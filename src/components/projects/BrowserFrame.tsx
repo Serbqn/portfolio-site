@@ -60,7 +60,7 @@ export function BrowserFrame({
   const [main, ...rest] = frames;
 
   return (
-    <div ref={wrapRef} className="space-y-8">
+    <div ref={wrapRef} className={cn(rest.length > 0 && "space-y-8")}>
       {/* Main frame */}
       <Frame title={title} url={url} theme={theme} index={0}>
         <Image
