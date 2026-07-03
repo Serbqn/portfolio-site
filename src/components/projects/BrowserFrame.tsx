@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 
@@ -34,33 +33,11 @@ export function BrowserFrame({
   url = "https://",
   theme = "dark",
 }: Props) {
-  const [active, setActive] = useState(0);
-  const wrapRef = useRef<HTMLDivElement | null>(null);
-
-  // Reveal-on-scroll for each frame after the first.
-  useEffect(() => {
-    if (!wrapRef.current) return;
-    const els = wrapRef.current.querySelectorAll<HTMLElement>("[data-reveal]");
-    const io = new IntersectionObserver(
-      (entries) => {
-        for (const e of entries) {
-          if (e.isIntersecting) {
-            e.target.classList.add("is-in");
-            io.unobserve(e.target);
-          }
-        }
-      },
-      { rootMargin: "0px 0px -10% 0px", threshold: 0.15 },
-    );
-    els.forEach((el) => io.observe(el));
-    return () => io.disconnect();
-  }, []);
-
   if (!frames.length) return null;
   const [main, ...rest] = frames;
 
   return (
-    <div ref={wrapRef} className={cn(rest.length > 0 && "space-y-8")}>
+    <div className={cn(rest.length > 0 && "space-y-8")}>
       {/* Main frame */}
       <Frame title={title} url={url} theme={theme} index={0}>
         <Image
@@ -77,18 +54,11 @@ export function BrowserFrame({
       {rest.length > 0 ? (
         <div className="grid gap-6 sm:grid-cols-2">
           {rest.map((f, i) => (
-            <button
+            <div
               key={f.src}
-              type="button"
-              onClick={() => setActive(i + 1)}
-              data-reveal
               className={cn(
                 "group relative block rounded-2xl outline-none",
-                "opacity-0 translate-y-3 transition-all duration-500 ease-out-soft",
-                "is-in:opacity-100 is-in:translate-y-0",
-                "focus-visible:ring-2 focus-visible:ring-accent-500",
               )}
-              aria-label={`Open ${f.alt}`}
             >
               <Frame
                 title={f.caption ?? title}
@@ -110,7 +80,7 @@ export function BrowserFrame({
                   {f.caption}
                 </span>
               ) : null}
-            </button>
+            </div>
           ))}
         </div>
       ) : null}

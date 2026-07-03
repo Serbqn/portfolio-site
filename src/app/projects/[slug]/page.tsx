@@ -224,29 +224,6 @@ export default async function ProjectPage({
         </div>
       </div>
 
-      {/* Gallery — browser-frame showcase */}
-      {project.gallery && project.gallery.length > 0 ? (
-        <section className="container-wide pb-section">
-          <p className="eyebrow">
-            <span className="eyebrow-dot" />
-            Gallery
-          </p>
-          <div className="mt-6">
-            <BrowserFrame
-              title={project.title}
-              url={urlFor(project.client)}
-              frames={project.gallery
-                .filter((g) => g !== project.cover)
-                .map((g, i) => ({
-                  src: g,
-                  alt: `${project.title} screenshot ${i + 1}`,
-                  caption: captionFor(project.title, i),
-                }))}
-            />
-          </div>
-        </section>
-      ) : null}
-
       {/* Inline artifact strip — process section from site content */}
       <section className="container-wide pb-section">
         <div className="rounded-2xl border border-accent-600 bg-surface-950 p-6 sm:p-8">
