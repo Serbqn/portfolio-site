@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { put } from "@vercel/blob";
 import { getSession } from "@/lib/auth";
 import { isValidSlug } from "@/lib/content";
-import { createServiceClient } from "@/lib/supabase";
 
 export const dynamic = "force-dynamic";
 
@@ -44,42 +44,24 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  // Build a safe filename
+  // Build a safe filename with slug prefix for organization
   const original = (file.name || "image").toLowerCase();
   const ext = extensionForMime(file.type) || ".png";
   const stem = original
     .replace(/\.[^.]+$/, "")
     .replace(/[^a-z0-9-]/g, "-")
     .slice(0, 40);
-  const filename = `${Date.now()}-${stem || "image"}${ext}`;
+  const pathname = `${slug}/${Date.now()}-${stem || "image"}${ext}`;
 
-  // Upload to Supabase Storage under slug/ folder
-  const buffer = Buffer.from(await file.arrayBuffer());
-  const supabase = await createServiceClient();
-  const { error } = await supabase.storage
-    .from("uploads")
-    .upload(`${slug}/${filename}`, buffer, {
-      contentType: file.type,
-      upsert: false,
-    });
-
-  if (error) {
-    console.error("Upload error:", error.message);
-    return NextResponse.json(
-      { error: "Failed to upload file" },
-      { status: 500 },
-    );
-  }
-
-  // Get the public URL
-  const {
-    data: { publicUrl },
-  } = supabase.storage.from("uploads").getPublicUrl(`${slug}/${filename}`);
+  // Upload to Vercel Blob (public store)
+  const blob = await put(pathname, file, {
+    access: "public",
+    addRandomSuffix: false,
+  });
 
   return NextResponse.json({
     ok: true,
-    url: publicUrl,
-    size: buffer.length,
+    url: blob.url,
     type: file.type,
   });
 }
