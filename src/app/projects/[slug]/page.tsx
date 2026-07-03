@@ -192,7 +192,7 @@ export default async function ProjectPage({
               <h2 className="text-display-3 font-semibold tracking-tight">
                 Problem
               </h2>
-              <div className="mt-4 max-w-prose space-y-3 text-pretty leading-relaxed text-surface-700">
+              <div className="mt-4 max-w-prose space-y-3 text-pretty leading-relaxed text-surface-700 break-words [overflow-wrap:anywhere]">
                 {renderMarkdownParagraphs(project.problem)}
               </div>
             </section>
@@ -202,7 +202,7 @@ export default async function ProjectPage({
               <h2 className="text-display-3 font-semibold tracking-tight">
                 Process
               </h2>
-              <div className="mt-4 max-w-prose space-y-3 text-pretty leading-relaxed text-surface-700">
+              <div className="mt-4 max-w-prose space-y-3 text-pretty leading-relaxed text-surface-700 break-words [overflow-wrap:anywhere]">
                 {renderMarkdownParagraphs(project.process)}
               </div>
             </section>
@@ -212,7 +212,7 @@ export default async function ProjectPage({
               <h2 className="text-display-3 font-semibold tracking-tight">
                 Solution
               </h2>
-              <div className="mt-4 max-w-prose space-y-3 text-pretty leading-relaxed text-surface-700">
+              <div className="mt-4 max-w-prose space-y-3 text-pretty leading-relaxed text-surface-700 break-words [overflow-wrap:anywhere]">
                 {renderMarkdownParagraphs(project.solution)}
               </div>
             </section>
@@ -222,7 +222,7 @@ export default async function ProjectPage({
               <h2 className="text-display-3 font-semibold tracking-tight">
                 Results
               </h2>
-              <div className="mt-4 max-w-prose space-y-3 text-pretty leading-relaxed text-surface-700">
+              <div className="mt-4 max-w-prose space-y-3 text-pretty leading-relaxed text-surface-700 break-words [overflow-wrap:anywhere]">
                 {renderMarkdownParagraphs(project.results)}
               </div>
             </section>
