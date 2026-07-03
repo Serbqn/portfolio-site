@@ -27,6 +27,13 @@ function captionFor(title: string, i: number): string {
   return captions[i] ?? `${title} — view ${i + 1}`;
 }
 
+function renderMarkdownParagraphs(text: string) {
+  return text
+    .split(/\n\n+/)
+    .filter(Boolean)
+    .map((para, i) => <p key={i}>{para.trim()}</p>);
+}
+
 export const dynamic = "force-dynamic";
 
 export async function generateMetadata({
@@ -179,9 +186,9 @@ export default async function ProjectPage({
               <h2 className="text-display-3 font-semibold tracking-tight">
                 Problem
               </h2>
-              <p className="mt-4 max-w-prose text-pretty leading-relaxed text-surface-700">
-                {project.problem}
-              </p>
+              <div className="mt-4 max-w-prose space-y-3 text-pretty leading-relaxed text-surface-700">
+                {renderMarkdownParagraphs(project.problem)}
+              </div>
             </section>
           ) : null}
           {project.process ? (
@@ -189,9 +196,9 @@ export default async function ProjectPage({
               <h2 className="text-display-3 font-semibold tracking-tight">
                 Process
               </h2>
-              <p className="mt-4 max-w-prose text-pretty leading-relaxed text-surface-700">
-                {project.process}
-              </p>
+              <div className="mt-4 max-w-prose space-y-3 text-pretty leading-relaxed text-surface-700">
+                {renderMarkdownParagraphs(project.process)}
+              </div>
             </section>
           ) : null}
           {project.solution ? (
@@ -199,9 +206,9 @@ export default async function ProjectPage({
               <h2 className="text-display-3 font-semibold tracking-tight">
                 Solution
               </h2>
-              <p className="mt-4 max-w-prose text-pretty leading-relaxed text-surface-700">
-                {project.solution}
-              </p>
+              <div className="mt-4 max-w-prose space-y-3 text-pretty leading-relaxed text-surface-700">
+                {renderMarkdownParagraphs(project.solution)}
+              </div>
             </section>
           ) : null}
           {project.results ? (
@@ -209,16 +216,16 @@ export default async function ProjectPage({
               <h2 className="text-display-3 font-semibold tracking-tight">
                 Results
               </h2>
-              <p className="mt-4 max-w-prose text-pretty leading-relaxed text-surface-700">
-                {project.results}
-              </p>
+              <div className="mt-4 max-w-prose space-y-3 text-pretty leading-relaxed text-surface-700">
+                {renderMarkdownParagraphs(project.results)}
+              </div>
             </section>
           ) : null}
         </div>
       </div>
 
       {/* Gallery — browser-frame showcase */}
-      {project.gallery && project.gallery.length > 1 ? (
+      {project.gallery && project.gallery.length > 0 ? (
         <section className="container-wide pb-section">
           <p className="eyebrow">
             <span className="eyebrow-dot" />
