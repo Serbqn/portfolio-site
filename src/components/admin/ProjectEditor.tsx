@@ -61,6 +61,9 @@ export function ProjectEditor({
   const [error, setError] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
+  const [tagsRaw, setTagsRaw] = useState<string>(
+    initial?.tags?.join(", ") ?? "",
+  );
 
   useEffect(() => {
     if (!isNew) {
@@ -281,16 +284,17 @@ export function ProjectEditor({
             <input
               id="tags"
               type="text"
-              value={draft.tags.join(", ")}
-              onChange={(e) =>
+              value={tagsRaw}
+              onChange={(e) => setTagsRaw(e.target.value)}
+              onBlur={() => {
                 setField(
                   "tags",
-                  e.target.value
+                  tagsRaw
                     .split(",")
                     .map((t) => t.trim())
                     .filter(Boolean),
-                )
-              }
+                );
+              }}
               className="h-10 w-full rounded-lg border border-surface-300 bg-white px-3 text-sm outline-none focus:border-accent-500 focus:shadow-ring-accent"
             />
           </Field>
