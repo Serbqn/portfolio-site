@@ -1,0 +1,20 @@
+{
+  "slug": "atlas-maps",
+  "title": "Atlas Maps",
+  "subtitle": "Field-operations app for a logistics company.",
+  "role": "UI/UX Designer",
+  "year": "2023",
+  "client": "Atlas",
+  "tags": ["Mobile", "Logistics", "Web app"],
+  "featured": false,
+  "cover": "/uploads/atlas-maps/cover.svg",
+  "summary": "A dispatch and route-confirmation app for drivers and ops. Designed for one-handed use on a glove, in the rain.",
+  "metrics": [
+    { "label": "Driver task completion", "value": "+28%" },
+    { "label": "Route deviation", "value": "−19%" },
+    { "label": "On-shift incidents", "value": "−44%" }
+  ],
+  "gallery": [
+    "/uploads/atlas-maps/cover.svg"
+  ]
+}

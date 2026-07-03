@@ -1,0 +1,133 @@
+{
+  "site": {
+    "name": "Serbay Sivrikaya",
+    "role": "Design Engineer",
+    "tagline": "I design interfaces for products where the work is in the details.",
+    "description": "Portfolio of Serb, a UI/UX designer focused on product clarity in fintech, dev tools, and B2B SaaS.",
+    "location": "Istanbul, TR",
+    "availability": "Available for select projects from August 2026.",
+    "email": "hello@serb.design",
+    "social": {
+      "dribbble": "https://dribbble.com/serb",
+      "behance": "https://behance.net/serb",
+      "linkedin": "https://linkedin.com/in/serb",
+      "github": "https://github.com/serb",
+      "twitter": "https://x.com/serb"
+    }
+  },
+  "hero": {
+    "eyebrow": "UI/UX Designer & Developer · Available Aug 2026",
+    "headline": "Clarity at every pixel.",
+    "subheadline": "I help product teams turn dense, technical software into interfaces people actually want to use. From zero to online.",
+    "primaryCta": {
+      "label": "View projects",
+      "href": "/projects"
+    },
+    "secondaryCta": {
+      "label": "Get in touch",
+      "href": "/contact"
+    }
+  },
+  "home": {
+    "intro": {
+      "eyebrow": "About",
+      "title": "I design for technical products. I build them too.",
+      "body": "Most of my work sits at the intersection of engineering and design — data-heavy dashboards, dev tools, financial products. I care about information density, motion that explains rather than decorates, and the kind of typography hierarchy that lets a user find the one important number in a screen full of them. I don't just hand off mockups — I write the production front-end code."
+    },
+    "featuredTitle": "Selected work",
+    "featuredCount": 3,
+    "skills": [
+      {
+        "name": "Product design",
+        "level": 95
+      },
+      {
+        "name": "Design systems",
+        "level": 92
+      },
+      {
+        "name": "Interaction & motion",
+        "level": 88
+      },
+      {
+        "name": "User research",
+        "level": 78
+      },
+      {
+        "name": "Prototyping",
+        "level": 90
+      },
+      {
+        "name": "Front-end (HTML / CSS / React)",
+        "level": 80
+      }
+    ],
+    "tools": [
+      "Figma",
+      "Framer",
+      "Linear",
+      "Notion",
+      "Cursor",
+      "Vercel",
+      "Webflow",
+      "Arc",
+      "Raycast"
+    ]
+  },
+  "about": {
+    "eyebrow": "About",
+    "title": "Designer, not decorator. Developer, not just implementer.",
+    "lead": "I'm Serb — a UI/UX designer with a background in front-end engineering. The two disciplines shape how I work: I think in systems, ship in components, and write copy that respects the reader. I don't just hand off mockups — I build the thing.",
+    "sections": [
+      {
+        "heading": "How I work",
+        "body": "I join projects early, before the pixel decisions get locked. I map the problem with the team, draft the structure in low-fi, then push high-fi only when the structure is solid. Reviews happen on a shared Figma file — no PDFs, no slides."
+      },
+      {
+        "heading": "What I care about",
+        "body": "Density, legibility, motion that earns its place, and copy that tells the user what is happening without making them feel stupid. I’ve been told I have strong opinions about kerning."
+      }
+    ],
+    "experience": [
+      {
+        "year": "2024 — Now",
+        "role": "Senior Product Designer & Developer",
+        "company": "Independent",
+        "summary": "Working with seed-to-Series-B teams on fintech, dev tools, and B2B SaaS. Recent clients include a payments API, an observability platform, and a logistics dashboard. From zero to online."
+      },
+      {
+        "year": "2021 — 2024",
+        "role": "Product Designer",
+        "company": "Acme SaaS",
+        "summary": "Led design on the analytics surface, from initial concept to GA. Defined and maintained the design system used by 14 squads."
+      },
+      {
+        "year": "2019 — 2021",
+        "role": "UI Designer",
+        "company": "Studio Bauhaus",
+        "summary": "Worked across agency clients: banking apps, healthcare portals, e-commerce. Learned what ‘done’ means in 12 different industries."
+      },
+      {
+        "year": "2016 — 2019",
+        "role": "Front-end Developer → Designer",
+        "company": "Self-taught",
+        "summary": "Started in code, drifted into design. The path still informs everything I do — every mockup I draw is one I could ship."
+      }
+    ]
+  },
+  "contact": {
+    "eyebrow": "Contact",
+    "title": "Have a project in mind?",
+    "lead": "I take on a small number of engagements per quarter. Tell me about the product, the team, and the rough timeline — I’ll reply within two working days.",
+    "submitLabel": "Send message"
+  },
+  "process": {
+    "eyebrow": "From zero to online",
+    "steps": [
+      { "label": "Discovery", "value": "1 week" },
+      { "label": "Design", "value": "3–5 weeks" },
+      { "label": "Build & ship", "value": "4–8 weeks" }
+    ],
+    "footer": "I run the full loop — research, design, and the production front-end code — so the artifact you see above is the artifact you ship."
+  }
+}

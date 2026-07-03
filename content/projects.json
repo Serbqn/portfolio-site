@@ -1,0 +1,225 @@
+[
+  {
+    "slug": "asdasd",
+    "title": "asdasd",
+    "subtitle": "test test",
+    "role": "test test ",
+    "year": "2026",
+    "client": "test test test",
+    "tags": [
+      "test test testtest test test"
+    ],
+    "featured": false,
+    "cover": "/uploads/asdasd/1783021516087-bg-transparent.png",
+    "summary": "asdasdad",
+    "metrics": [
+      {
+        "label": "",
+        "value": ""
+      }
+    ],
+    "gallery": [
+      "/uploads/asdasd/1783021518218-bg-transparent.png",
+      "/uploads/asdasd/1783021523854-yazdaglari-logo-pastel.png"
+    ]
+  },
+  {
+    "slug": "test",
+    "title": "test",
+    "subtitle": "test test",
+    "role": "test test ",
+    "year": "2026",
+    "client": "test test test",
+    "tags": [
+      "test test testtest test test"
+    ],
+    "featured": false,
+    "cover": "/uploads/test/1783013185152-bg-transparent.png",
+    "summary": "test test test test test test test test test test test test",
+    "metrics": [
+      {
+        "label": "test test test",
+        "value": "11"
+      },
+      {
+        "label": "test test testtest test testtest test test",
+        "value": "22"
+      },
+      {
+        "label": "test test testtest test testtest test testtest test test",
+        "value": "43"
+      }
+    ],
+    "gallery": []
+  },
+  {
+    "slug": "ledger-os",
+    "title": "Ledger OS",
+    "subtitle": "A double-entry bookkeeping surface for an early-stage fintech.",
+    "role": "Lead Product Designer",
+    "year": "2026",
+    "client": "Ledger OS (Stealth)",
+    "tags": [
+      "Fintech",
+      "Web app",
+      "Design system"
+    ],
+    "featured": true,
+    "cover": "/uploads/ledger-os/cover.svg",
+    "summary": "Replaced a 14-tab spreadsheet workflow with a single, keyboard-driven ledger that exports clean CSV. Cut month-end close from 4 days to 6 hours.",
+    "metrics": [
+      {
+        "label": "Month-end close",
+        "value": "4d → 6h"
+      },
+      {
+        "label": "Daily active users",
+        "value": "+312%"
+      },
+      {
+        "label": "Onboarding completion",
+        "value": "47% → 89%"
+      }
+    ],
+    "problem": "The founding team was running the entire company's books in a single Notion database with 14 linked tables. Every entry required four clicks, three tab switches, and a manual currency conversion. Month-end close took four people four days, and the resulting numbers needed to be re-keyed into the actual accounting software.",
+    "process": "We started with a week of contextual inquiry — sitting next to the founders while they closed the books. From there, I drafted a single-screen, keyboard-driven ledger that kept the mental model of double-entry bookkeeping but hid the ceremony. Every screen was tested against the spreadsheet, not against best practice.",
+    "solution": "A single dense screen with three panels: accounts on the left, journal entries in the middle, and a running balance on the right. Everything is reachable from the keyboard. A command bar handles the 5% of operations that don't deserve a button.",
+    "results": "Shipped in March 2026 to a closed beta of 12 companies. Month-end close dropped from four days to six hours. NPS is +62. The team is now expanding to invoicing and reconciliation on top of the same primitive."
+  },
+  {
+    "slug": "trace-grid",
+    "title": "Trace Grid",
+    "subtitle": "Observability dashboard for a distributed-tracing startup.",
+    "role": "Product Designer",
+    "year": "2025",
+    "client": "Trace Grid",
+    "tags": [
+      "Dev tools",
+      "Web app",
+      "Data viz"
+    ],
+    "featured": true,
+    "cover": "/uploads/trace-grid/cover.svg",
+    "summary": "Reimagined a 7-figure-revenue tracing product around a query-first workflow. Latency to first insight: 90s → 4s.",
+    "metrics": [
+      {
+        "label": "Time to first insight",
+        "value": "90s → 4s"
+      },
+      {
+        "label": "Free → paid conversion",
+        "value": "+41%"
+      },
+      {
+        "label": "Support tickets / wk",
+        "value": "−58%"
+      }
+    ],
+    "problem": "The product could answer any question about a distributed system, but only if you already knew the right query to write. New users opened the dashboard, stared at a complex form, and filed a support ticket within 90 seconds.",
+    "process": "Spent two weeks shadowing the on-call rotation. Built a query-suggestion model by hand from the top 200 saved queries, then prototyped the resulting autocomplete. Validated with moderated tests against the existing form-based UI.",
+    "solution": "The home screen is now a single search bar with a live waterfall preview underneath. Every query is shareable as a URL, and the most useful queries surface in a personal feed. The legacy form is still there, hidden behind a keyboard shortcut.",
+    "results": "Time to first insight dropped from 90 seconds to 4. Free-to-paid conversion is up 41% quarter-over-quarter. Support volume on the dashboard dropped 58%."
+  },
+  {
+    "slug": "harbor-payments",
+    "title": "Harbor Payments",
+    "subtitle": "Cross-border payouts dashboard for marketplace operators.",
+    "role": "Senior Product Designer",
+    "year": "2025",
+    "client": "Harbor",
+    "tags": [
+      "Fintech",
+      "Web app",
+      "Mobile"
+    ],
+    "featured": true,
+    "cover": "/uploads/harbor-payments/cover.svg",
+    "summary": "A payouts console that replaced five internal tools and finally made ‘where is my money?’ answerable in one screen.",
+    "metrics": [
+      {
+        "label": "Internal tools replaced",
+        "value": "5 → 1"
+      },
+      {
+        "label": "Support escalations",
+        "value": "−71%"
+      },
+      {
+        "label": "Customer eNPS",
+        "value": "+34"
+      }
+    ],
+    "problem": "Marketplace operators were getting a flood of seller questions — 'where is my payout?', 'why was it delayed?', 'is it stuck?' — and the Harbor team had to dig through five different internal tools to answer each one.",
+    "process": "Mapped the seller lifecycle across five tools and identified the four question shapes 80% of tickets fell into. Designed a single payouts console that could answer all four without leaving the page.",
+    "solution": "A dense, table-first console with three views (by payout, by seller, by corridor) and a side panel that opens for any row. The side panel answers the four common questions inline; deeper investigation is one click away.",
+    "results": "Five tools became one. The Harbor support team now resolves most payouts questions without leaving the console. The product launched to general availability in Q3 2025."
+  },
+  {
+    "slug": "lattice-docs",
+    "title": "Lattice Docs",
+    "subtitle": "API reference redesign for a developer-tools company.",
+    "role": "Product Designer",
+    "year": "2024",
+    "client": "Lattice",
+    "tags": [
+      "Dev tools",
+      "Web app",
+      "Docs"
+    ],
+    "featured": false,
+    "cover": "/uploads/lattice-docs/cover.svg",
+    "summary": "Rebuilt the API reference around the developer’s actual mental model: a single endpoint, with the request, the response, and the failure modes all on one page.",
+    "metrics": [
+      {
+        "label": "Page → first 200 OK",
+        "value": "−47%"
+      },
+      {
+        "label": "Doc search success",
+        "value": "+62%"
+      },
+      {
+        "label": "Support tickets",
+        "value": "−33%"
+      }
+    ],
+    "problem": "The API reference was technically complete but practically useless: 11 tabs to read before you could make your first call, no working examples for the failure modes that mattered, and a search that returned marketing pages before docs.",
+    "process": "Sat with five customer teams for two days. Rebuilt the information architecture from the request shape up, not from the URL up. Prototyped in a static HTML build that I could A/B test against the live site.",
+    "solution": "A single endpoint page: request on the left, response on the right, failure modes collapsed at the bottom. Every page has a working copy-pasteable curl example. Search prioritises reference pages over marketing.",
+    "results": "Time from landing on a docs page to a successful 200 response dropped 47%. Doc-search success rate is up 62%. Support tickets about the API are down a third."
+  },
+  {
+    "slug": "atlas-maps",
+    "title": "Atlas Maps",
+    "subtitle": "Field-operations app for a logistics company.",
+    "role": "UI/UX Designer",
+    "year": "2023",
+    "client": "Atlas",
+    "tags": [
+      "Mobile",
+      "Logistics",
+      "Web app"
+    ],
+    "featured": false,
+    "cover": "/uploads/atlas-maps/cover.svg",
+    "summary": "A dispatch and route-confirmation app for drivers and ops. Designed for one-handed use on a glove, in the rain.",
+    "metrics": [
+      {
+        "label": "Driver task completion",
+        "value": "+28%"
+      },
+      {
+        "label": "Route deviation",
+        "value": "−19%"
+      },
+      {
+        "label": "On-shift incidents",
+        "value": "−44%"
+      }
+    ],
+    "problem": "Drivers were using a paper sheet and a personal phone to do a job that needed real-time dispatch updates. Ops had no visibility into what was happening on the ground.",
+    "process": "Two weeks embedded with the dispatch team and the drivers. I tested paper prototypes in the cab, in the rain, with gloves on. The design rules followed from there.",
+    "solution": "A two-pane mobile app: a map on the left, a tappable task list on the right. Every action is one-handed and thumb-reachable. Offline mode handles 4 hours of cell dead zones.",
+    "results": "Task completion is up 28%, route deviation is down 19%, and on-shift incidents have nearly halved. The app now powers 800+ drivers across three countries."
+  }
+]

@@ -1,0 +1,29 @@
+{
+  "slug": "test",
+  "title": "test",
+  "subtitle": "test test",
+  "role": "test test ",
+  "year": "2026",
+  "client": "test test test",
+  "tags": [
+    "test test testtest test test"
+  ],
+  "featured": false,
+  "cover": "/uploads/test/1783013185152-bg-transparent.png",
+  "summary": "test test test test test test test test test test test test",
+  "metrics": [
+    {
+      "label": "test test test",
+      "value": "11"
+    },
+    {
+      "label": "test test testtest test testtest test test",
+      "value": "22"
+    },
+    {
+      "label": "test test testtest test testtest test testtest test test",
+      "value": "43"
+    }
+  ],
+  "gallery": []
+}

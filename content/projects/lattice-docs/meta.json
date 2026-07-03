@@ -1,0 +1,20 @@
+{
+  "slug": "lattice-docs",
+  "title": "Lattice Docs",
+  "subtitle": "API reference redesign for a developer-tools company.",
+  "role": "Product Designer",
+  "year": "2024",
+  "client": "Lattice",
+  "tags": ["Dev tools", "Web app", "Docs"],
+  "featured": false,
+  "cover": "/uploads/lattice-docs/cover.svg",
+  "summary": "Rebuilt the API reference around the developer’s actual mental model: a single endpoint, with the request, the response, and the failure modes all on one page.",
+  "metrics": [
+    { "label": "Page → first 200 OK", "value": "−47%" },
+    { "label": "Doc search success", "value": "+62%" },
+    { "label": "Support tickets", "value": "−33%" }
+  ],
+  "gallery": [
+    "/uploads/lattice-docs/cover.svg"
+  ]
+}

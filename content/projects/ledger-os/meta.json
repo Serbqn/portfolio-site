@@ -1,0 +1,22 @@
+{
+  "slug": "ledger-os",
+  "title": "Ledger OS",
+  "subtitle": "A double-entry bookkeeping surface for an early-stage fintech.",
+  "role": "Lead Product Designer",
+  "year": "2026",
+  "client": "Ledger OS (Stealth)",
+  "tags": ["Fintech", "Web app", "Design system"],
+  "featured": true,
+  "cover": "/uploads/ledger-os/cover.svg",
+  "summary": "Replaced a 14-tab spreadsheet workflow with a single, keyboard-driven ledger that exports clean CSV. Cut month-end close from 4 days to 6 hours.",
+  "metrics": [
+    { "label": "Month-end close", "value": "4d → 6h" },
+    { "label": "Daily active users", "value": "+312%" },
+    { "label": "Onboarding completion", "value": "47% → 89%" }
+  ],
+  "gallery": [
+    "/uploads/ledger-os/cover.svg",
+    "/uploads/ledger-os/01-ledger.svg",
+    "/uploads/ledger-os/02-command-bar.svg"
+  ]
+}

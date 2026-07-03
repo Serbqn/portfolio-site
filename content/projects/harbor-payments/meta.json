@@ -1,0 +1,21 @@
+{
+  "slug": "harbor-payments",
+  "title": "Harbor Payments",
+  "subtitle": "Cross-border payouts dashboard for marketplace operators.",
+  "role": "Senior Product Designer",
+  "year": "2025",
+  "client": "Harbor",
+  "tags": ["Fintech", "Web app", "Mobile"],
+  "featured": true,
+  "cover": "/uploads/harbor-payments/cover.svg",
+  "summary": "A payouts console that replaced five internal tools and finally made ‘where is my money?’ answerable in one screen.",
+  "metrics": [
+    { "label": "Internal tools replaced", "value": "5 → 1" },
+    { "label": "Support escalations", "value": "−71%" },
+    { "label": "Customer eNPS", "value": "+34" }
+  ],
+  "gallery": [
+    "/uploads/harbor-payments/cover.svg",
+    "/uploads/harbor-payments/01-table.svg"
+  ]
+}

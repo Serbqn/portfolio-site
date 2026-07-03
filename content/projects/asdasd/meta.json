@@ -1,0 +1,24 @@
+{
+  "slug": "asdasd",
+  "title": "asdasd",
+  "subtitle": "test test",
+  "role": "test test ",
+  "year": "2026",
+  "client": "test test test",
+  "tags": [
+    "test test testtest test test"
+  ],
+  "featured": false,
+  "cover": "/uploads/asdasd/1783021516087-bg-transparent.png",
+  "summary": "asdasdad",
+  "metrics": [
+    {
+      "label": "",
+      "value": ""
+    }
+  ],
+  "gallery": [
+    "/uploads/asdasd/1783021518218-bg-transparent.png",
+    "/uploads/asdasd/1783021523854-yazdaglari-logo-pastel.png"
+  ]
+}

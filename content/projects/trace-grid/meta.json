@@ -1,0 +1,22 @@
+{
+  "slug": "trace-grid",
+  "title": "Trace Grid",
+  "subtitle": "Observability dashboard for a distributed-tracing startup.",
+  "role": "Product Designer",
+  "year": "2025",
+  "client": "Trace Grid",
+  "tags": ["Dev tools", "Web app", "Data viz"],
+  "featured": true,
+  "cover": "/uploads/trace-grid/cover.svg",
+  "summary": "Reimagined a 7-figure-revenue tracing product around a query-first workflow. Latency to first insight: 90s → 4s.",
+  "metrics": [
+    { "label": "Time to first insight", "value": "90s → 4s" },
+    { "label": "Free → paid conversion", "value": "+41%" },
+    { "label": "Support tickets / wk", "value": "−58%" }
+  ],
+  "gallery": [
+    "/uploads/trace-grid/cover.svg",
+    "/uploads/trace-grid/01-search.svg",
+    "/uploads/trace-grid/02-waterfall.svg"
+  ]
+}
