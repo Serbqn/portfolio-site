@@ -405,6 +405,9 @@ export function ProjectEditor({
                 Max 8 MB each · JPG, PNG, WebP, SVG, GIF, AVIF
               </span>
             </div>
+            {uploadError ? (
+              <p className="mt-2 text-xs text-red-600">{uploadError}</p>
+            ) : null}
           </label>
 
           {/* Gallery grid */}
