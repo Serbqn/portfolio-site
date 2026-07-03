@@ -75,11 +75,6 @@ export function BrowserFrame({
                   className="object-cover object-top"
                 />
               </Frame>
-              {f.caption ? (
-                <span className="mt-3 inline-block font-mono text-xs uppercase tracking-widest text-surface-200">
-                  {f.caption}
-                </span>
-              ) : null}
             </div>
           ))}
         </div>

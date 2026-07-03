@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { getProjectBySlug, getProjects, getSite } from "@/lib/content";
+import { cn } from "@/lib/utils";
 import { BrowserFrame } from "@/components/projects/BrowserFrame";
 
 type Params = { slug: string };
@@ -29,7 +30,7 @@ function captionFor(title: string, i: number): string {
 
 function renderMarkdownParagraphs(text: string) {
   return text
-    .split(/\n\n+/)
+    .split(/\n+/)
     .filter(Boolean)
     .map((para, i) => <p key={i}>{para.trim()}</p>);
 }
@@ -157,7 +158,12 @@ export default async function ProjectPage({
       {/* Metrics */}
       {project.metrics?.length ? (
         <section className="container-wide mt-section-sm">
-          <div className="grid gap-px overflow-hidden rounded-2xl border border-surface-200 bg-surface-200 sm:grid-cols-3">
+          <div className={cn(
+            "grid overflow-hidden rounded-2xl border border-surface-200 divide-x divide-surface-200",
+            project.metrics.length === 1 ? "grid-cols-1" :
+            project.metrics.length === 2 ? "grid-cols-1 sm:grid-cols-2" :
+            "grid-cols-1 sm:grid-cols-3",
+          )}>
             {project.metrics.map((m) => (
               <div key={m.label} className="bg-white p-6">
                 <div className="font-mono text-xs uppercase tracking-widest text-surface-500">
