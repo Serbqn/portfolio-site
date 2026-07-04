@@ -325,7 +325,7 @@ export function ProjectEditor({
 
       <Section
         title="Cover image"
-        description="Upload a JPG, PNG, WebP, or SVG. Max 8 MB."
+        description="Upload a JPG, PNG, WebP, or SVG. Max 8 MB. Recommended: 1920×1080 (16:9), keep key content in upper portion."
       >
         <div className="grid gap-4 sm:grid-cols-[1fr_auto] sm:items-start">
           <div>
@@ -369,7 +369,7 @@ export function ProjectEditor({
 
       <Section
         title="Gallery"
-        description="Upload multiple images (JPG, PNG, WebP, SVG). Drag to reorder. First image becomes cover if no cover set."
+        description="Upload multiple images (JPG, PNG, WebP, SVG). Drag to reorder. First image becomes cover if no cover set. Recommended: 1600×1000 (16:10), WebP under 500 KB each."
       >
         <div className="space-y-4">
           {/* Upload zone */}
