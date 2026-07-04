@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
 
 type Frame = {
@@ -20,12 +21,14 @@ type Props = {
   theme?: "dark" | "light";
 };
 
+const frameSpring = { type: "spring" as const, stiffness: 200, damping: 24, mass: 0.8 };
+
 /**
  * BrowserFrame — a creative way to present project screenshots.
  *
  * Each project renders as a macOS-style browser window: URL bar + traffic
- * lights on top, the screenshot inside. Hovering the frame subtly tilts and
- * glows; scrolling brings the next frame into view with a reveal animation.
+ * lights on top, the screenshot inside. The main frame scales in with a
+ * spring animation on page load for a "presentation" feel.
  */
 export function BrowserFrame({
   frames,
@@ -38,17 +41,23 @@ export function BrowserFrame({
 
   return (
     <div className={cn(rest.length > 0 && "space-y-8")}>
-      {/* Main frame */}
-      <Frame title={title} url={url} theme={theme} index={0}>
-        <Image
-          src={main.src}
-          alt={main.alt}
-          fill
-          sizes="(min-width: 1024px) 1152px, 100vw"
-          className="object-cover object-top"
-          priority
-        />
-      </Frame>
+      {/* Main frame — spring entrance */}
+      <motion.div
+        initial={{ scale: 0.96, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={frameSpring}
+      >
+        <Frame title={title} url={url} theme={theme} index={0}>
+          <Image
+            src={main.src}
+            alt={main.alt}
+            fill
+            sizes="(min-width: 1024px) 1152px, 100vw"
+            className="object-cover object-top"
+            priority
+          />
+        </Frame>
+      </motion.div>
 
       {/* Gallery frames */}
       {rest.length > 0 ? (

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { motion, useScroll, useTransform } from "motion/react";
 import { cn } from "@/lib/utils";
 
 const links = [
@@ -22,23 +22,19 @@ export function Navbar({
   logo?: string;
 }) {
   const pathname = usePathname();
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  const { scrollY } = useScroll();
+  const blur = useTransform(scrollY, [0, 40], [0, 12]);
+  const borderOpacity = useTransform(scrollY, [0, 40], [0, 1]);
+  const bgOpacity = useTransform(scrollY, [0, 40], [0, 0.8]);
 
   return (
-    <header
-      className={cn(
-        "sticky top-0 z-40 w-full border-b border-transparent transition-all duration-300",
-        scrolled
-          ? "border-surface-700 bg-surface-900/80 backdrop-blur-md"
-          : "bg-surface-900",
-      )}
+    <motion.header
+      style={{
+        backdropFilter: useTransform(() => `blur(${blur.get()}px)`),
+        borderBottomColor: useTransform(() => `rgba(46,46,46,${borderOpacity.get()})`),
+        backgroundColor: useTransform(() => `rgba(23,23,23,${bgOpacity.get()})`),
+      }}
+      className="sticky top-0 z-40 w-full border-b border-transparent"
     >
       <div className="container-wide flex h-16 items-center justify-between">
         <Link
@@ -122,6 +118,6 @@ export function Navbar({
           </Link>
         </nav>
       </div>
-    </header>
+    </motion.header>
   );
 }

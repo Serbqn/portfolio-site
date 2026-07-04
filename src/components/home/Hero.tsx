@@ -1,6 +1,11 @@
+"use client";
+
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { motion } from "motion/react";
 import type { Hero } from "@/lib/types";
+
+const tapSpring = { type: "spring" as const, stiffness: 500, damping: 30, mass: 0.5 };
 
 export function Hero({
   hero,
@@ -35,19 +40,31 @@ export function Hero({
               {hero.subheadline}
             </p>
             <div className="mt-10 flex flex-wrap items-center gap-3">
-              <Link
-                href={hero.primaryCta.href}
-                className="group inline-flex h-11 items-center justify-center gap-2 rounded-lg bg-surface-950 px-5 text-sm font-medium text-white transition-all duration-150 hover:bg-surface-800"
+              <motion.div
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.97 }}
+                transition={tapSpring}
               >
-                {hero.primaryCta.label}
-                <ArrowRight className="h-4 w-4 transition-transform duration-150 group-hover:translate-x-0.5" />
-              </Link>
-              <Link
-                href={hero.secondaryCta.href}
-                className="inline-flex h-11 items-center justify-center rounded-lg border border-surface-700 bg-surface-900 px-5 text-sm font-medium text-surface-0 transition-colors duration-150 hover:bg-surface-800"
+                <Link
+                  href={hero.primaryCta.href}
+                  className="group inline-flex h-11 items-center justify-center gap-2 rounded-lg bg-surface-950 px-5 text-sm font-medium text-white transition-colors duration-150 hover:bg-surface-800"
+                >
+                  {hero.primaryCta.label}
+                  <ArrowRight className="h-4 w-4 transition-transform duration-150 group-hover:translate-x-0.5" />
+                </Link>
+              </motion.div>
+              <motion.div
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.97 }}
+                transition={tapSpring}
               >
-                {hero.secondaryCta.label}
-              </Link>
+                <Link
+                  href={hero.secondaryCta.href}
+                  className="inline-flex h-11 items-center justify-center rounded-lg border border-surface-700 bg-surface-900 px-5 text-sm font-medium text-surface-0 transition-colors duration-150 hover:bg-surface-800"
+                >
+                  {hero.secondaryCta.label}
+                </Link>
+              </motion.div>
             </div>
           </div>
 

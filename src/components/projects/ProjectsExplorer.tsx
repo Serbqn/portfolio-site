@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { motion, AnimatePresence } from "motion/react";
 import { ProjectCard } from "@/components/projects/ProjectCard";
 import type { ProjectListItem } from "@/lib/types";
 import { cn } from "@/lib/utils";
@@ -46,11 +47,25 @@ export function ProjectsExplorer({ projects }: { projects: ProjectListItem[] }) 
         </span>
       </div>
 
-      <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8">
-        {filtered.map((p) => (
-          <ProjectCard key={p.slug} project={p} />
-        ))}
-      </div>
+      <motion.div
+        layout
+        className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8"
+      >
+        <AnimatePresence mode="popLayout">
+          {filtered.map((p) => (
+            <motion.div
+              key={p.slug}
+              layout
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <ProjectCard project={p} />
+            </motion.div>
+          ))}
+        </AnimatePresence>
+      </motion.div>
 
       {filtered.length === 0 ? (
         <p className="mt-12 text-center text-sm text-surface-400">

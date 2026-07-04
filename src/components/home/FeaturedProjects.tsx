@@ -1,5 +1,27 @@
+"use client";
+
+import { motion } from "motion/react";
 import { ProjectCard } from "@/components/projects/ProjectCard";
 import type { ProjectListItem } from "@/lib/types";
+
+const containerVariants = {
+  hidden: {},
+  show: {
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.05,
+    },
+  },
+};
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 12 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] },
+  },
+};
 
 export function FeaturedProjects({
   projects,
@@ -31,11 +53,19 @@ export function FeaturedProjects({
         </a>
       </div>
 
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8">
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, margin: "-60px" }}
+        className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8"
+      >
         {projects.map((p) => (
-          <ProjectCard key={p.slug} project={p} />
+          <motion.div key={p.slug} variants={cardVariants}>
+            <ProjectCard project={p} />
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
 
       <div className="mt-10 sm:hidden">
         <a

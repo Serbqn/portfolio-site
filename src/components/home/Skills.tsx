@@ -1,4 +1,9 @@
+"use client";
+
+import { motion } from "motion/react";
 import type { Skill } from "@/lib/types";
+
+const barTransition = { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const };
 
 export function Skills({ skills, tools }: { skills: Skill[]; tools: string[] }) {
   return (
@@ -20,7 +25,7 @@ export function Skills({ skills, tools }: { skills: Skill[]; tools: string[] }) 
 
         <div className="lg:col-span-7">
           <ul className="grid gap-3">
-            {skills.map((s) => (
+            {skills.map((s, i) => (
               <li
                 key={s.name}
                 className="grid grid-cols-[1fr_auto] items-center gap-4 border-b border-surface-700 py-3 last:border-b-0"
@@ -30,9 +35,12 @@ export function Skills({ skills, tools }: { skills: Skill[]; tools: string[] }) 
                     {s.name}
                   </div>
                   <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-surface-700">
-                    <div
-                      className="h-full rounded-full bg-surface-950 transition-all duration-500 ease-out-soft"
-                      style={{ width: `${s.level}%` }}
+                    <motion.div
+                      className="h-full rounded-full bg-accent-400"
+                      initial={{ width: 0 }}
+                      whileInView={{ width: `${s.level}%` }}
+                      viewport={{ once: true, margin: "-80px" }}
+                      transition={{ ...barTransition, delay: i * 0.08 }}
                     />
                   </div>
                 </div>

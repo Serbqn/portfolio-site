@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
@@ -6,6 +5,7 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 import { getProjectBySlug, getProjects, getSite } from "@/lib/content";
 import { cn } from "@/lib/utils";
 import { BrowserFrame } from "@/components/projects/BrowserFrame";
+import { ImageLightbox } from "@/components/projects/ImageLightbox";
 
 type Params = { slug: string };
 
@@ -73,8 +73,26 @@ export default async function ProjectPage({
   const prev = all[(idx - 1 + all.length) % all.length];
   const next = all[(idx + 1) % all.length];
 
+  // Build gallery images for the lightbox (cover + gallery)
+  const lightboxImages =
+    project.cover || project.gallery?.length
+      ? [
+          ...(project.cover
+            ? [{ src: project.cover, alt: `${project.title} cover`, caption: `${project.title} — overview` }]
+            : []),
+          ...(project.gallery ?? [])
+            .filter((g) => g !== project.cover)
+            .map((g, i) => ({
+              src: g,
+              alt: `${project.title} screenshot ${i + 1}`,
+              caption: captionFor(project.title, i),
+            })),
+        ]
+      : [];
+
   return (
-    <article>      {/* Cover */}
+    <article>
+      {/* Cover */}
       <header className="border-b border-surface-700">
         <div className="container-wide pb-10 pt-16 sm:pb-12 sm:pt-20">
           <Link
@@ -136,22 +154,41 @@ export default async function ProjectPage({
         </div>
       </header>
 
+      {/* Gallery: BrowserFrame for main cover + ImageLightbox for clickable gallery */}
       {project.cover ? (
         <div className="container-wide mt-10 sm:mt-12">
+          {/* Main cover in BrowserFrame — presentation piece */}
           <BrowserFrame
             title={project.title}
             url={urlFor(project.client)}
             frames={[
               { src: project.cover, alt: `${project.title} cover` },
-              ...(project.gallery ?? [])
-                .filter((g) => g !== project.cover)
-                .map((g, i) => ({
-                  src: g,
-                  alt: `${project.title} screenshot ${i + 1}`,
-                  caption: captionFor(project.title, i),
-                })),
             ]}
           />
+
+          {/* Clickable gallery grid below */}
+          {lightboxImages.length > 1 ? (
+            <div className="mt-8">
+              <p className="font-mono text-xs uppercase tracking-widest text-surface-400 mb-4">
+                Gallery — click to expand
+              </p>
+              <ImageLightbox images={lightboxImages} />
+            </div>
+          ) : lightboxImages.length === 1 ? (
+            <div className="mt-8">
+              <p className="font-mono text-xs uppercase tracking-widest text-surface-400 mb-4">
+                Gallery — click to expand
+              </p>
+              <ImageLightbox images={lightboxImages} />
+            </div>
+          ) : null}
+        </div>
+      ) : lightboxImages.length > 0 ? (
+        <div className="container-wide mt-10 sm:mt-12">
+          <p className="font-mono text-xs uppercase tracking-widest text-surface-400 mb-4">
+            Gallery — click to expand
+          </p>
+          <ImageLightbox images={lightboxImages} />
         </div>
       ) : null}
 
