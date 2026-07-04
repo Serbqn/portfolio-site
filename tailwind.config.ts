@@ -18,8 +18,8 @@ const config: Config = {
           0: "#fafafa",    // Primary text, button text
           50: "#efefef",   // Light border, subtle surface
           100: "#b4b4b4",  // Secondary link text
-          200: "#898989",  // Muted text, tertiary links
-          300: "#4d4d4d",  // Heavy secondary text
+          200: "#a0a0a0",  // Muted text, tertiary links
+          300: "#6b6b6b",  // Heavy secondary text
           400: "#434343",  // Tertiary border
           500: "#393939",  // Secondary border
           600: "#363636",  // Button border, secondary divider

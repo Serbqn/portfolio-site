@@ -23,7 +23,7 @@ export default async function HomePage() {
       />
       <Skills skills={site.home.skills} tools={site.home.tools} />
 
-      <section className="container-wide pb-section">
+      <section className="container-wide section">
         <div className="rounded-2xl border border-surface-700 bg-surface-800 p-8 sm:p-12">
           <p className="eyebrow">
             <span className="eyebrow-dot" />
