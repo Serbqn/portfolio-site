@@ -24,7 +24,7 @@ export function FeaturedProjects({
         </div>
         <a
           href="/projects"
-          className="hidden shrink-0 items-center gap-1.5 self-end text-sm text-surface-700 transition-colors hover:text-surface-950 sm:inline-flex"
+          className="hidden shrink-0 items-center gap-1.5 self-end text-sm text-surface-200 transition-colors hover:text-surface-0 sm:inline-flex"
         >
           All projects
           <span aria-hidden>→</span>
@@ -40,7 +40,7 @@ export function FeaturedProjects({
       <div className="mt-10 sm:hidden">
         <a
           href="/projects"
-          className="inline-flex h-10 items-center justify-center rounded-lg border border-surface-200 px-4 text-sm font-medium text-surface-900 transition-colors hover:bg-surface-50"
+          className="inline-flex h-10 items-center justify-center rounded-lg border border-surface-700 px-4 text-sm font-medium text-surface-0 transition-colors hover:bg-surface-800"
         >
           All projects →
         </a>

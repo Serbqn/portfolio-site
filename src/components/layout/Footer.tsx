@@ -18,7 +18,7 @@ export async function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-surface-200 bg-surface-50">
+    <footer className="border-t border-surface-700 bg-surface-900">
       <div className="container-wide grid gap-12 py-section sm:grid-cols-2 sm:gap-8 lg:grid-cols-12">
         <div className="lg:col-span-5">
           <div className="flex items-center gap-2.5">
@@ -37,27 +37,27 @@ export async function Footer() {
                 />
               </svg>
             </span>
-            <span className="text-sm font-semibold tracking-tight text-surface-950">
+            <span className="text-sm font-semibold tracking-tight text-surface-0">
               {site.name}
             </span>
           </div>
-          <p className="mt-4 max-w-sm text-sm leading-relaxed text-surface-600">
+          <p className="mt-4 max-w-sm text-sm leading-relaxed text-surface-300">
             {site.tagline}
           </p>
-          <p className="mt-4 font-mono text-xs uppercase tracking-widest text-surface-500">
+          <p className="mt-4 font-mono text-xs uppercase tracking-widest text-surface-400">
             {site.location}
           </p>
         </div>
 
         <div className="lg:col-span-3">
-          <h3 className="font-mono text-xs uppercase tracking-widest text-surface-500">
+          <h3 className="font-mono text-xs uppercase tracking-widest text-surface-400">
             Sitemap
           </h3>
           <ul className="mt-4 space-y-2 text-sm">
             <li>
               <Link
                 href="/"
-                className="text-surface-700 transition-colors hover:text-surface-950"
+                className="text-surface-200 transition-colors hover:text-surface-0"
               >
                 Home
               </Link>
@@ -65,7 +65,7 @@ export async function Footer() {
             <li>
               <Link
                 href="/projects"
-                className="text-surface-700 transition-colors hover:text-surface-950"
+                className="text-surface-200 transition-colors hover:text-surface-0"
               >
                 Projects
               </Link>
@@ -73,7 +73,7 @@ export async function Footer() {
             <li>
               <Link
                 href="/about"
-                className="text-surface-700 transition-colors hover:text-surface-950"
+                className="text-surface-200 transition-colors hover:text-surface-0"
               >
                 About
               </Link>
@@ -81,7 +81,7 @@ export async function Footer() {
             <li>
               <Link
                 href="/contact"
-                className="text-surface-700 transition-colors hover:text-surface-950"
+                className="text-surface-200 transition-colors hover:text-surface-0"
               >
                 Contact
               </Link>
@@ -90,7 +90,7 @@ export async function Footer() {
         </div>
 
         <div className="lg:col-span-4">
-          <h3 className="font-mono text-xs uppercase tracking-widest text-surface-500">
+          <h3 className="font-mono text-xs uppercase tracking-widest text-surface-400">
             Elsewhere
           </h3>
           <ul className="mt-4 grid grid-cols-2 gap-y-2 text-sm sm:grid-cols-1">
@@ -100,7 +100,7 @@ export async function Footer() {
                   href={l.href}
                   target="_blank"
                   rel="noreferrer noopener"
-                  className="link-reveal text-surface-700"
+                  className="link-reveal text-surface-200"
                 >
                   {l.label}
                 </a>
@@ -109,7 +109,7 @@ export async function Footer() {
             <li>
               <a
                 href={`mailto:${site.email}`}
-                className="link-reveal text-surface-700"
+                className="link-reveal text-surface-200"
               >
                 {site.email}
               </a>
@@ -118,12 +118,12 @@ export async function Footer() {
         </div>
       </div>
 
-      <div className="border-t border-surface-200">
+      <div className="border-t border-surface-700">
         <div className="container-wide flex flex-col items-start justify-between gap-2 py-6 sm:flex-row sm:items-center">
-          <p className="font-mono text-xs uppercase tracking-widest text-surface-500">
+          <p className="font-mono text-xs uppercase tracking-widest text-surface-400">
             © {year} {site.name}
           </p>
-          <p className="font-mono text-xs uppercase tracking-widest text-surface-500">
+          <p className="font-mono text-xs uppercase tracking-widest text-surface-400">
             Built with Next.js · Designed in Open Design
           </p>
         </div>

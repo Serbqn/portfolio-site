@@ -226,7 +226,7 @@ export function ProjectEditor({
               type="text"
               value={draft.title}
               onChange={(e) => setField("title", e.target.value)}
-              className="h-10 w-full rounded-lg border border-surface-300 bg-white px-3 text-sm outline-none focus:border-accent-500 focus:shadow-ring-accent"
+              className="h-10 w-full rounded-lg border border-surface-600 bg-surface-900 px-3 text-sm text-surface-0 outline-none focus:border-accent-500 focus:shadow-ring-accent"
             />
           </Field>
           <Field id="slug" label="Slug">
@@ -238,10 +238,10 @@ export function ProjectEditor({
                 setSlugTouched(true);
                 setSlug(slugify(e.target.value));
               }}
-              className="h-10 w-full rounded-lg border border-surface-300 bg-white px-3 font-mono text-sm outline-none focus:border-accent-500 focus:shadow-ring-accent"
+              className="h-10 w-full rounded-lg border border-surface-600 bg-surface-900 px-3 font-mono text-sm text-surface-0 outline-none focus:border-accent-500 focus:shadow-ring-accent"
             />
             {allSlugs.includes(slug) && isNew ? (
-              <p className="mt-1.5 text-xs text-amber-700">
+              <p className="mt-1.5 text-xs text-amber-400">
                 A project with this slug already exists — saving will overwrite.
               </p>
             ) : null}
@@ -252,7 +252,7 @@ export function ProjectEditor({
               type="text"
               value={draft.subtitle}
               onChange={(e) => setField("subtitle", e.target.value)}
-              className="h-10 w-full rounded-lg border border-surface-300 bg-white px-3 text-sm outline-none focus:border-accent-500 focus:shadow-ring-accent"
+              className="h-10 w-full rounded-lg border border-surface-600 bg-surface-900 px-3 text-sm text-surface-0 outline-none focus:border-accent-500 focus:shadow-ring-accent"
             />
           </Field>
           <Field id="role" label="Role">
@@ -261,7 +261,7 @@ export function ProjectEditor({
               type="text"
               value={draft.role}
               onChange={(e) => setField("role", e.target.value)}
-              className="h-10 w-full rounded-lg border border-surface-300 bg-white px-3 text-sm outline-none focus:border-accent-500 focus:shadow-ring-accent"
+              className="h-10 w-full rounded-lg border border-surface-600 bg-surface-900 px-3 text-sm text-surface-0 outline-none focus:border-accent-500 focus:shadow-ring-accent"
             />
           </Field>
           <Field id="year" label="Year">
@@ -270,7 +270,7 @@ export function ProjectEditor({
               type="text"
               value={draft.year}
               onChange={(e) => setField("year", e.target.value)}
-              className="h-10 w-full rounded-lg border border-surface-300 bg-white px-3 text-sm outline-none focus:border-accent-500 focus:shadow-ring-accent"
+              className="h-10 w-full rounded-lg border border-surface-600 bg-surface-900 px-3 text-sm text-surface-0 outline-none focus:border-accent-500 focus:shadow-ring-accent"
             />
           </Field>
           <Field id="client" label="Client">
@@ -279,7 +279,7 @@ export function ProjectEditor({
               type="text"
               value={draft.client}
               onChange={(e) => setField("client", e.target.value)}
-              className="h-10 w-full rounded-lg border border-surface-300 bg-white px-3 text-sm outline-none focus:border-accent-500 focus:shadow-ring-accent"
+              className="h-10 w-full rounded-lg border border-surface-600 bg-surface-900 px-3 text-sm text-surface-0 outline-none focus:border-accent-500 focus:shadow-ring-accent"
             />
           </Field>
           <Field id="tags" label="Tags (comma separated)">
@@ -297,16 +297,16 @@ export function ProjectEditor({
                     .filter(Boolean),
                 );
               }}
-              className="h-10 w-full rounded-lg border border-surface-300 bg-white px-3 text-sm outline-none focus:border-accent-500 focus:shadow-ring-accent"
+              className="h-10 w-full rounded-lg border border-surface-600 bg-surface-900 px-3 text-sm text-surface-0 outline-none focus:border-accent-500 focus:shadow-ring-accent"
             />
           </Field>
           <Field id="featured" label="Featured?">
-            <label className="flex h-10 items-center gap-2 text-sm">
+            <label className="flex h-10 items-center gap-2 text-sm text-surface-0">
               <input
                 type="checkbox"
                 checked={draft.featured}
                 onChange={(e) => setField("featured", e.target.checked)}
-                className="h-4 w-4 rounded border-surface-300 text-accent-500 focus:ring-accent-500"
+                className="h-4 w-4 rounded border-surface-600 bg-surface-900 text-accent-500 focus:ring-accent-500"
               />
               Show on home page
             </label>
@@ -317,7 +317,7 @@ export function ProjectEditor({
               rows={2}
               value={draft.summary}
               onChange={(e) => setField("summary", e.target.value)}
-              className="w-full rounded-lg border border-surface-300 bg-white px-3 py-2.5 text-sm outline-none focus:border-accent-500 focus:shadow-ring-accent"
+              className="w-full rounded-lg border border-surface-600 bg-surface-900 px-3 py-2.5 text-sm text-surface-0 outline-none focus:border-accent-500 focus:shadow-ring-accent"
             />
           </Field>
         </div>
@@ -336,10 +336,10 @@ export function ProjectEditor({
                 value={draft.cover}
                 onChange={(e) => setField("cover", e.target.value)}
                 placeholder="/uploads/your-slug/cover.svg"
-                className="h-10 w-full rounded-lg border border-surface-300 bg-white px-3 font-mono text-xs outline-none focus:border-accent-500 focus:shadow-ring-accent"
+                className="h-10 w-full rounded-lg border border-surface-600 bg-surface-900 px-3 font-mono text-xs text-surface-0 outline-none focus:border-accent-500 focus:shadow-ring-accent"
               />
             </Field>
-            <label className="mt-3 inline-flex h-9 cursor-pointer items-center justify-center rounded-md border border-surface-200 bg-white px-3 text-sm font-medium text-surface-900 transition-colors hover:bg-surface-50">
+            <label className="mt-3 inline-flex h-9 cursor-pointer items-center justify-center rounded-md border border-surface-700 bg-surface-900 px-3 text-sm font-medium text-surface-0 transition-colors hover:bg-surface-800">
               {uploading ? "Uploading…" : "Upload image"}
               <input
                 type="file"
@@ -353,7 +353,7 @@ export function ProjectEditor({
               />
             </label>
             {uploadError ? (
-              <p className="mt-2 text-xs text-red-600">{uploadError}</p>
+              <p className="mt-2 text-xs text-red-400">{uploadError}</p>
             ) : null}
           </div>
           {draft.cover ? (
@@ -361,7 +361,7 @@ export function ProjectEditor({
             <img
               src={draft.cover}
               alt=""
-              className="h-32 w-48 rounded-lg border border-surface-200 object-cover"
+              className="h-32 w-48 rounded-lg border border-surface-700 object-cover"
             />
           ) : null}
         </div>
@@ -377,8 +377,8 @@ export function ProjectEditor({
             className={cn(
               "group relative flex flex-col items-center justify-center rounded-xl border-2 border-dashed p-8 transition-all duration-150 cursor-pointer",
               dragOver
-                ? "border-accent-500 bg-accent-50"
-                : "border-surface-300 bg-surface-50 hover:border-accent-500 hover:bg-accent-50",
+                ? "border-accent-500 bg-accent-500/10"
+                : "border-surface-600 bg-surface-800 hover:border-accent-500 hover:bg-accent-500/10",
             )}
             onDragOver={(e) => {
               e.preventDefault();
@@ -421,7 +421,7 @@ export function ProjectEditor({
             />
             <div className="flex flex-col items-center gap-2">
               <svg
-                className="h-10 w-10 text-surface-300 group-hover:text-accent-500 transition-colors"
+                className="h-10 w-10 text-surface-500 group-hover:text-accent-500 transition-colors"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -434,15 +434,15 @@ export function ProjectEditor({
                   d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
                 />
               </svg>
-              <span className="font-mono text-xs uppercase tracking-widest text-surface-500">
+              <span className="font-mono text-xs uppercase tracking-widest text-surface-400">
                 {uploading ? "Uploading…" : "Drop images here or click to select"}
               </span>
-              <span className="text-xs text-surface-400">
+              <span className="text-xs text-surface-500">
                 Max 8 MB each · JPG, PNG, WebP, SVG, GIF, AVIF
               </span>
             </div>
             {uploadError ? (
-              <p className="mt-2 text-xs text-red-600">{uploadError}</p>
+              <p className="mt-2 text-xs text-red-400">{uploadError}</p>
             ) : null}
           </div>
 
@@ -452,7 +452,7 @@ export function ProjectEditor({
               {draft.gallery.map((img, i) => (
                 <div
                   key={img}
-                  className="relative group rounded-lg border border-surface-200 bg-white overflow-hidden"
+                  className="relative group rounded-lg border border-surface-700 bg-surface-900 overflow-hidden"
                 >
                   <div className="relative aspect-[16/10] overflow-hidden">
                     <img
@@ -465,7 +465,7 @@ export function ProjectEditor({
                     <button
                       type="button"
                       onClick={() => setGalleryCover(i)}
-                      className="rounded-md bg-white/90 px-2 py-1 text-xs font-medium text-surface-900 hover:bg-white"
+                      className="rounded-md bg-white/90 px-2 py-1 text-xs font-medium text-surface-950 hover:bg-white"
                       title="Set as cover"
                     >
                       Set cover
@@ -474,7 +474,7 @@ export function ProjectEditor({
                       type="button"
                       onClick={() => moveGalleryItem(i, -1)}
                       disabled={i === 0}
-                      className="rounded-md bg-white/90 px-2 py-1 text-xs font-medium text-surface-900 hover:bg-white disabled:opacity-30 disabled:cursor-not-allowed"
+                      className="rounded-md bg-white/90 px-2 py-1 text-xs font-medium text-surface-950 hover:bg-white disabled:opacity-30 disabled:cursor-not-allowed"
                       title="Move up"
                     >
                       ↑
@@ -483,7 +483,7 @@ export function ProjectEditor({
                       type="button"
                       onClick={() => moveGalleryItem(i, 1)}
                       disabled={i === draft.gallery.length - 1}
-                      className="rounded-md bg-white/90 px-2 py-1 text-xs font-medium text-surface-900 hover:bg-white disabled:opacity-30 disabled:cursor-not-allowed"
+                      className="rounded-md bg-white/90 px-2 py-1 text-xs font-medium text-surface-950 hover:bg-white disabled:opacity-30 disabled:cursor-not-allowed"
                       title="Move down"
                     >
                       ↓
@@ -506,7 +506,7 @@ export function ProjectEditor({
               ))}
             </div>
           ) : (
-            <p className="text-center text-sm text-surface-500 py-4">
+            <p className="text-center text-sm text-surface-400 py-4">
               No gallery images yet. Drop some above.
             </p>
           )}
@@ -525,19 +525,19 @@ export function ProjectEditor({
                 placeholder="Label"
                 value={m.label}
                 onChange={(e) => setMetric(i, "label", e.target.value)}
-                className="h-9 rounded-md border border-surface-300 bg-white px-3 text-sm outline-none focus:border-accent-500"
+                className="h-9 rounded-md border border-surface-600 bg-surface-900 px-3 text-sm text-surface-0 outline-none focus:border-accent-500"
               />
               <input
                 type="text"
                 placeholder="Value (e.g. 90s → 4s)"
                 value={m.value}
                 onChange={(e) => setMetric(i, "value", e.target.value)}
-                className="h-9 rounded-md border border-surface-300 bg-white px-3 text-sm outline-none focus:border-accent-500"
+                className="h-9 rounded-md border border-surface-600 bg-surface-900 px-3 text-sm text-surface-0 outline-none focus:border-accent-500"
               />
               <button
                 type="button"
                 onClick={() => removeMetric(i)}
-                className="inline-flex h-9 items-center justify-center rounded-md border border-surface-200 bg-white px-2.5 text-xs text-surface-600 hover:text-red-600"
+                className="inline-flex h-9 items-center justify-center rounded-md border border-surface-700 bg-surface-900 px-2.5 text-xs text-surface-300 hover:text-red-400"
                 aria-label="Remove metric"
               >
                 Remove
@@ -547,7 +547,7 @@ export function ProjectEditor({
           <button
             type="button"
             onClick={addMetric}
-            className="inline-flex h-9 items-center justify-center rounded-md border border-surface-200 bg-white px-3 text-xs font-medium text-surface-900 transition-colors hover:bg-surface-50"
+            className="inline-flex h-9 items-center justify-center rounded-md border border-surface-700 bg-surface-900 px-3 text-xs font-medium text-surface-0 transition-colors hover:bg-surface-800"
           >
             + Add metric
           </button>
@@ -590,21 +590,21 @@ export function ProjectEditor({
       {error ? (
         <div
           role="alert"
-          className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700"
+          className="rounded-md border border-red-800 bg-red-950/50 px-3 py-2 text-sm text-red-400"
         >
           {error}
         </div>
       ) : null}
 
-      <div className="sticky bottom-4 z-10 flex items-center justify-end gap-3 rounded-xl border border-surface-200 bg-white/90 p-3 shadow-lift backdrop-blur">
-        <span className="mr-auto font-mono text-xs uppercase tracking-widest text-surface-500">
+      <div className="sticky bottom-4 z-10 flex items-center justify-end gap-3 rounded-xl border border-surface-700 bg-surface-900/90 p-3 backdrop-blur">
+        <span className="mr-auto font-mono text-xs uppercase tracking-widest text-surface-400">
           {status === "saving" ? "Saving…" : status === "saved" ? "Saved" : ""}
         </span>
         <button
           type="button"
           onClick={handleSave}
           disabled={status === "saving" || !draft.title || !slug}
-          className="inline-flex h-10 items-center justify-center rounded-lg bg-surface-950 px-4 text-sm font-medium text-white transition-colors hover:bg-surface-800 disabled:opacity-50"
+          className="inline-flex h-10 items-center justify-center rounded-lg bg-surface-0 px-4 text-sm font-medium text-surface-950 transition-colors hover:bg-surface-100 disabled:opacity-50"
         >
           {isNew ? "Create project" : "Save changes"}
         </button>
@@ -623,12 +623,12 @@ function Section({
   children: React.ReactNode;
 }) {
   return (
-    <section className="rounded-2xl border border-surface-200 bg-white p-5 sm:p-6">
-      <h2 className="text-base font-semibold tracking-tight text-surface-950">
+    <section className="rounded-2xl border border-surface-700 bg-surface-900 p-5 sm:p-6">
+      <h2 className="text-base font-semibold tracking-tight text-surface-0">
         {title}
       </h2>
       {description ? (
-        <p className="mt-1 text-sm text-surface-500">{description}</p>
+        <p className="mt-1 text-sm text-surface-400">{description}</p>
       ) : null}
       <div className="mt-4">{children}</div>
     </section>
@@ -650,7 +650,7 @@ function Field({
     <div className={className}>
       <label
         htmlFor={id}
-        className="font-mono text-xs uppercase tracking-widest text-surface-500"
+        className="font-mono text-xs uppercase tracking-widest text-surface-400"
       >
         {label}
       </label>
@@ -676,7 +676,7 @@ function TextArea({
     <div>
       <label
         htmlFor={id}
-        className="font-mono text-xs uppercase tracking-widest text-surface-500"
+        className="font-mono text-xs uppercase tracking-widest text-surface-400"
       >
         {label}
       </label>
@@ -685,7 +685,7 @@ function TextArea({
         rows={rows}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="mt-1.5 w-full rounded-lg border border-surface-300 bg-white px-3 py-2.5 text-sm leading-relaxed outline-none focus:border-accent-500 focus:shadow-ring-accent"
+        className="mt-1.5 w-full rounded-lg border border-surface-600 bg-surface-900 px-3 py-2.5 text-sm text-surface-0 leading-relaxed outline-none focus:border-accent-500 focus:shadow-ring-accent"
       />
     </div>
   );

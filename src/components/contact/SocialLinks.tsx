@@ -23,7 +23,7 @@ export function SocialLinks({
             href={l.href}
             target="_blank"
             rel="noreferrer noopener"
-            className="link-reveal text-surface-700"
+            className="link-reveal text-surface-200"
           >
             {l.label}
           </a>

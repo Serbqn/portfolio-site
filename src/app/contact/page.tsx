@@ -23,21 +23,21 @@ export default async function ContactPage() {
           <h1 className="mt-3 text-display-1 font-semibold tracking-tight text-balance">
             {contact.title}
           </h1>
-          <p className="mt-5 max-w-md text-lg leading-relaxed text-pretty text-surface-600">
+          <p className="mt-5 max-w-md text-lg leading-relaxed text-pretty text-surface-300">
             {contact.lead}
           </p>
 
           <div className="mt-10">
-            <h2 className="font-mono text-xs uppercase tracking-widest text-surface-500">
+            <h2 className="font-mono text-xs uppercase tracking-widest text-surface-400">
               Direct
             </h2>
             <a
               href={`mailto:${site.email}`}
-              className="link-reveal mt-2 inline-block text-base font-medium text-surface-950"
+              className="link-reveal mt-2 inline-block text-base font-medium text-surface-0"
             >
               {site.email}
             </a>
-            <p className="mt-1 text-sm text-surface-500">{site.location}</p>
+            <p className="mt-1 text-sm text-surface-400">{site.location}</p>
           </div>
 
           <div className="mt-10">

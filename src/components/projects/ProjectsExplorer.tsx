@@ -32,8 +32,8 @@ export function ProjectsExplorer({ projects }: { projects: ProjectListItem[] }) 
               className={cn(
                 "rounded-full border px-3 py-1.5 text-xs font-medium transition-colors duration-150",
                 isActive
-                  ? "border-surface-950 bg-surface-950 text-white"
-                  : "border-surface-200 bg-white text-surface-700 hover:border-surface-300 hover:text-surface-950",
+                  ? "border-surface-0 bg-surface-0 text-surface-950"
+                  : "border-surface-700 bg-surface-900 text-surface-200 hover:border-surface-500 hover:text-surface-0",
               )}
               aria-pressed={isActive}
             >
@@ -41,7 +41,7 @@ export function ProjectsExplorer({ projects }: { projects: ProjectListItem[] }) 
             </button>
           );
         })}
-        <span className="ml-2 font-mono text-xs uppercase tracking-widest text-surface-500">
+        <span className="ml-2 font-mono text-xs uppercase tracking-widest text-surface-400">
           {filtered.length} project{filtered.length === 1 ? "" : "s"}
         </span>
       </div>
@@ -53,7 +53,7 @@ export function ProjectsExplorer({ projects }: { projects: ProjectListItem[] }) 
       </div>
 
       {filtered.length === 0 ? (
-        <p className="mt-12 text-center text-sm text-surface-500">
+        <p className="mt-12 text-center text-sm text-surface-400">
           No projects match this filter yet.
         </p>
       ) : null}

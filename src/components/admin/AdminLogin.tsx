@@ -36,12 +36,12 @@ export function AdminLogin() {
   return (
     <form
       onSubmit={onSubmit}
-      className="space-y-4 rounded-2xl border border-surface-200 bg-white p-6 shadow-soft sm:p-8"
+      className="space-y-4 rounded-2xl border border-surface-700 bg-surface-900 p-6 sm:p-8"
     >
       <div>
         <label
           htmlFor="email"
-          className="font-mono text-xs uppercase tracking-widest text-surface-500"
+          className="font-mono text-xs uppercase tracking-widest text-surface-400"
         >
           Email
         </label>
@@ -52,14 +52,14 @@ export function AdminLogin() {
           autoComplete="email"
           required
           autoFocus
-          className="mt-2 h-11 w-full rounded-lg border border-surface-300 bg-white px-3 text-sm text-surface-900 outline-none transition focus:border-accent-500 focus:shadow-ring-accent"
+          className="mt-2 h-11 w-full rounded-lg border border-surface-600 bg-surface-900 px-3 text-sm text-surface-0 outline-none transition focus:border-accent-500 focus:shadow-ring-accent"
         />
       </div>
 
       <div>
         <label
           htmlFor="password"
-          className="font-mono text-xs uppercase tracking-widest text-surface-500"
+          className="font-mono text-xs uppercase tracking-widest text-surface-400"
         >
           Password
         </label>
@@ -69,14 +69,14 @@ export function AdminLogin() {
           type="password"
           autoComplete="current-password"
           required
-          className="mt-2 h-11 w-full rounded-lg border border-surface-300 bg-white px-3 text-sm text-surface-900 outline-none transition focus:border-accent-500 focus:shadow-ring-accent"
+          className="mt-2 h-11 w-full rounded-lg border border-surface-600 bg-surface-900 px-3 text-sm text-surface-0 outline-none transition focus:border-accent-500 focus:shadow-ring-accent"
         />
       </div>
 
       {error ? (
         <p
           role="alert"
-          className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700"
+          className="rounded-md border border-red-800 bg-red-950/50 px-3 py-2 text-sm text-red-400"
         >
           {error}
         </p>

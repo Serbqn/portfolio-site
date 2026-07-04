@@ -75,11 +75,11 @@ export default async function ProjectPage({
 
   return (
     <article>      {/* Cover */}
-      <header className="border-b border-surface-200">
+      <header className="border-b border-surface-700">
         <div className="container-wide pb-10 pt-16 sm:pb-12 sm:pt-20">
           <Link
             href="/projects"
-            className="inline-flex items-center gap-1.5 text-sm text-surface-500 transition-colors hover:text-surface-950"
+            className="inline-flex items-center gap-1.5 text-sm text-surface-400 transition-colors hover:text-surface-0"
           >
             <ArrowLeft className="h-3.5 w-3.5" />
             All projects
@@ -94,37 +94,37 @@ export default async function ProjectPage({
               <h1 className="mt-3 text-display-1 font-semibold tracking-tight text-balance">
                 {project.title}
               </h1>
-              <p className="mt-4 max-w-2xl text-lg leading-relaxed text-pretty text-surface-600">
+              <p className="mt-4 max-w-2xl text-lg leading-relaxed text-pretty text-surface-300">
                 {project.subtitle}
               </p>
             </div>
 
-            <dl className="grid gap-5 border-t border-surface-200 pt-6 text-sm sm:grid-cols-2 lg:col-span-5 lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0">
+            <dl className="grid gap-5 border-t border-surface-700 pt-6 text-sm sm:grid-cols-2 lg:col-span-5 lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0">
               <div>
-                <dt className="font-mono text-xs uppercase tracking-widest text-surface-500">
+                <dt className="font-mono text-xs uppercase tracking-widest text-surface-400">
                   Role
                 </dt>
-                <dd className="mt-1 font-medium text-surface-950">
+                <dd className="mt-1 font-medium text-surface-0">
                   {project.role}
                 </dd>
               </div>
               <div>
-                <dt className="font-mono text-xs uppercase tracking-widest text-surface-500">
+                <dt className="font-mono text-xs uppercase tracking-widest text-surface-400">
                   Year
                 </dt>
-                <dd className="mt-1 font-medium text-surface-950">
+                <dd className="mt-1 font-medium text-surface-0">
                   {project.year}
                 </dd>
               </div>
               <div className="sm:col-span-2">
-                <dt className="font-mono text-xs uppercase tracking-widest text-surface-500">
+                <dt className="font-mono text-xs uppercase tracking-widest text-surface-400">
                   Tags
                 </dt>
                 <dd className="mt-1 flex flex-wrap gap-1.5">
                   {project.tags.map((t) => (
                     <span
                       key={t}
-                      className="inline-flex items-center rounded-full bg-surface-100 px-2.5 py-0.5 text-xs font-medium text-surface-700"
+                      className="inline-flex items-center rounded-full bg-surface-800 px-2.5 py-0.5 text-xs font-medium text-surface-200"
                     >
                       {t}
                     </span>
@@ -159,17 +159,17 @@ export default async function ProjectPage({
       {project.metrics?.length ? (
         <section className="container-wide mt-section-sm">
           <div className={cn(
-            "grid overflow-hidden rounded-2xl border border-surface-200 divide-x divide-surface-200",
+            "grid overflow-hidden rounded-2xl border border-surface-700 divide-x divide-surface-700",
             project.metrics.length === 1 ? "grid-cols-1" :
             project.metrics.length === 2 ? "grid-cols-1 sm:grid-cols-2" :
             "grid-cols-1 sm:grid-cols-3",
           )}>
             {project.metrics.map((m) => (
-              <div key={m.label} className="bg-white p-6">
-                <div className="font-mono text-xs uppercase tracking-widest text-surface-500">
+              <div key={m.label} className="bg-surface-900 p-6">
+                <div className="font-mono text-xs uppercase tracking-widest text-surface-400">
                   {m.label}
                 </div>
-                <div className="mt-2 text-2xl font-semibold tracking-tight text-surface-950 sm:text-3xl">
+                <div className="mt-2 text-2xl font-semibold tracking-tight text-surface-0 sm:text-3xl">
                   {m.value}
                 </div>
               </div>
@@ -192,7 +192,7 @@ export default async function ProjectPage({
               <h2 className="text-display-3 font-semibold tracking-tight">
                 Problem
               </h2>
-              <div className="mt-4 max-w-prose space-y-3 text-pretty leading-relaxed text-surface-700 break-words [overflow-wrap:anywhere]">
+              <div className="mt-4 max-w-prose space-y-3 text-pretty leading-relaxed text-surface-200 break-words [overflow-wrap:anywhere]">
                 {renderMarkdownParagraphs(project.problem)}
               </div>
             </section>
@@ -202,7 +202,7 @@ export default async function ProjectPage({
               <h2 className="text-display-3 font-semibold tracking-tight">
                 Process
               </h2>
-              <div className="mt-4 max-w-prose space-y-3 text-pretty leading-relaxed text-surface-700 break-words [overflow-wrap:anywhere]">
+              <div className="mt-4 max-w-prose space-y-3 text-pretty leading-relaxed text-surface-200 break-words [overflow-wrap:anywhere]">
                 {renderMarkdownParagraphs(project.process)}
               </div>
             </section>
@@ -212,7 +212,7 @@ export default async function ProjectPage({
               <h2 className="text-display-3 font-semibold tracking-tight">
                 Solution
               </h2>
-              <div className="mt-4 max-w-prose space-y-3 text-pretty leading-relaxed text-surface-700 break-words [overflow-wrap:anywhere]">
+              <div className="mt-4 max-w-prose space-y-3 text-pretty leading-relaxed text-surface-200 break-words [overflow-wrap:anywhere]">
                 {renderMarkdownParagraphs(project.solution)}
               </div>
             </section>
@@ -222,7 +222,7 @@ export default async function ProjectPage({
               <h2 className="text-display-3 font-semibold tracking-tight">
                 Results
               </h2>
-              <div className="mt-4 max-w-prose space-y-3 text-pretty leading-relaxed text-surface-700 break-words [overflow-wrap:anywhere]">
+              <div className="mt-4 max-w-prose space-y-3 text-pretty leading-relaxed text-surface-200 break-words [overflow-wrap:anywhere]">
                 {renderMarkdownParagraphs(project.results)}
               </div>
             </section>
@@ -261,30 +261,30 @@ export default async function ProjectPage({
       {/* Prev / Next */}
       <nav
         aria-label="Project navigation"
-        className="border-t border-surface-200"
+        className="border-t border-surface-700"
       >
-        <div className="container-wide grid grid-cols-2 gap-px overflow-hidden bg-surface-200 sm:grid-cols-2">
+        <div className="container-wide grid grid-cols-2 gap-px overflow-hidden bg-surface-700 sm:grid-cols-2">
           <Link
             href={`/projects/${prev.slug}`}
-            className="group flex flex-col gap-2 bg-white p-6 transition-colors hover:bg-surface-50 sm:p-8"
+            className="group flex flex-col gap-2 bg-surface-900 p-6 transition-colors hover:bg-surface-800 sm:p-8"
           >
-            <span className="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-widest text-surface-500 transition-colors group-hover:text-surface-950">
+            <span className="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-widest text-surface-400 transition-colors group-hover:text-surface-0">
               <ArrowLeft className="h-3.5 w-3.5" />
               Previous
             </span>
-            <span className="text-base font-medium text-surface-950 sm:text-lg">
+            <span className="text-base font-medium text-surface-0 sm:text-lg">
               {prev.title}
             </span>
           </Link>
           <Link
             href={`/projects/${next.slug}`}
-            className="group col-start-2 flex flex-col items-end gap-2 bg-white p-6 text-right transition-colors hover:bg-surface-50 sm:p-8"
+            className="group col-start-2 flex flex-col items-end gap-2 bg-surface-900 p-6 text-right transition-colors hover:bg-surface-800 sm:p-8"
           >
-            <span className="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-widest text-surface-500 transition-colors group-hover:text-surface-950">
+            <span className="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-widest text-surface-400 transition-colors group-hover:text-surface-0">
               Next
               <ArrowRight className="h-3.5 w-3.5" />
             </span>
-            <span className="text-base font-medium text-surface-950 sm:text-lg">
+            <span className="text-base font-medium text-surface-0 sm:text-lg">
               {next.title}
             </span>
           </Link>

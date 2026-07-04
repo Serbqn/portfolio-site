@@ -51,7 +51,7 @@ export default async function RootLayout({
   const { site } = await getSite();
   return (
     <html lang="en" className={`${sans.variable} ${mono.variable}`}>
-      <body className="min-h-screen flex flex-col bg-white text-surface-900 antialiased">
+      <body className="min-h-screen flex flex-col bg-surface-900 text-surface-0 antialiased">
         <Navbar name={site.name} role={site.role} logo={site.logo} />
         <main className="flex-1">{children}</main>
         <Footer />

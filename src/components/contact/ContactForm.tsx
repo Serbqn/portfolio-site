@@ -47,7 +47,7 @@ export function ContactForm({
 
   if (status === "success") {
     return (
-      <div className="rounded-2xl border border-surface-200 bg-white p-8 shadow-soft">
+      <div className="rounded-2xl border border-surface-700 bg-surface-900 p-8">
         <p className="eyebrow">
           <span className="eyebrow-dot" />
           Opened
@@ -55,11 +55,11 @@ export function ContactForm({
         <h2 className="mt-3 text-display-3 font-semibold tracking-tight">
           Thanks — your mail client should be opening.
         </h2>
-        <p className="mt-3 max-w-prose text-pretty text-surface-600">
+        <p className="mt-3 max-w-prose text-pretty text-surface-300">
           If nothing opened, you can email me directly at{" "}
           <a
             href={`mailto:${contactEmail}`}
-            className="link-reveal font-medium text-surface-950"
+            className="link-reveal font-medium text-surface-0"
           >
             {contactEmail}
           </a>
@@ -72,7 +72,7 @@ export function ContactForm({
   return (
     <form
       onSubmit={onSubmit}
-      className="rounded-2xl border border-surface-200 bg-white p-6 shadow-soft sm:p-8"
+      className="rounded-2xl border border-surface-700 bg-surface-900 p-6 sm:p-8"
       noValidate
     >
       <div className="grid gap-5 sm:grid-cols-2">
@@ -83,7 +83,7 @@ export function ContactForm({
             type="text"
             autoComplete="name"
             required
-            className="h-10 w-full rounded-lg border border-surface-300 bg-white px-3 text-sm text-surface-900 outline-none transition focus:border-accent-500 focus:shadow-ring-accent"
+            className="h-10 w-full rounded-lg border border-surface-600 bg-surface-900 px-3 text-sm text-surface-0 outline-none transition focus:border-accent-500 focus:shadow-ring-accent"
           />
         </Field>
         <Field id="email" label="Email" required>
@@ -93,7 +93,7 @@ export function ContactForm({
             type="email"
             autoComplete="email"
             required
-            className="h-10 w-full rounded-lg border border-surface-300 bg-white px-3 text-sm text-surface-900 outline-none transition focus:border-accent-500 focus:shadow-ring-accent"
+            className="h-10 w-full rounded-lg border border-surface-600 bg-surface-900 px-3 text-sm text-surface-0 outline-none transition focus:border-accent-500 focus:shadow-ring-accent"
           />
         </Field>
         <Field id="company" label="Company (optional)" className="sm:col-span-2">
@@ -102,7 +102,7 @@ export function ContactForm({
             name="company"
             type="text"
             autoComplete="organization"
-            className="h-10 w-full rounded-lg border border-surface-300 bg-white px-3 text-sm text-surface-900 outline-none transition focus:border-accent-500 focus:shadow-ring-accent"
+            className="h-10 w-full rounded-lg border border-surface-600 bg-surface-900 px-3 text-sm text-surface-0 outline-none transition focus:border-accent-500 focus:shadow-ring-accent"
           />
         </Field>
         <Field
@@ -117,7 +117,7 @@ export function ContactForm({
             rows={6}
             required
             placeholder="What are you building, who is it for, and what’s the rough timeline?"
-            className="w-full rounded-lg border border-surface-300 bg-white px-3 py-2.5 text-sm text-surface-900 outline-none transition focus:border-accent-500 focus:shadow-ring-accent"
+            className="w-full rounded-lg border border-surface-600 bg-surface-900 px-3 py-2.5 text-sm text-surface-0 outline-none transition focus:border-accent-500 focus:shadow-ring-accent"
           />
         </Field>
       </div>
@@ -125,14 +125,14 @@ export function ContactForm({
       {error ? (
         <p
           role="alert"
-          className="mt-5 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700"
+          className="mt-5 rounded-md border border-red-800 bg-red-950/50 px-3 py-2 text-sm text-red-400"
         >
           {error}
         </p>
       ) : null}
 
       <div className="mt-6 flex items-center justify-between gap-3">
-        <p className="text-xs text-surface-500">
+        <p className="text-xs text-surface-400">
           No tracking. No newsletter. Just an email to me.
         </p>
         <button
@@ -167,7 +167,7 @@ function Field({
     <div className={cn("grid gap-1.5", className)}>
       <label
         htmlFor={id}
-        className="font-mono text-xs uppercase tracking-widest text-surface-500"
+        className="font-mono text-xs uppercase tracking-widest text-surface-400"
       >
         {label}
         {required ? <span className="text-accent-600"> *</span> : null}

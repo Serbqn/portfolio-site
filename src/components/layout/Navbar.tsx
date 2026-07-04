@@ -36,8 +36,8 @@ export function Navbar({
       className={cn(
         "sticky top-0 z-40 w-full border-b border-transparent transition-all duration-300",
         scrolled
-          ? "border-surface-200 bg-white/80 backdrop-blur-md"
-          : "bg-white",
+          ? "border-surface-700 bg-surface-900/80 backdrop-blur-md"
+          : "bg-surface-900",
       )}
     >
       <div className="container-wide flex h-16 items-center justify-between">
@@ -67,9 +67,9 @@ export function Navbar({
               )}
             </svg>
           </span>
-          <span className="text-surface-950">{name}</span>
-          <span className="hidden text-surface-400 sm:inline">/</span>
-          <span className="hidden font-mono text-xs uppercase tracking-widest text-surface-500 sm:inline">
+          <span className="text-surface-0">{name}</span>
+          <span className="hidden text-surface-500 sm:inline">/</span>
+          <span className="hidden font-mono text-xs uppercase tracking-widest text-surface-400 sm:inline">
             {role}
           </span>
         </Link>
@@ -87,8 +87,8 @@ export function Navbar({
                 className={cn(
                   "rounded-md px-2.5 py-1.5 text-sm transition-colors duration-150 sm:px-3",
                   active
-                    ? "text-surface-950"
-                    : "text-surface-500 hover:text-surface-950",
+                    ? "text-surface-0"
+                    : "text-surface-400 hover:text-surface-0",
                 )}
                 aria-current={active ? "page" : undefined}
               >
@@ -98,7 +98,7 @@ export function Navbar({
           })}
           <span
             aria-hidden
-            className="mx-1 hidden h-4 w-px bg-surface-200 sm:inline-block"
+            className="mx-1 hidden h-4 w-px bg-surface-700 sm:inline-block"
           />
           <Link
             href="/contact"

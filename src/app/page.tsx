@@ -24,7 +24,7 @@ export default async function HomePage() {
       <Skills skills={site.home.skills} tools={site.home.tools} />
 
       <section className="container-wide pb-section">
-        <div className="rounded-2xl border border-surface-200 bg-surface-50 p-8 sm:p-12">
+        <div className="rounded-2xl border border-surface-700 bg-surface-800 p-8 sm:p-12">
           <p className="eyebrow">
             <span className="eyebrow-dot" />
             {site.home.intro.eyebrow}
@@ -32,12 +32,12 @@ export default async function HomePage() {
           <h2 className="mt-3 text-display-3 font-semibold tracking-tight text-balance">
             {site.home.intro.title}
           </h2>
-          <p className="mt-4 max-w-2xl text-pretty text-surface-600">
+          <p className="mt-4 max-w-2xl text-pretty text-surface-300">
             {site.home.intro.body}
           </p>
           <a
             href="/about"
-            className="mt-6 inline-flex items-center gap-1.5 text-sm text-surface-700 transition-colors hover:text-surface-950"
+            className="mt-6 inline-flex items-center gap-1.5 text-sm text-surface-200 transition-colors hover:text-surface-0"
           >
             More about how I work
             <span aria-hidden>→</span>

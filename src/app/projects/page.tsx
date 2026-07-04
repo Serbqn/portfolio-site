@@ -21,7 +21,7 @@ export default async function ProjectsPage() {
         <h1 className="mt-3 text-display-1 font-semibold tracking-tight text-balance">
           A small portfolio, picked carefully.
         </h1>
-        <p className="mt-5 max-w-2xl text-lg leading-relaxed text-pretty text-surface-600">
+        <p className="mt-5 max-w-2xl text-lg leading-relaxed text-pretty text-surface-300">
           Most of my work is under NDA. The five below are the public ones,
           with the parts I’m allowed to share. Filter by discipline to narrow
           things down.

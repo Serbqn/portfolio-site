@@ -21,7 +21,7 @@ export default async function AboutPage() {
           <h1 className="mt-3 text-display-1 font-semibold tracking-tight text-balance">
             {about.title}
           </h1>
-          <p className="mt-5 max-w-2xl text-lg leading-relaxed text-pretty text-surface-600">
+          <p className="mt-5 max-w-2xl text-lg leading-relaxed text-pretty text-surface-300">
             {about.lead}
           </p>
         </header>
@@ -34,7 +34,7 @@ export default async function AboutPage() {
                   <h2 className="text-display-3 font-semibold tracking-tight">
                     {s.heading}
                   </h2>
-                  <p className="mt-4 max-w-prose text-pretty leading-relaxed text-surface-700">
+                  <p className="mt-4 max-w-prose text-pretty leading-relaxed text-surface-200">
                     {s.body}
                   </p>
                 </section>
@@ -43,21 +43,21 @@ export default async function AboutPage() {
           </div>
 
           <aside className="lg:col-span-5">
-            <div className="sticky top-24 rounded-2xl border border-surface-200 bg-surface-50 p-6">
-              <h2 className="font-mono text-xs uppercase tracking-widest text-surface-500">
+            <div className="sticky top-24 rounded-2xl border border-surface-700 bg-surface-800 p-6">
+              <h2 className="font-mono text-xs uppercase tracking-widest text-surface-400">
                 Experience
               </h2>
               <ol className="mt-4 space-y-6">
                 {about.experience.map((e) => (
                   <li key={`${e.year}-${e.role}`} className="grid gap-1">
-                    <div className="font-mono text-xs uppercase tracking-widest text-surface-500">
+                    <div className="font-mono text-xs uppercase tracking-widest text-surface-400">
                       {e.year}
                     </div>
-                    <div className="text-base font-semibold tracking-tight text-surface-950">
+                    <div className="text-base font-semibold tracking-tight text-surface-0">
                       {e.role}
                     </div>
-                    <div className="text-sm text-surface-700">{e.company}</div>
-                    <p className="mt-1 text-sm leading-relaxed text-surface-600">
+                    <div className="text-sm text-surface-200">{e.company}</div>
+                    <p className="mt-1 text-sm leading-relaxed text-surface-300">
                       {e.summary}
                     </p>
                   </li>

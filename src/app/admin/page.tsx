@@ -19,7 +19,7 @@ export default async function AdminPage() {
           <h1 className="mt-3 text-display-2 font-semibold tracking-tight text-balance">
             Sign in to manage content.
           </h1>
-          <p className="mt-3 text-pretty text-surface-600">
+          <p className="mt-3 text-pretty text-surface-300">
             Sign in with your Supabase account to manage projects, upload images,
             and update site content.
           </p>

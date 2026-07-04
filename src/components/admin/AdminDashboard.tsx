@@ -82,7 +82,7 @@ export function AdminDashboard({ initialSite }: { initialSite: SiteContent }) {
       <header className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">Admin</h1>
-          <p className="mt-1 text-sm text-surface-500">
+          <p className="mt-1 text-sm text-surface-400">
             Edit projects, upload cover images, and update site copy. All changes
             are saved to Supabase and deployed instantly.
           </p>
@@ -91,28 +91,28 @@ export function AdminDashboard({ initialSite }: { initialSite: SiteContent }) {
           <Link
             href="/"
             target="_blank"
-            className="inline-flex h-9 items-center justify-center rounded-lg border border-surface-200 bg-white px-3 text-sm font-medium text-surface-900 transition-colors hover:bg-surface-50"
+            className="inline-flex h-9 items-center justify-center rounded-lg border border-surface-700 bg-surface-900 px-3 text-sm font-medium text-surface-0 transition-colors hover:bg-surface-800"
           >
             View site ↗
           </Link>
           <button
             type="button"
             onClick={handleLogout}
-            className="inline-flex h-9 items-center justify-center rounded-lg border border-surface-200 bg-white px-3 text-sm font-medium text-surface-900 transition-colors hover:bg-surface-50"
+            className="inline-flex h-9 items-center justify-center rounded-lg border border-surface-700 bg-surface-900 px-3 text-sm font-medium text-surface-0 transition-colors hover:bg-surface-800"
           >
             Sign out
           </button>
         </div>
       </header>
 
-      <nav className="flex flex-wrap items-center gap-2 border-b border-surface-200 pb-3">
+      <nav className="flex flex-wrap items-center gap-2 border-b border-surface-700 pb-3">
         <button
           type="button"
           onClick={() => setSection("list")}
           className={`rounded-md px-3 py-1.5 text-sm transition-colors ${
             section === "list"
-              ? "bg-surface-950 text-white"
-              : "text-surface-600 hover:text-surface-950"
+              ? "bg-surface-0 text-surface-950"
+              : "text-surface-300 hover:text-surface-0"
           }`}
         >
           Projects
@@ -122,8 +122,8 @@ export function AdminDashboard({ initialSite }: { initialSite: SiteContent }) {
           onClick={() => setSection("new")}
           className={`rounded-md px-3 py-1.5 text-sm transition-colors ${
             section === "new"
-              ? "bg-surface-950 text-white"
-              : "text-surface-600 hover:text-surface-950"
+              ? "bg-surface-0 text-surface-950"
+              : "text-surface-300 hover:text-surface-0"
           }`}
         >
           + New project
@@ -133,13 +133,13 @@ export function AdminDashboard({ initialSite }: { initialSite: SiteContent }) {
           onClick={() => setSection("site")}
           className={`rounded-md px-3 py-1.5 text-sm transition-colors ${
             section === "site"
-              ? "bg-surface-950 text-white"
-              : "text-surface-600 hover:text-surface-950"
+              ? "bg-surface-0 text-surface-950"
+              : "text-surface-300 hover:text-surface-0"
           }`}
         >
           Site copy
         </button>
-        <span className="ml-auto font-mono text-xs uppercase tracking-widest text-surface-500">
+        <span className="ml-auto font-mono text-xs uppercase tracking-widest text-surface-400">
           {projects.length} project{projects.length === 1 ? "" : "s"}
         </span>
       </nav>
@@ -147,7 +147,7 @@ export function AdminDashboard({ initialSite }: { initialSite: SiteContent }) {
       {error ? (
         <div
           role="alert"
-          className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700"
+          className="rounded-md border border-red-800 bg-red-950/50 px-3 py-2 text-sm text-red-400"
         >
           {error}
         </div>
@@ -242,41 +242,41 @@ function ProjectList({
 }) {
   if (loading) {
     return (
-      <p className="rounded-2xl border border-surface-200 bg-white p-6 text-sm text-surface-500">
+      <p className="rounded-2xl border border-surface-700 bg-surface-900 p-6 text-sm text-surface-400">
         Loading projects…
       </p>
     );
   }
   if (!projects.length) {
     return (
-      <p className="rounded-2xl border border-surface-200 bg-white p-6 text-sm text-surface-500">
+      <p className="rounded-2xl border border-surface-700 bg-surface-900 p-6 text-sm text-surface-400">
         No projects yet. Create one with the “+ New project” tab above.
       </p>
     );
   }
   return (
-    <ul className="divide-y divide-surface-200 overflow-hidden rounded-2xl border border-surface-200 bg-white">
+    <ul className="divide-y divide-surface-700 overflow-hidden rounded-2xl border border-surface-700 bg-surface-900">
       {projects.map((p) => (
         <li
           key={p.slug}
           className="grid grid-cols-[1fr_auto] items-center gap-3 p-4 sm:grid-cols-[2fr_1fr_auto_auto] sm:p-5"
         >
           <div className="min-w-0">
-            <div className="truncate text-sm font-semibold text-surface-950">
+            <div className="truncate text-sm font-semibold text-surface-0">
               {p.title}
             </div>
-            <div className="mt-0.5 truncate text-xs text-surface-500">
+            <div className="mt-0.5 truncate text-xs text-surface-400">
               {p.subtitle}
             </div>
           </div>
-          <div className="hidden text-xs text-surface-500 sm:block">
+          <div className="hidden text-xs text-surface-400 sm:block">
             {p.year} · {p.client}
           </div>
           <div className="hidden flex-wrap gap-1 sm:flex">
             {p.tags.slice(0, 2).map((t) => (
               <span
                 key={t}
-                className="inline-flex items-center rounded-full bg-surface-100 px-2 py-0.5 text-[11px] font-medium text-surface-700"
+                className="inline-flex items-center rounded-full bg-surface-800 px-2 py-0.5 text-[11px] font-medium text-surface-200"
               >
                 {t}
               </span>
@@ -286,14 +286,14 @@ function ProjectList({
             <button
               type="button"
               onClick={() => onEdit(p.slug)}
-              className="inline-flex h-8 items-center justify-center rounded-md border border-surface-200 bg-white px-3 text-xs font-medium text-surface-900 transition-colors hover:bg-surface-50"
+              className="inline-flex h-8 items-center justify-center rounded-md border border-surface-700 bg-surface-900 px-3 text-xs font-medium text-surface-0 transition-colors hover:bg-surface-800"
             >
               Edit
             </button>
             <button
               type="button"
               onClick={() => onDelete(p.slug)}
-              className="inline-flex h-8 items-center justify-center rounded-md border border-red-200 bg-white px-3 text-xs font-medium text-red-700 transition-colors hover:bg-red-50"
+              className="inline-flex h-8 items-center justify-center rounded-md border border-red-800 bg-surface-900 px-3 text-xs font-medium text-red-400 transition-colors hover:bg-red-950/50"
             >
               Delete
             </button>

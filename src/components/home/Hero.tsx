@@ -28,10 +28,10 @@ export function Hero({
               <span className="eyebrow-dot" />
               {hero.eyebrow}
             </p>
-            <h1 className="mt-6 text-display-1 font-semibold tracking-tight text-balance text-surface-950">
+            <h1 className="mt-6 text-display-1 font-semibold tracking-tight text-balance text-surface-0">
               {hero.headline}
             </h1>
-            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-pretty text-surface-600 sm:text-xl">
+            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-pretty text-surface-300 sm:text-xl">
               {hero.subheadline}
             </p>
             <div className="mt-10 flex flex-wrap items-center gap-3">
@@ -44,7 +44,7 @@ export function Hero({
               </Link>
               <Link
                 href={hero.secondaryCta.href}
-                className="inline-flex h-11 items-center justify-center rounded-lg border border-surface-200 bg-white px-5 text-sm font-medium text-surface-900 transition-colors duration-150 hover:bg-surface-50"
+                className="inline-flex h-11 items-center justify-center rounded-lg border border-surface-700 bg-surface-900 px-5 text-sm font-medium text-surface-0 transition-colors duration-150 hover:bg-surface-800"
               >
                 {hero.secondaryCta.label}
               </Link>
@@ -52,28 +52,28 @@ export function Hero({
           </div>
 
           <aside className="lg:col-span-4">
-            <dl className="grid gap-6 border-l border-surface-200 pl-6 sm:grid-cols-2 lg:grid-cols-1">
+            <dl className="grid gap-6 border-l border-surface-700 pl-6 sm:grid-cols-2 lg:grid-cols-1">
               <div>
-                <dt className="font-mono text-xs uppercase tracking-widest text-surface-500">
+                <dt className="font-mono text-xs uppercase tracking-widest text-surface-400">
                   Designer
                 </dt>
-                <dd className="mt-1 text-base font-medium text-surface-950">
+                <dd className="mt-1 text-base font-medium text-surface-0">
                   {name}
                 </dd>
               </div>
               <div>
-                <dt className="font-mono text-xs uppercase tracking-widest text-surface-500">
+                <dt className="font-mono text-xs uppercase tracking-widest text-surface-400">
                   Focus
                 </dt>
-                <dd className="mt-1 text-base font-medium text-surface-950">
+                <dd className="mt-1 text-base font-medium text-surface-0">
                   Fintech · Dev tools · B2B
                 </dd>
               </div>
               <div>
-                <dt className="font-mono text-xs uppercase tracking-widest text-surface-500">
+                <dt className="font-mono text-xs uppercase tracking-widest text-surface-400">
                   Status
                 </dt>
-                <dd className="mt-1 text-base font-medium text-surface-950">
+                <dd className="mt-1 text-base font-medium text-surface-0">
                   {availability}
                 </dd>
               </div>

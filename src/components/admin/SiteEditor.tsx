@@ -51,11 +51,11 @@ export function SiteEditor({
                   setSite("site", { ...draft.site, logo: v || undefined })
                 }
               />
-              <p className="font-mono text-[10px] uppercase tracking-widest text-surface-400">
-                SVG path data (e.g. <code className="rounded bg-surface-100 px-1">M9 11h14M9 16h10M9 21h14</code>). Leave empty for the default icon.
+              <p className="font-mono text-[10px] uppercase tracking-widest text-surface-500">
+                SVG path data (e.g. <code className="rounded bg-surface-800 px-1">M9 11h14M9 16h10M9 21h14</code>). Leave empty for the default icon.
               </p>
               {/* Live preview */}
-              <div className="mt-2 flex items-center gap-2 rounded-lg border border-surface-200 bg-surface-50 p-3">
+              <div className="mt-2 flex items-center gap-2 rounded-lg border border-surface-700 bg-surface-800 p-3">
                 <span className="grid h-7 w-7 place-items-center rounded-md bg-surface-950 text-accent-500">
                   <svg viewBox="0 0 32 32" className="h-4 w-4" fill="none" aria-hidden>
                     <path
@@ -66,9 +66,9 @@ export function SiteEditor({
                     />
                   </svg>
                 </span>
-                <span className="text-sm font-semibold text-surface-950">{draft.site.name || "Name"}</span>
-                <span className="text-surface-400">/</span>
-                <span className="font-mono text-xs uppercase tracking-widest text-surface-500">
+                <span className="text-sm font-semibold text-surface-0">{draft.site.name || "Name"}</span>
+                <span className="text-surface-500">/</span>
+                <span className="font-mono text-xs uppercase tracking-widest text-surface-400">
                   {draft.site.role || "Role"}
                 </span>
               </div>
@@ -284,7 +284,7 @@ export function SiteEditor({
                   featuredCount: Math.max(1, Number(e.target.value) || 3),
                 })
               }
-              className="h-10 w-full rounded-lg border border-surface-300 bg-white px-3 text-sm outline-none focus:border-accent-500 focus:shadow-ring-accent"
+              className="h-10 w-full rounded-lg border border-surface-600 bg-surface-900 px-3 text-sm outline-none focus:border-accent-500 focus:shadow-ring-accent"
             />
           </Field>
         </Grid>
@@ -305,7 +305,7 @@ export function SiteEditor({
                     setSite("home", { ...draft.home, skills: next });
                   }}
                   placeholder="Skill name"
-                  className="h-9 flex-1 rounded-lg border border-surface-300 bg-white px-3 text-sm outline-none focus:border-accent-500"
+                  className="h-9 flex-1 rounded-lg border border-surface-600 bg-surface-900 px-3 text-sm outline-none focus:border-accent-500"
                 />
                 <input
                   type="number"
@@ -317,7 +317,7 @@ export function SiteEditor({
                     next[i] = { ...next[i], level: Math.min(100, Math.max(0, Number(e.target.value) || 0)) };
                     setSite("home", { ...draft.home, skills: next });
                   }}
-                  className="h-9 w-20 rounded-lg border border-surface-300 bg-white px-2 text-sm outline-none focus:border-accent-500"
+                  className="h-9 w-20 rounded-lg border border-surface-600 bg-surface-900 px-2 text-sm outline-none focus:border-accent-500"
                 />
                 <button
                   type="button"
@@ -325,7 +325,7 @@ export function SiteEditor({
                     const next = draft.home.skills.filter((_, j) => j !== i);
                     setSite("home", { ...draft.home, skills: next });
                   }}
-                  className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-red-200 text-red-500 hover:bg-red-50"
+                  className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-red-800 text-red-400 hover:bg-red-950/50"
                   aria-label="Remove skill"
                 >
                   ×
@@ -340,7 +340,7 @@ export function SiteEditor({
                   skills: [...draft.home.skills, { name: "", level: 80 }],
                 })
               }
-              className="inline-flex h-9 items-center justify-center rounded-lg border border-dashed border-surface-300 px-3 text-sm text-surface-500 hover:border-accent-400 hover:text-accent-500"
+              className="inline-flex h-9 items-center justify-center rounded-lg border border-dashed border-surface-600 px-3 text-sm text-surface-400 hover:border-accent-400 hover:text-accent-500"
             >
               + Add skill
             </button>
@@ -356,7 +356,7 @@ export function SiteEditor({
             {draft.home.tools.map((tool, i) => (
               <span
                 key={i}
-                className="inline-flex items-center gap-1 rounded-full border border-surface-200 bg-surface-50 px-3 py-1 text-sm"
+                className="inline-flex items-center gap-1 rounded-full border border-surface-700 bg-surface-800 px-3 py-1 text-sm"
               >
                 <input
                   value={tool}
@@ -365,7 +365,7 @@ export function SiteEditor({
                     next[i] = e.target.value;
                     setSite("home", { ...draft.home, tools: next });
                   }}
-                  className="w-24 bg-transparent text-sm outline-none"
+                  className="w-24 bg-transparent text-sm text-surface-0 outline-none"
                 />
                 <button
                   type="button"
@@ -373,7 +373,7 @@ export function SiteEditor({
                     const next = draft.home.tools.filter((_, j) => j !== i);
                     setSite("home", { ...draft.home, tools: next });
                   }}
-                  className="text-surface-400 hover:text-red-500"
+                  className="text-surface-500 hover:text-red-400"
                   aria-label="Remove tool"
                 >
                   ×
@@ -388,7 +388,7 @@ export function SiteEditor({
                   tools: [...draft.home.tools, ""],
                 })
               }
-              className="inline-flex h-9 items-center justify-center rounded-full border border-dashed border-surface-300 px-3 text-sm text-surface-500 hover:border-accent-400 hover:text-accent-500"
+              className="inline-flex h-9 items-center justify-center rounded-full border border-dashed border-surface-600 px-3 text-sm text-surface-400 hover:border-accent-400 hover:text-accent-500"
             >
               + Add tool
             </button>
@@ -431,12 +431,12 @@ export function SiteEditor({
 
         {/* About sections */}
         <div className="mt-6">
-          <h3 className="font-mono text-xs uppercase tracking-widest text-surface-500">
+          <h3 className="font-mono text-xs uppercase tracking-widest text-surface-400">
             Sections
           </h3>
           <div className="mt-3 space-y-3">
             {draft.about.sections.map((section, i) => (
-              <div key={i} className="rounded-lg border border-surface-200 bg-surface-50 p-3">
+              <div key={i} className="rounded-lg border border-surface-700 bg-surface-800 p-3">
                 <div className="flex items-center gap-2 mb-2">
                   <input
                     value={section.heading}
@@ -446,7 +446,7 @@ export function SiteEditor({
                       setSite("about", { ...draft.about, sections: next });
                     }}
                     placeholder="Heading"
-                    className="h-9 flex-1 rounded-lg border border-surface-300 bg-white px-3 text-sm font-semibold outline-none focus:border-accent-500"
+                    className="h-9 flex-1 rounded-lg border border-surface-600 bg-surface-900 px-3 text-sm font-semibold text-surface-0 outline-none focus:border-accent-500"
                   />
                   <button
                     type="button"
@@ -454,7 +454,7 @@ export function SiteEditor({
                       const next = draft.about.sections.filter((_, j) => j !== i);
                       setSite("about", { ...draft.about, sections: next });
                     }}
-                    className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-red-200 text-red-500 hover:bg-red-50"
+                    className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-red-800 text-red-400 hover:bg-red-950/50"
                     aria-label="Remove section"
                   >
                     ×
@@ -469,7 +469,7 @@ export function SiteEditor({
                     setSite("about", { ...draft.about, sections: next });
                   }}
                   placeholder="Body text"
-                  className="w-full rounded-lg border border-surface-300 bg-white px-3 py-2.5 text-sm leading-relaxed outline-none focus:border-accent-500"
+                  className="w-full rounded-lg border border-surface-600 bg-surface-900 px-3 py-2.5 text-sm text-surface-0 leading-relaxed outline-none focus:border-accent-500"
                 />
               </div>
             ))}
@@ -481,7 +481,7 @@ export function SiteEditor({
                   sections: [...draft.about.sections, { heading: "", body: "" }],
                 })
               }
-              className="inline-flex h-9 items-center justify-center rounded-lg border border-dashed border-surface-300 px-3 text-sm text-surface-500 hover:border-accent-400 hover:text-accent-500"
+              className="inline-flex h-9 items-center justify-center rounded-lg border border-dashed border-surface-600 px-3 text-sm text-surface-400 hover:border-accent-400 hover:text-accent-500"
             >
               + Add section
             </button>
@@ -490,15 +490,15 @@ export function SiteEditor({
 
         {/* Experience */}
         <div className="mt-6">
-          <h3 className="font-mono text-xs uppercase tracking-widest text-surface-500">
+          <h3 className="font-mono text-xs uppercase tracking-widest text-surface-400">
             Experience
           </h3>
           <div className="mt-3 space-y-3">
             {draft.about.experience.map((exp, i) => (
-              <div key={i} className="rounded-lg border border-surface-200 bg-surface-50 p-3">
+              <div key={i} className="rounded-lg border border-surface-700 bg-surface-800 p-3">
                 <div className="grid gap-2 sm:grid-cols-2">
                   <div>
-                    <label className="font-mono text-[10px] uppercase tracking-widest text-surface-400">Year</label>
+                    <label className="font-mono text-[10px] uppercase tracking-widest text-surface-500">Year</label>
                     <input
                       value={exp.year}
                       onChange={(e) => {
@@ -507,11 +507,11 @@ export function SiteEditor({
                         setSite("about", { ...draft.about, experience: next });
                       }}
                       placeholder="2024 — Now"
-                      className="mt-1 h-9 w-full rounded-lg border border-surface-300 bg-white px-3 text-sm outline-none focus:border-accent-500"
+                      className="mt-1 h-9 w-full rounded-lg border border-surface-600 bg-surface-900 px-3 text-sm text-surface-0 outline-none focus:border-accent-500"
                     />
                   </div>
                   <div>
-                    <label className="font-mono text-[10px] uppercase tracking-widest text-surface-400">Role</label>
+                    <label className="font-mono text-[10px] uppercase tracking-widest text-surface-500">Role</label>
                     <input
                       value={exp.role}
                       onChange={(e) => {
@@ -520,11 +520,11 @@ export function SiteEditor({
                         setSite("about", { ...draft.about, experience: next });
                       }}
                       placeholder="Senior Product Designer"
-                      className="mt-1 h-9 w-full rounded-lg border border-surface-300 bg-white px-3 text-sm outline-none focus:border-accent-500"
+                      className="mt-1 h-9 w-full rounded-lg border border-surface-600 bg-surface-900 px-3 text-sm text-surface-0 outline-none focus:border-accent-500"
                     />
                   </div>
                   <div>
-                    <label className="font-mono text-[10px] uppercase tracking-widest text-surface-400">Company</label>
+                    <label className="font-mono text-[10px] uppercase tracking-widest text-surface-500">Company</label>
                     <input
                       value={exp.company}
                       onChange={(e) => {
@@ -533,7 +533,7 @@ export function SiteEditor({
                         setSite("about", { ...draft.about, experience: next });
                       }}
                       placeholder="Acme Inc."
-                      className="mt-1 h-9 w-full rounded-lg border border-surface-300 bg-white px-3 text-sm outline-none focus:border-accent-500"
+                      className="mt-1 h-9 w-full rounded-lg border border-surface-600 bg-surface-900 px-3 text-sm text-surface-0 outline-none focus:border-accent-500"
                     />
                   </div>
                   <div className="flex items-end gap-2">
@@ -543,7 +543,7 @@ export function SiteEditor({
                         const next = draft.about.experience.filter((_, j) => j !== i);
                         setSite("about", { ...draft.about, experience: next });
                       }}
-                      className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-red-200 text-red-500 hover:bg-red-50"
+                      className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-red-800 text-red-400 hover:bg-red-950/50"
                       aria-label="Remove experience"
                     >
                       ×
@@ -559,7 +559,7 @@ export function SiteEditor({
                     setSite("about", { ...draft.about, experience: next });
                   }}
                   placeholder="Summary"
-                  className="mt-2 w-full rounded-lg border border-surface-300 bg-white px-3 py-2.5 text-sm leading-relaxed outline-none focus:border-accent-500"
+                  className="mt-2 w-full rounded-lg border border-surface-600 bg-surface-900 px-3 py-2.5 text-sm text-surface-0 leading-relaxed outline-none focus:border-accent-500"
                 />
               </div>
             ))}
@@ -574,7 +574,7 @@ export function SiteEditor({
                   ],
                 })
               }
-              className="inline-flex h-9 items-center justify-center rounded-lg border border-dashed border-surface-300 px-3 text-sm text-surface-500 hover:border-accent-400 hover:text-accent-500"
+              className="inline-flex h-9 items-center justify-center rounded-lg border border-dashed border-surface-600 px-3 text-sm text-surface-400 hover:border-accent-400 hover:text-accent-500"
             >
               + Add experience
             </button>
@@ -670,7 +670,7 @@ export function SiteEditor({
                     const steps = draft.process.steps.filter((_, j) => j !== i);
                     setSite("process", { ...draft.process, steps });
                   }}
-                  className="mt-1.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-surface-200 text-surface-400 hover:text-red-500 hover:border-red-200 transition-colors"
+                  className="mt-1.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-surface-700 text-surface-500 hover:text-red-400 hover:border-red-800 transition-colors"
                   title="Remove step"
                 >
                   ×
@@ -685,7 +685,7 @@ export function SiteEditor({
                   steps: [...draft.process.steps, { label: "", value: "" }],
                 })
               }
-              className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-dashed border-surface-300 px-3 text-xs font-medium text-surface-500 hover:border-surface-950 hover:text-surface-950 transition-colors"
+              className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-dashed border-surface-600 px-3 text-xs font-medium text-surface-400 hover:border-surface-0 hover:text-surface-0 transition-colors"
             >
               + Add step
             </button>
@@ -703,15 +703,15 @@ export function SiteEditor({
         </Field>
       </Section>
 
-      <div className="sticky bottom-4 z-10 flex items-center justify-end gap-3 rounded-xl border border-surface-200 bg-white/90 p-3 shadow-lift backdrop-blur">
-        <span className="mr-auto font-mono text-xs uppercase tracking-widest text-surface-500">
+      <div className="sticky bottom-4 z-10 flex items-center justify-end gap-3 rounded-xl border border-surface-700 bg-surface-900/90 p-3 backdrop-blur">
+        <span className="mr-auto font-mono text-xs uppercase tracking-widest text-surface-400">
           {status === "saving" ? "Saving…" : status === "saved" ? "Saved" : ""}
         </span>
         <button
           type="button"
           onClick={() => onSave(draft)}
           disabled={status === "saving"}
-          className="inline-flex h-10 items-center justify-center rounded-lg bg-surface-950 px-4 text-sm font-medium text-white transition-colors hover:bg-surface-800 disabled:opacity-50"
+          className="inline-flex h-10 items-center justify-center rounded-lg bg-surface-0 px-4 text-sm font-medium text-surface-950 transition-colors hover:bg-surface-100 disabled:opacity-50"
         >
           Save site copy
         </button>
@@ -728,8 +728,8 @@ function Section({
   children: React.ReactNode;
 }) {
   return (
-    <section className="rounded-2xl border border-surface-200 bg-white p-5 sm:p-6">
-      <h2 className="text-base font-semibold tracking-tight text-surface-950">
+    <section className="rounded-2xl border border-surface-700 bg-surface-900 p-5 sm:p-6">
+      <h2 className="text-base font-semibold tracking-tight text-surface-0">
         {title}
       </h2>
       <div className="mt-4">{children}</div>
@@ -756,7 +756,7 @@ function Field({
     <div className={className}>
       <label
         htmlFor={id}
-        className="font-mono text-xs uppercase tracking-widest text-surface-500"
+        className="font-mono text-xs uppercase tracking-widest text-surface-400"
       >
         {label}
       </label>
@@ -782,7 +782,7 @@ function Input({
       type={type}
       value={value}
       onChange={(e) => onChange(e.target.value)}
-      className="h-10 w-full rounded-lg border border-surface-300 bg-white px-3 text-sm outline-none focus:border-accent-500 focus:shadow-ring-accent"
+      className="h-10 w-full rounded-lg border border-surface-600 bg-surface-900 px-3 text-sm text-surface-0 outline-none focus:border-accent-500 focus:shadow-ring-accent"
     />
   );
 }
@@ -804,7 +804,7 @@ function TextArea({
       rows={rows}
       value={value}
       onChange={(e) => onChange(e.target.value)}
-      className="w-full rounded-lg border border-surface-300 bg-white px-3 py-2.5 text-sm leading-relaxed outline-none focus:border-accent-500 focus:shadow-ring-accent"
+      className="w-full rounded-lg border border-surface-600 bg-surface-900 px-3 py-2.5 text-sm text-surface-0 leading-relaxed outline-none focus:border-accent-500 focus:shadow-ring-accent"
     />
   );
 }
