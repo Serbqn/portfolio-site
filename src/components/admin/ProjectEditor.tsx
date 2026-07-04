@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { slugify } from "@/lib/utils";
+import { cn, slugify } from "@/lib/utils";
 
 export type ProjectDraftWithSections = {
   title: string;
@@ -61,6 +61,7 @@ export function ProjectEditor({
   const [error, setError] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
+  const [dragOver, setDragOver] = useState(false);
   const [tagsRaw, setTagsRaw] = useState<string>(
     initial?.tags?.join(", ") ?? "",
   );
@@ -371,7 +372,31 @@ export function ProjectEditor({
       >
         <div className="space-y-4">
           {/* Upload zone */}
-          <label className="group relative flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-surface-300 bg-surface-50 p-8 transition-all duration-150 hover:border-accent-500 hover:bg-accent-50 cursor-pointer">
+          <div
+            className={cn(
+              "group relative flex flex-col items-center justify-center rounded-xl border-2 border-dashed p-8 transition-all duration-150 cursor-pointer",
+              dragOver
+                ? "border-accent-500 bg-accent-50"
+                : "border-surface-300 bg-surface-50 hover:border-accent-500 hover:bg-accent-50",
+            )}
+            onDragOver={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setDragOver(true);
+            }}
+            onDragLeave={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setDragOver(false);
+            }}
+            onDrop={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setDragOver(false);
+              const files = e.dataTransfer.files;
+              if (files && files.length > 0) void handleGalleryUpload(files);
+            }}
+          >
             <input
               type="file"
               accept="image/jpeg,image/png,image/webp,image/svg+xml,image/gif,image/avif"
@@ -408,7 +433,7 @@ export function ProjectEditor({
             {uploadError ? (
               <p className="mt-2 text-xs text-red-600">{uploadError}</p>
             ) : null}
-          </label>
+          </div>
 
           {/* Gallery grid */}
           {draft.gallery.length > 0 ? (
