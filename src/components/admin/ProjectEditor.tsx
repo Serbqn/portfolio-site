@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { cn, slugify } from "@/lib/utils";
 
 export type ProjectDraftWithSections = {
@@ -62,6 +62,7 @@ export function ProjectEditor({
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [dragOver, setDragOver] = useState(false);
+  const dragCounter = useRef(0);
   const [tagsRaw, setTagsRaw] = useState<string>(
     initial?.tags?.join(", ") ?? "",
   );
@@ -382,16 +383,26 @@ export function ProjectEditor({
             onDragOver={(e) => {
               e.preventDefault();
               e.stopPropagation();
-              setDragOver(true);
+            }}
+            onDragEnter={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              dragCounter.current++;
+              if (dragCounter.current === 1) setDragOver(true);
             }}
             onDragLeave={(e) => {
               e.preventDefault();
               e.stopPropagation();
-              setDragOver(false);
+              dragCounter.current--;
+              if (dragCounter.current <= 0) {
+                dragCounter.current = 0;
+                setDragOver(false);
+              }
             }}
             onDrop={(e) => {
               e.preventDefault();
               e.stopPropagation();
+              dragCounter.current = 0;
               setDragOver(false);
               const files = e.dataTransfer.files;
               if (files && files.length > 0) void handleGalleryUpload(files);
