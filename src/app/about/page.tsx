@@ -50,7 +50,11 @@ export default async function AboutPage() {
                   <li key={`${e.year}-${e.role}`} className="relative grid gap-1">
                     <span
                       aria-hidden
-                      className="absolute -left-[1.9rem] top-1 grid h-2.5 w-2.5 place-items-center rounded-full border border-accent-600 bg-surface-900"
+                      /* Left edge pinned to the line's center (1px border +
+                          24px padding = 24.5px from the li edge), then shifted
+                          back half the dot's width → perfectly centered on
+                          the line at any zoom / device pixel ratio. */
+                      className="absolute -left-[24.5px] top-1 grid h-2.5 w-2.5 -translate-x-1/2 place-items-center rounded-full border border-accent-600 bg-surface-900"
                     >
                       <span className="h-1 w-1 rounded-full bg-accent-500" />
                     </span>

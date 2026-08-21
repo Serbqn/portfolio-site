@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useScroll, useTransform } from "motion/react";
 import { Command, List, X } from "@phosphor-icons/react";
-import { cn } from "@/lib/utils";
+import { cn, resolveLogo } from "@/lib/utils";
 import { CommandPalette } from "@/components/layout/CommandPalette";
 import type { ProjectListItem } from "@/lib/types";
 
@@ -31,6 +31,8 @@ export function Navbar({
   const [paletteOpen, setPaletteOpen] = useState(false);
   /** Mobile / tablet hamburger menu (< lg). */
   const [menuOpen, setMenuOpen] = useState(false);
+  /** Admin-configured logo — accepts a path string or full SVG snippet. */
+  const logoMark = resolveLogo(logo);
   const { scrollY } = useScroll();
   const blur = useTransform(scrollY, [0, 40], [0, 12]);
   const borderOpacity = useTransform(scrollY, [0, 40], [0, 1]);
@@ -82,23 +84,17 @@ export function Navbar({
           >
             <span className="grid h-7 w-7 place-items-center rounded-md bg-surface-950 text-accent-400 transition-colors duration-150 group-hover:text-accent-500">
               <svg
-                viewBox="0 0 32 32"
+                viewBox={logoMark.viewBox}
                 className="h-4 w-4"
                 fill="none"
                 aria-hidden
               >
-                {logo ? (
-                  <path d={logo} stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" />
-                ) : (
-                  <>
-                    <path
-                      d="M9 11h14M9 16h10M9 21h14"
-                      stroke="currentColor"
-                      strokeWidth="2.4"
-                      strokeLinecap="round"
-                    />
-                  </>
-                )}
+                <path
+                  d={logoMark.d}
+                  stroke="currentColor"
+                  strokeWidth="2.4"
+                  strokeLinecap="round"
+                />
               </svg>
             </span>
             <span className="text-surface-0">{name}</span>

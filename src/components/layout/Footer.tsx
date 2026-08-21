@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getSite } from "@/lib/content";
+import { resolveLogo } from "@/lib/utils";
 
 export async function Footer() {
   const { site, social } = await getSite().then((s) => ({
@@ -16,6 +17,8 @@ export async function Footer() {
   ].filter(Boolean) as { label: string; href: string }[];
 
   const year = new Date().getFullYear();
+  /** Same source as the header logo — admin-set SVG path or markup. */
+  const logoMark = resolveLogo(site.logo);
 
   return (
     <footer className="border-t border-surface-700 bg-surface-900">
@@ -53,13 +56,14 @@ export async function Footer() {
           <div className="flex items-center gap-2.5">
             <span className="grid h-7 w-7 place-items-center rounded-md bg-surface-950 text-accent-400">
               <svg
-                viewBox="0 0 32 32"
+                viewBox={logoMark.viewBox}
                 className="h-4 w-4"
                 fill="none"
                 aria-hidden
               >
+                {/* Same source as the header logo */}
                 <path
-                  d="M9 11h14M9 16h10M9 21h14"
+                  d={logoMark.d}
                   stroke="currentColor"
                   strokeWidth="2.4"
                   strokeLinecap="round"
