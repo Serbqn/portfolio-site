@@ -4,39 +4,39 @@
 
 /* ===== DESIGN TOKENS =====
  * Source of truth: design-systems/serb-portfolio/DESIGN.md
- * Supabase-inspired dark-mode-native palette
+ * "Ember" identity — warm charcoal canvas, tangerine accent, cream text.
  */
 
 :root {
-  /* Supabase-inspired dark surface tokens */
-  --surface-0: #fafafa;
-  --surface-50: #efefef;
-  --surface-100: #b4b4b4;
-  --surface-200: #a0a0a0;
-  --surface-300: #6b6b6b;
-  --surface-400: #434343;
-  --surface-500: #393939;
-  --surface-600: #363636;
-  --surface-700: #2e2e2e;
-  --surface-800: #242424;
-  --surface-900: #171717;
-  --surface-950: #0f0f0f;
+  /* Warm charcoal surface tokens */
+  --surface-0: #f5efe6;
+  --surface-50: #ede5da;
+  --surface-100: #d9cec0;
+  --surface-200: #c4b8ab;
+  --surface-300: #94897c;
+  --surface-400: #6e655a;
+  --surface-500: #4a4038;
+  --surface-600: #3a332d;
+  --surface-700: #2e2823;
+  --surface-800: #1c1815;
+  --surface-900: #141110;
+  --surface-950: #0e0c0b;
 
   /* Text tokens (inverted for dark mode) */
-  --text-primary: #fafafa;
-  --text-secondary: #b4b4b4;
-  --text-tertiary: #898989;
-  --text-inverse: #171717;
+  --text-primary: #f5efe6;
+  --text-secondary: #c4b8ab;
+  --text-tertiary: #94897c;
+  --text-inverse: #141110;
 
-  /* Emerald accent */
-  --accent-400: #3ecf8e;
-  --accent-500: #00c573;
-  --accent-600: rgba(62, 207, 142, 0.3);
+  /* Ember accent */
+  --accent-400: #ffb86a;
+  --accent-500: #ff6b35;
+  --accent-600: rgba(255, 107, 53, 0.35);
 
-  /* Border hierarchy (dark → lighter) */
-  --border-subtle: #242424;
-  --border-default: #2e2e2e;
-  --border-strong: #363636;
+  /* Border hierarchy (dark → lighter, all warm) */
+  --border-subtle: #241f1c;
+  --border-default: #2e2823;
+  --border-strong: #3a332d;
 
   /* Spacing scale (8px base) */
   --space-2: 0.5rem; /* 8 */
@@ -50,7 +50,7 @@
   /* Motion */
   --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
   --duration-hover: 150ms;
-  --duration-reveal: 300ms;
+  --duration-reveal: 380ms;
 }
 
 @layer base {
@@ -72,8 +72,8 @@
     color: var(--text-primary);
     font-feature-settings: "ss01", "cv01", "cv02";
     /* Smooth page-wide color transitions for theme changes */
-    transition: background-color 300ms var(--ease-out-soft),
-                color 300ms var(--ease-out-soft);
+    transition: background-color 380ms var(--ease-out-soft),
+                color 380ms var(--ease-out-soft);
   }
 
   /* Apply smooth transitions to all interactive elements */
@@ -84,11 +84,11 @@
   }
 
   ::selection {
-    background-color: var(--accent-400);
-    color: #0f0f0f;
+    background-color: var(--accent-500);
+    color: var(--surface-950);
   }
 
-  /* Focus ring */
+  /* Focus ring — tangerine */
   :focus-visible {
     outline: 2px solid var(--accent-500);
     outline-offset: 2px;
@@ -96,8 +96,61 @@
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-weight: 400;
+    font-weight: 500;
     letter-spacing: -0.02em;
+  }
+
+  /* Fullscreen canvas frame — fill the viewport, drop chrome */
+  *:fullscreen {
+    width: 100vw !important;
+    height: 100vh !important;
+    max-height: none !important;
+    border-radius: 0 !important;
+    border: none !important;
+  }
+
+  /* ===== Scrollbar — Ember edition =====
+   * Thin warm-charcoal thumb on a transparent track; ignites tangerine
+   * while dragged. Firefox gets the flat scrollbar-color equivalent.
+   * Reserve the gutter so locking body scroll (drawer/panel) never shifts
+   * the layout. */
+  html {
+    scrollbar-gutter: stable;
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--surface-500) transparent;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--surface-600);
+    border-radius: 999px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: var(--surface-500);
+  }
+
+  ::-webkit-scrollbar-thumb:active {
+    background-color: var(--accent-500);
+  }
+
+  ::-webkit-scrollbar-corner,
+  ::-webkit-scrollbar-button {
+    background: transparent;
+    display: none;
   }
 
   /* Respect reduced motion preferences */
@@ -138,11 +191,7 @@
 
   /* Eyebrow label */
   .eyebrow {
-    @apply inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-surface-200;
-  }
-
-  .eyebrow-dot {
-    @apply h-1.5 w-1.5 rounded-full bg-accent-400 animate-pulse-dot;
+    @apply inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-surface-400;
   }
 
   /* Link with underline reveal */
@@ -166,9 +215,9 @@
     transform-origin: left;
   }
 
-  /* Card — no shadows, border-driven depth */
+  /* Card — border-driven depth, warm */
   .card {
-    @apply bg-surface-900 border border-surface-700 rounded-2xl p-6 transition-all duration-300 hover:border-surface-500;
+    @apply bg-surface-800 border border-surface-700 rounded-2xl p-6 transition-colors duration-300 hover:border-surface-500;
   }
 }
 
@@ -184,9 +233,26 @@
   .grid-lines {
     background-image: linear-gradient(
       to right,
-      var(--border-default) 1px,
+      var(--border-subtle) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      var(--border-subtle) 1px,
       transparent 1px
     );
-    background-size: calc(100% / 12) 100%;
+    background-size: calc(100% / 12) calc(100% / 8);
+  }
+
+  /* Paper grain — breaks up flat black. Keep opacity ≤ 0.04. */
+  .grain::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    pointer-events: none;
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 256px 256px;
   }
 }

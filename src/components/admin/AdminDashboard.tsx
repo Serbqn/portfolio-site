@@ -6,7 +6,6 @@ import type {
   ProjectListItem,
   SiteContent,
 } from "@/lib/types";
-import { slugify } from "@/lib/utils";
 import type { AdminStatus } from "@/lib/admin-types";
 import { ProjectEditor, type ProjectDraftWithSections } from "@/components/admin/ProjectEditor";
 import { SiteEditor } from "@/components/admin/SiteEditor";
@@ -14,7 +13,6 @@ import { SiteEditor } from "@/components/admin/SiteEditor";
 type Section = "list" | "site" | string; // slug or 'list' | 'site' | 'new'
 
 export function AdminDashboard({ initialSite }: { initialSite: SiteContent }) {
-  const [session, setSession] = useState<{ sub: string; role: string } | null>(null);
   const [status, setStatus] = useState<AdminStatus>("loading");
   const [error, setError] = useState<string | null>(null);
   const [projects, setProjects] = useState<ProjectListItem[]>([]);

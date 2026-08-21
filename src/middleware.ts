@@ -13,7 +13,7 @@ export async function middleware(req: NextRequest) {
   }
 
   // Create a Supabase client that reads/writes cookies via the request/response.
-  let supabaseResponse = NextResponse.next({ request: req });
+  const supabaseResponse = NextResponse.next({ request: req });
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,

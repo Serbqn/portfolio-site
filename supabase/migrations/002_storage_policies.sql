@@ -1,6 +1,10 @@
 -- ============================================================================
 -- Storage policies for the "uploads" bucket
 -- Run AFTER creating the "uploads" bucket in Storage UI (as public bucket).
+--
+-- NOTE: This migration is currently UNUSED by the app. Image uploads go to
+-- Vercel Blob (see src/app/admin/api/upload/route.ts), not Supabase Storage.
+-- Kept for reference in case you switch upload targets.
 -- ============================================================================
 
 -- Allow public read access to all files

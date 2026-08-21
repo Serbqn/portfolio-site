@@ -2,7 +2,6 @@ import type { Config } from "tailwindcss";
 
 const config: Config = {
   content: ["./src/**/*.{ts,tsx,mdx}"],
-  darkMode: "class",
   theme: {
     container: {
       center: true,
@@ -13,26 +12,26 @@ const config: Config = {
     },
     extend: {
       colors: {
-        // Supabase-inspired dark surface scale
+        // Ember — warm charcoal surface scale (every gray leans brown, never blue)
         surface: {
-          0: "#fafafa",    // Primary text, button text
-          50: "#efefef",   // Light border, subtle surface
-          100: "#b4b4b4",  // Secondary link text
-          200: "#a0a0a0",  // Muted text, tertiary links
-          300: "#6b6b6b",  // Heavy secondary text
-          400: "#434343",  // Tertiary border
-          500: "#393939",  // Secondary border
-          600: "#363636",  // Button border, secondary divider
-          700: "#2e2e2e",  // Card border, tab border
-          800: "#242424",  // Subtle divider, section hr
-          900: "#171717",  // Page background, card bg
-          950: "#0f0f0f",  // Deepest surface, primary button bg
+          0: "#f5efe6",    // Primary text (warm cream)
+          50: "#ede5da",   // Subtle surface on dark
+          100: "#d9cec0",  // Secondary link hover
+          200: "#c4b8ab",  // Muted text, links resting
+          300: "#94897c",  // Body secondary text
+          400: "#6e655a",  // Eyebrow, meta text
+          500: "#4a4038",  // Hover border
+          600: "#3a332d",  // Strong border, button border
+          700: "#2e2823",  // Card border, divider
+          800: "#1c1815",  // Raised card bg, section band
+          900: "#141110",  // Page background
+          950: "#0e0c0b",  // Deepest surface, primary button bg
         },
-        // Supabase emerald green accent
+        // Ember accent — tangerine interactive + amber brand
         accent: {
-          400: "#3ecf8e",                    // Brand green — logo, accent borders
-          500: "#00c573",                    // Interactive green — links, CTAs
-          600: "rgba(62, 207, 142, 0.3)",   // Green border accent
+          400: "#ffb86a",                    // Amber — logo mark, highlights
+          500: "#ff6b35",                    // Tangerine — links, CTAs, focus
+          600: "rgba(255, 107, 53, 0.35)",   // Accent border, glow rings
         },
       },
       fontFamily: {
@@ -40,8 +39,8 @@ const config: Config = {
         mono: ["var(--font-mono)", "ui-monospace", "monospace"],
       },
       fontSize: {
-        "display-1": ["clamp(2.75rem, 5.5vw, 4.5rem)", { lineHeight: "1.00", letterSpacing: "-0.02em" }],
-        "display-2": ["clamp(2.25rem, 4vw, 3.5rem)", { lineHeight: "1.10", letterSpacing: "-0.02em" }],
+        "display-1": ["clamp(3rem, 6.5vw, 5.5rem)", { lineHeight: "0.98", letterSpacing: "-0.03em" }],
+        "display-2": ["clamp(2.25rem, 4.5vw, 3.75rem)", { lineHeight: "1.05", letterSpacing: "-0.025em" }],
         "display-3": ["clamp(1.75rem, 3vw, 2.5rem)", { lineHeight: "1.15", letterSpacing: "-0.02em" }],
       },
       spacing: {
@@ -60,20 +59,19 @@ const config: Config = {
         "full": "9999px",
       },
       boxShadow: {
-        "soft": "0 1px 2px 0 rgb(0 0 0 / 0.04), 0 4px 12px -2px rgb(0 0 0 / 0.04)",
-        "lift": "0 4px 6px -1px rgb(0 0 0 / 0.06), 0 12px 24px -4px rgb(0 0 0 / 0.08)",
-        "ring-accent": "0 0 0 3px rgb(16 185 129 / 0.18)",
+        "lift": "0 12px 32px -12px rgb(0 0 0 / 0.6)",
+        "glow-accent": "0 0 40px -8px rgb(255 107 53 / 0.35)",
       },
       transitionDuration: {
         "150": "150ms",
-        "300": "300ms",
+        "380": "380ms",
       },
       transitionTimingFunction: {
         "out-soft": "cubic-bezier(0.22, 1, 0.36, 1)",
       },
       keyframes: {
         "fade-up": {
-          from: { opacity: "0", transform: "translateY(8px)" },
+          from: { opacity: "0", transform: "translateY(14px)" },
           to: { opacity: "1", transform: "translateY(0)" },
         },
         "fade-in": {
@@ -81,14 +79,19 @@ const config: Config = {
           to: { opacity: "1" },
         },
         "pulse-dot": {
-          "0%, 100%": { opacity: "1" },
-          "50%": { opacity: "0.5" },
+          "0%, 100%": { opacity: "1", transform: "scale(1)" },
+          "50%": { opacity: "0.55", transform: "scale(0.82)" },
+        },
+        "drift": {
+          "0%, 100%": { transform: "translate3d(0, 0, 0)" },
+          "50%": { transform: "translate3d(0, -10px, 0)" },
         },
       },
       animation: {
-        "fade-up": "fade-up 300ms cubic-bezier(0.22, 1, 0.36, 1) both",
-        "fade-in": "fade-in 300ms ease-out both",
-        "pulse-dot": "pulse-dot 2s ease-in-out infinite",
+        "fade-up": "fade-up 380ms cubic-bezier(0.22, 1, 0.36, 1) both",
+        "fade-in": "fade-in 380ms ease-out both",
+        "pulse-dot": "pulse-dot 2s cubic-bezier(0.22, 1, 0.36, 1) infinite",
+        "drift": "drift 9s ease-in-out infinite",
       },
     },
   },

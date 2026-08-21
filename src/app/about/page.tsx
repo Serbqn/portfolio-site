@@ -14,11 +14,8 @@ export default async function AboutPage() {
     <>
       <section className="container-wide section">
         <header className="max-w-3xl">
-          <p className="eyebrow">
-            <span className="eyebrow-dot" />
-            {about.eyebrow}
-          </p>
-          <h1 className="mt-3 text-display-1 font-semibold tracking-tight text-balance">
+          <p className="eyebrow">{about.eyebrow}</p>
+          <h1 className="mt-2 text-display-1 font-medium tracking-tight text-balance">
             {about.title}
           </h1>
           <p className="mt-5 max-w-2xl text-lg leading-relaxed text-pretty text-surface-300">
@@ -31,7 +28,7 @@ export default async function AboutPage() {
             <div className="space-y-10">
               {about.sections.map((s) => (
                 <section key={s.heading}>
-                  <h2 className="text-display-3 font-semibold tracking-tight">
+                  <h2 className="text-display-3 font-medium tracking-tight">
                     {s.heading}
                   </h2>
                   <p className="mt-4 max-w-prose text-pretty leading-relaxed text-surface-200">
@@ -47,16 +44,23 @@ export default async function AboutPage() {
               <h2 className="font-mono text-xs uppercase tracking-widest text-surface-400">
                 Experience
               </h2>
-              <ol className="mt-4 space-y-6">
+              {/* Warm vertical timeline */}
+              <ol className="relative mt-5 space-y-8 border-l border-surface-600 pl-6">
                 {about.experience.map((e) => (
-                  <li key={`${e.year}-${e.role}`} className="grid gap-1">
+                  <li key={`${e.year}-${e.role}`} className="relative grid gap-1">
+                    <span
+                      aria-hidden
+                      className="absolute -left-[1.9rem] top-1 grid h-2.5 w-2.5 place-items-center rounded-full border border-accent-600 bg-surface-900"
+                    >
+                      <span className="h-1 w-1 rounded-full bg-accent-500" />
+                    </span>
                     <div className="font-mono text-xs uppercase tracking-widest text-surface-400">
                       {e.year}
                     </div>
-                    <div className="text-base font-semibold tracking-tight text-surface-0">
+                    <div className="text-base font-medium tracking-tight text-surface-0">
                       {e.role}
                     </div>
-                    <div className="text-sm text-surface-200">{e.company}</div>
+                    <div className="text-sm text-accent-400">{e.company}</div>
                     <p className="mt-1 text-sm leading-relaxed text-surface-300">
                       {e.summary}
                     </p>

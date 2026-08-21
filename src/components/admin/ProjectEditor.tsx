@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import { cn, slugify } from "@/lib/utils";
 
 export type ProjectDraftWithSections = {
@@ -57,7 +58,7 @@ export function ProjectEditor({
   );
   const [slug, setSlug] = useState<string>(initialSlug);
   const [slugTouched, setSlugTouched] = useState<boolean>(!isNew);
-  const [status, setStatus] = useState<Status>(initial && isNew ? "idle" : "idle");
+  const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
@@ -80,9 +81,9 @@ export function ProjectEditor({
             setStatus("error");
             return;
           }
-          const { slug: _, ...rest } = data.project;
+          const { slug, ...rest } = data.project;
           setDraft(rest as ProjectDraftWithSections);
-          setSlug(initialSlug);
+          setSlug(slug);
           setStatus("idle");
         })
         .catch((e: unknown) => {
@@ -152,16 +153,29 @@ export function ProjectEditor({
     if (!files || files.length === 0) return;
     for (let i = 0; i < files.length; i++) {
       // Sequential to keep order predictable.
-      // eslint-disable-next-line no-await-in-loop
       await handleUpload(files[i], "gallery");
     }
   }
 
+  async function deleteBlob(url: string) {
+    try {
+      await fetch("/admin/api/upload", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url }),
+      });
+    } catch {
+      // Non-fatal — the reference is removed from the draft regardless.
+    }
+  }
+
   function removeGalleryItem(i: number) {
+    const removed = draft.gallery[i];
     setDraft((d) => ({
       ...d,
       gallery: d.gallery.filter((_, idx) => idx !== i),
     }));
+    if (removed) void deleteBlob(removed);
   }
 
   function moveGalleryItem(i: number, dir: -1 | 1) {
@@ -215,7 +229,7 @@ export function ProjectEditor({
   return (
     <div className="space-y-6">
       {status === "loading" ? (
-        <p className="text-sm text-surface-500">Loading…</p>
+        <p className="text-sm text-surface-400">Loading…</p>
       ) : null}
 
       <Section title="Basics">
@@ -357,12 +371,25 @@ export function ProjectEditor({
             ) : null}
           </div>
           {draft.cover ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={draft.cover}
-              alt=""
-              className="h-32 w-48 rounded-lg border border-surface-700 object-cover"
-            />
+            <div className="space-y-2">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={draft.cover}
+                alt=""
+                className="h-32 w-48 rounded-lg border border-surface-700 object-cover"
+              />
+              <button
+                type="button"
+                onClick={() => {
+                  const old = draft.cover;
+                  setField("cover", "");
+                  if (old) void deleteBlob(old);
+                }}
+                className="inline-flex h-8 items-center justify-center rounded-md border border-red-800 bg-surface-900 px-3 text-xs font-medium text-red-400 transition-colors hover:bg-red-950/50"
+              >
+                Remove cover
+              </button>
+            </div>
           ) : null}
         </div>
       </Section>
@@ -421,7 +448,7 @@ export function ProjectEditor({
             />
             <div className="flex flex-col items-center gap-2">
               <svg
-                className="h-10 w-10 text-surface-500 group-hover:text-accent-500 transition-colors"
+                className="h-10 w-10 text-surface-400 group-hover:text-accent-500 transition-colors"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -437,7 +464,7 @@ export function ProjectEditor({
               <span className="font-mono text-xs uppercase tracking-widest text-surface-400">
                 {uploading ? "Uploading…" : "Drop images here or click to select"}
               </span>
-              <span className="text-xs text-surface-500">
+              <span className="text-xs text-surface-400">
                 Max 8 MB each · JPG, PNG, WebP, SVG, GIF, AVIF
               </span>
             </div>
@@ -455,10 +482,12 @@ export function ProjectEditor({
                   className="relative group rounded-lg border border-surface-700 bg-surface-900 overflow-hidden"
                 >
                   <div className="relative aspect-[16/10] overflow-hidden">
-                    <img
+                    <Image
                       src={img}
                       alt={`Gallery ${i + 1}`}
-                      className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                      fill
+                      sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+                      className="object-cover transition-transform duration-300 group-hover:scale-105"
                     />
                   </div>
                   <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center gap-2 p-2">
@@ -600,6 +629,16 @@ export function ProjectEditor({
         <span className="mr-auto font-mono text-xs uppercase tracking-widest text-surface-400">
           {status === "saving" ? "Saving…" : status === "saved" ? "Saved" : ""}
         </span>
+        {!isNew && slug ? (
+          <a
+            href={`/projects/${slug}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex h-10 items-center justify-center rounded-lg border border-surface-700 bg-surface-900 px-4 text-sm font-medium text-surface-0 transition-colors hover:bg-surface-800"
+          >
+            View live ↗
+          </a>
+        ) : null}
         <button
           type="button"
           onClick={handleSave}

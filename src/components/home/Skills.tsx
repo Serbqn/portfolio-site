@@ -10,11 +10,8 @@ export function Skills({ skills, tools }: { skills: Skill[]; tools: string[] }) 
     <section className="border-y border-surface-700 bg-surface-800">
       <div className="container-wide grid gap-12 py-section lg:grid-cols-12 lg:gap-16">
         <div className="lg:col-span-5">
-          <p className="eyebrow">
-            <span className="eyebrow-dot" />
-            Skills
-          </p>
-          <h2 className="mt-3 text-display-3 font-semibold tracking-tight text-balance">
+          <p className="eyebrow">Capabilities</p>
+          <h2 className="mt-2 text-display-3 font-medium tracking-tight text-balance">
             Where the work happens.
           </h2>
           <p className="mt-4 text-pretty text-surface-300">
@@ -36,7 +33,7 @@ export function Skills({ skills, tools }: { skills: Skill[]; tools: string[] }) 
                   </div>
                   <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-surface-700">
                     <motion.div
-                      className="h-full rounded-full bg-accent-400"
+                      className="h-full rounded-full bg-gradient-to-r from-accent-500 to-accent-400"
                       initial={{ width: 0 }}
                       whileInView={{ width: `${s.level}%` }}
                       viewport={{ once: true, margin: "-80px" }}
@@ -60,7 +57,7 @@ export function Skills({ skills, tools }: { skills: Skill[]; tools: string[] }) 
                 {tools.map((t) => (
                   <li
                     key={t}
-                    className="inline-flex items-center rounded-md border border-surface-700 bg-surface-900 px-2.5 py-1 text-xs font-medium text-surface-200"
+                    className="inline-flex items-center rounded-full border border-surface-600 bg-surface-900 px-2.5 py-1 text-xs font-medium text-surface-200 transition-colors duration-150 hover:border-accent-600 hover:text-surface-0"
                   >
                     {t}
                   </li>

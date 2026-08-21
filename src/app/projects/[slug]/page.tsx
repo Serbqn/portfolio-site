@@ -1,11 +1,12 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { ArrowLeft, ArrowRight } from "lucide-react";
-import { getProjectBySlug, getProjects, getSite } from "@/lib/content";
+import { getProjectBySlug, getProjectSlugs, getProjects, getSite } from "@/lib/content";
 import { cn } from "@/lib/utils";
 import { BrowserFrame } from "@/components/projects/BrowserFrame";
 import { ImageLightbox } from "@/components/projects/ImageLightbox";
+import { Markdown } from "@/components/projects/Markdown";
+import { BackLink } from "./BackLink";
+import { ProjectNav } from "./ProjectNav";
 
 type Params = { slug: string };
 
@@ -28,14 +29,12 @@ function captionFor(title: string, i: number): string {
   return captions[i] ?? `${title} — view ${i + 1}`;
 }
 
-function renderMarkdownParagraphs(text: string) {
-  return text
-    .split(/\n+/)
-    .filter(Boolean)
-    .map((para, i) => <p key={i}>{para.trim()}</p>);
-}
+export const revalidate = 3600;
 
-export const dynamic = "force-dynamic";
+export async function generateStaticParams() {
+  const slugs = await getProjectSlugs();
+  return slugs.map((slug) => ({ slug }));
+}
 
 export async function generateMetadata({
   params,
@@ -92,24 +91,31 @@ export default async function ProjectPage({
 
   return (
     <article>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "CreativeWork",
+            name: project.title,
+            description: project.summary,
+            creator: { "@type": "Person", name: site.site.name },
+            image: project.cover,
+            dateCreated: project.year,
+          }),
+        }}
+      />
       {/* Cover */}
       <header className="border-b border-surface-700">
         <div className="container-wide pb-10 pt-16 sm:pb-12 sm:pt-20">
-          <Link
-            href="/projects"
-            className="inline-flex items-center gap-1.5 text-sm text-surface-400 transition-colors hover:text-surface-0"
-          >
-            <ArrowLeft className="h-3.5 w-3.5" />
-            All projects
-          </Link>
+          <BackLink />
 
           <div className="mt-8 grid gap-8 lg:grid-cols-12 lg:gap-12">
             <div className="lg:col-span-7">
               <p className="eyebrow">
-                <span className="eyebrow-dot" />
                 {project.year} · {project.client}
               </p>
-              <h1 className="mt-3 text-display-1 font-semibold tracking-tight text-balance">
+              <h1 className="mt-3 text-display-1 font-medium tracking-tight text-balance">
                 {project.title}
               </h1>
               <p className="mt-4 max-w-2xl text-lg leading-relaxed text-pretty text-surface-300">
@@ -167,17 +173,10 @@ export default async function ProjectPage({
           />
 
           {/* Clickable gallery grid below */}
-          {lightboxImages.length > 1 ? (
+          {lightboxImages.length > 0 ? (
             <div className="mt-8">
-              <p className="font-mono text-xs uppercase tracking-widest text-surface-400 mb-4">
-                Gallery — click to expand
-              </p>
-              <ImageLightbox images={lightboxImages} />
-            </div>
-          ) : lightboxImages.length === 1 ? (
-            <div className="mt-8">
-              <p className="font-mono text-xs uppercase tracking-widest text-surface-400 mb-4">
-                Gallery — click to expand
+              <p className="font-mono text-xs uppercase tracking-widest text-surface-400">
+                Gallery - click to expand
               </p>
               <ImageLightbox images={lightboxImages} />
             </div>
@@ -185,8 +184,8 @@ export default async function ProjectPage({
         </div>
       ) : lightboxImages.length > 0 ? (
         <div className="container-wide mt-10 sm:mt-12">
-          <p className="font-mono text-xs uppercase tracking-widest text-surface-400 mb-4">
-            Gallery — click to expand
+          <p className="font-mono text-xs uppercase tracking-widest text-surface-400">
+            Gallery - click to expand
           </p>
           <ImageLightbox images={lightboxImages} />
         </div>
@@ -202,11 +201,11 @@ export default async function ProjectPage({
             "grid-cols-1 sm:grid-cols-3",
           )}>
             {project.metrics.map((m) => (
-              <div key={m.label} className="bg-surface-900 p-6">
+              <div key={m.label} className="bg-surface-950 p-6">
                 <div className="font-mono text-xs uppercase tracking-widest text-surface-400">
                   {m.label}
                 </div>
-                <div className="mt-2 text-2xl font-semibold tracking-tight text-surface-0 sm:text-3xl">
+                <div className="mt-2 text-2xl font-medium tracking-tight text-accent-400 sm:text-3xl">
                   {m.value}
                 </div>
               </div>
@@ -218,49 +217,48 @@ export default async function ProjectPage({
       {/* Case study sections */}
       <div className="container-wide mt-section-sm grid gap-12 pb-section lg:grid-cols-12 lg:gap-16">
         <aside className="lg:col-span-3">
-          <p className="eyebrow sticky top-24">
-            <span className="eyebrow-dot" />
+          <p className="font-mono text-xs uppercase tracking-widest text-surface-400 sticky top-24">
             Case study
           </p>
         </aside>
         <div className="space-y-12 lg:col-span-9">
           {project.problem ? (
             <section>
-              <h2 className="text-display-3 font-semibold tracking-tight">
+              <h2 className="text-display-3 font-medium tracking-tight">
                 Problem
               </h2>
-              <div className="mt-4 max-w-prose space-y-3 text-pretty leading-relaxed text-surface-200 break-words [overflow-wrap:anywhere]">
-                {renderMarkdownParagraphs(project.problem)}
+              <div className="mt-4">
+                <Markdown>{project.problem}</Markdown>
               </div>
             </section>
           ) : null}
           {project.process ? (
             <section>
-              <h2 className="text-display-3 font-semibold tracking-tight">
+              <h2 className="text-display-3 font-medium tracking-tight">
                 Process
               </h2>
-              <div className="mt-4 max-w-prose space-y-3 text-pretty leading-relaxed text-surface-200 break-words [overflow-wrap:anywhere]">
-                {renderMarkdownParagraphs(project.process)}
+              <div className="mt-4">
+                <Markdown>{project.process}</Markdown>
               </div>
             </section>
           ) : null}
           {project.solution ? (
             <section>
-              <h2 className="text-display-3 font-semibold tracking-tight">
+              <h2 className="text-display-3 font-medium tracking-tight">
                 Solution
               </h2>
-              <div className="mt-4 max-w-prose space-y-3 text-pretty leading-relaxed text-surface-200 break-words [overflow-wrap:anywhere]">
-                {renderMarkdownParagraphs(project.solution)}
+              <div className="mt-4">
+                <Markdown>{project.solution}</Markdown>
               </div>
             </section>
           ) : null}
           {project.results ? (
             <section>
-              <h2 className="text-display-3 font-semibold tracking-tight">
+              <h2 className="text-display-3 font-medium tracking-tight">
                 Results
               </h2>
-              <div className="mt-4 max-w-prose space-y-3 text-pretty leading-relaxed text-surface-200 break-words [overflow-wrap:anywhere]">
-                {renderMarkdownParagraphs(project.results)}
+              <div className="mt-4">
+                <Markdown>{project.results}</Markdown>
               </div>
             </section>
           ) : null}
@@ -270,8 +268,7 @@ export default async function ProjectPage({
       {/* Inline artifact strip — process section from site content */}
       <section className="container-wide pb-section">
         <div className="rounded-2xl border border-accent-600 bg-surface-950 p-6 sm:p-8">
-          <p className="eyebrow">
-            <span className="eyebrow-dot" />
+          <p className="font-mono text-xs uppercase tracking-widest text-surface-400">
             {site.process.eyebrow}
           </p>
           <div className="mt-4 grid gap-4 sm:grid-cols-3">
@@ -296,37 +293,7 @@ export default async function ProjectPage({
       </section>
 
       {/* Prev / Next */}
-      <nav
-        aria-label="Project navigation"
-        className="border-t border-surface-700"
-      >
-        <div className="container-wide grid grid-cols-2 gap-px overflow-hidden bg-surface-700 sm:grid-cols-2">
-          <Link
-            href={`/projects/${prev.slug}`}
-            className="group flex flex-col gap-2 bg-surface-900 p-6 transition-colors hover:bg-surface-800 sm:p-8"
-          >
-            <span className="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-widest text-surface-400 transition-colors group-hover:text-surface-0">
-              <ArrowLeft className="h-3.5 w-3.5" />
-              Previous
-            </span>
-            <span className="text-base font-medium text-surface-0 sm:text-lg">
-              {prev.title}
-            </span>
-          </Link>
-          <Link
-            href={`/projects/${next.slug}`}
-            className="group col-start-2 flex flex-col items-end gap-2 bg-surface-900 p-6 text-right transition-colors hover:bg-surface-800 sm:p-8"
-          >
-            <span className="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-widest text-surface-400 transition-colors group-hover:text-surface-0">
-              Next
-              <ArrowRight className="h-3.5 w-3.5" />
-            </span>
-            <span className="text-base font-medium text-surface-0 sm:text-lg">
-              {next.title}
-            </span>
-          </Link>
-        </div>
-      </nav>
+      <ProjectNav prev={prev} next={next} />
     </article>
   );
 }

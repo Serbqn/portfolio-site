@@ -34,36 +34,58 @@ export function ContactForm({
       setStatus("error");
       return;
     }
-    // v1: open the user's mail client with a pre-filled draft.
-    const subject = encodeURIComponent(
-      `Project enquiry — ${name}${company ? ` (${company})` : ""}`,
-    );
-    const body = encodeURIComponent(
-      `${message}\n\n—\n${name}\n${email}${company ? `\n${company}` : ""}`,
-    );
-    window.location.href = `mailto:${contactEmail}?subject=${subject}&body=${body}`;
-    setStatus("success");
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, company, message }),
+      });
+      if (!res.ok) {
+        const data = (await res.json().catch(() => null)) as {
+          error?: string;
+        } | null;
+        setError(data?.error ?? "Something went wrong. Please try again.");
+        setStatus("error");
+        return;
+      }
+      setStatus("success");
+    } catch {
+      setError("Network error. Please try again.");
+      setStatus("error");
+    }
   }
 
   if (status === "success") {
     return (
-      <div className="rounded-2xl border border-surface-700 bg-surface-900 p-8">
-        <p className="eyebrow">
-          <span className="eyebrow-dot" />
-          Opened
-        </p>
-        <h2 className="mt-3 text-display-3 font-semibold tracking-tight">
-          Thanks — your mail client should be opening.
+      <div
+        role="status"
+        className="rounded-2xl border border-accent-600 bg-surface-900 p-8"
+      >
+        <span className="inline-grid h-10 w-10 place-items-center rounded-full bg-accent-500/15 text-accent-400">
+          <svg viewBox="0 0 20 20" className="h-5 w-5" fill="none" aria-hidden>
+            <path
+              d="M4 10.5l4 4 8-9"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </span>
+        <h2 className="mt-4 text-display-3 font-medium tracking-tight">
+          Thanks — your message is on its way.
         </h2>
         <p className="mt-3 max-w-prose text-pretty text-surface-300">
-          If nothing opened, you can email me directly at{" "}
+          I read everything myself and reply within two working days. In the
+          meantime you can reach me directly at{" "}
           <a
             href={`mailto:${contactEmail}`}
             className="link-reveal font-medium text-surface-0"
           >
             {contactEmail}
           </a>
-          . I’ll reply within two working days.
+          .
         </p>
       </div>
     );
@@ -83,7 +105,7 @@ export function ContactForm({
             type="text"
             autoComplete="name"
             required
-            className="h-10 w-full rounded-lg border border-surface-600 bg-surface-900 px-3 text-sm text-surface-0 outline-none transition focus:border-accent-500 focus:shadow-ring-accent"
+            className="h-10 w-full rounded-lg border border-surface-600 bg-surface-900 px-3 text-sm text-surface-0 outline-none transition placeholder:text-surface-400 focus:border-accent-500"
           />
         </Field>
         <Field id="email" label="Email" required>
@@ -93,7 +115,7 @@ export function ContactForm({
             type="email"
             autoComplete="email"
             required
-            className="h-10 w-full rounded-lg border border-surface-600 bg-surface-900 px-3 text-sm text-surface-0 outline-none transition focus:border-accent-500 focus:shadow-ring-accent"
+            className="h-10 w-full rounded-lg border border-surface-600 bg-surface-900 px-3 text-sm text-surface-0 outline-none transition placeholder:text-surface-400 focus:border-accent-500"
           />
         </Field>
         <Field id="company" label="Company (optional)" className="sm:col-span-2">
@@ -102,7 +124,7 @@ export function ContactForm({
             name="company"
             type="text"
             autoComplete="organization"
-            className="h-10 w-full rounded-lg border border-surface-600 bg-surface-900 px-3 text-sm text-surface-0 outline-none transition focus:border-accent-500 focus:shadow-ring-accent"
+            className="h-10 w-full rounded-lg border border-surface-600 bg-surface-900 px-3 text-sm text-surface-0 outline-none transition placeholder:text-surface-400 focus:border-accent-500"
           />
         </Field>
         <Field
@@ -117,7 +139,7 @@ export function ContactForm({
             rows={6}
             required
             placeholder="What are you building, who is it for, and what’s the rough timeline?"
-            className="w-full rounded-lg border border-surface-600 bg-surface-900 px-3 py-2.5 text-sm text-surface-0 outline-none transition focus:border-accent-500 focus:shadow-ring-accent"
+            className="w-full rounded-lg border border-surface-600 bg-surface-900 px-3 py-2.5 text-sm text-surface-0 outline-none transition placeholder:text-surface-400 focus:border-accent-500"
           />
         </Field>
       </div>
@@ -133,17 +155,17 @@ export function ContactForm({
 
       <div className="mt-6 flex items-center justify-between gap-3">
         <p className="text-xs text-surface-400">
-          No tracking. No newsletter. Just an email to me.
+          No tracking. No newsletter. Straight to my inbox.
         </p>
         <button
           type="submit"
           disabled={status === "submitting"}
           className={cn(
-            "inline-flex h-10 items-center justify-center rounded-lg bg-surface-950 px-4 text-sm font-medium text-white transition-colors duration-150 hover:bg-surface-800",
+            "inline-flex h-10 items-center justify-center rounded-lg bg-accent-500 px-4 text-sm font-medium text-surface-950 transition-colors duration-150 hover:bg-accent-400 active:scale-[0.98]",
             "disabled:opacity-50",
           )}
         >
-          {status === "submitting" ? "Opening…" : submitLabel}
+          {status === "submitting" ? "Sending…" : submitLabel}
         </button>
       </div>
     </form>

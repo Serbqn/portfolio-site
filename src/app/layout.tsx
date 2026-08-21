@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono } from "next/font/google";
+import { Geist, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
-import { getSite } from "@/lib/content";
+import { getSite, getProjects } from "@/lib/content";
 
-const sans = Inter({
+const sans = Geist({
   subsets: ["latin"],
   variable: "--font-sans",
   display: "swap",
@@ -20,7 +20,9 @@ const mono = JetBrains_Mono({
 export async function generateMetadata(): Promise<Metadata> {
   const { site, hero } = await getSite();
   return {
-    metadataBase: new URL("https://serb.design"),
+    metadataBase: new URL(
+      process.env.NEXT_PUBLIC_SITE_URL ?? "https://serb.design",
+    ),
     title: {
       default: `${site.name} — ${site.role}`,
       template: `%s — ${site.name}`,
@@ -48,11 +50,16 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { site } = await getSite();
+  const [{ site }, projects] = await Promise.all([getSite(), getProjects()]);
   return (
     <html lang="en" className={`${sans.variable} ${mono.variable}`}>
-      <body className="min-h-screen flex flex-col bg-surface-900 text-surface-0 antialiased">
-        <Navbar name={site.name} role={site.role} logo={site.logo} />
+      <body className="grain min-h-screen flex flex-col bg-surface-900 text-surface-0 antialiased">
+        <Navbar
+          name={site.name}
+          role={site.role}
+          logo={site.logo}
+          projects={projects}
+        />
         <main className="flex-1">{children}</main>
         <Footer />
       </body>

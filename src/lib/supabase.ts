@@ -1,4 +1,5 @@
 import { createServerClient } from "@supabase/ssr";
+import { createClient as createSupabaseClient } from "@supabase/supabase-js";
 import { cookies } from "next/headers";
 
 /**
@@ -33,28 +34,18 @@ export async function createClient() {
 
 /**
  * Supabase client with service_role key for admin operations (DB writes, storage).
- * Only use in server-side API routes — never expose to the client.
+ * Uses the plain supabase-js client (no cookie/session handling) since the
+ * service key bypasses RLS and is only used server-side. This also makes it
+ * safe to call inside cached functions (unstable_cache).
  */
-export async function createServiceClient() {
-  const cookieStore = await cookies();
-
-  return createServerClient(
+export function createServiceClient() {
+  return createSupabaseClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_ROLE_KEY!,
     {
-      cookies: {
-        getAll() {
-          return cookieStore.getAll();
-        },
-        setAll(cookiesToSet) {
-          try {
-            cookiesToSet.forEach(({ name, value, options }) =>
-              cookieStore.set(name, value, options),
-            );
-          } catch {
-            // Ignored in Server Components.
-          }
-        },
+      auth: {
+        persistSession: false,
+        autoRefreshToken: false,
       },
     },
   );

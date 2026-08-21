@@ -51,7 +51,7 @@ export function SiteEditor({
                   setSite("site", { ...draft.site, logo: v || undefined })
                 }
               />
-              <p className="font-mono text-[10px] uppercase tracking-widest text-surface-500">
+              <p className="font-mono text-[10px] uppercase tracking-widest text-surface-400">
                 SVG path data (e.g. <code className="rounded bg-surface-800 px-1">M9 11h14M9 16h10M9 21h14</code>). Leave empty for the default icon.
               </p>
               {/* Live preview */}
@@ -67,7 +67,7 @@ export function SiteEditor({
                   </svg>
                 </span>
                 <span className="text-sm font-semibold text-surface-0">{draft.site.name || "Name"}</span>
-                <span className="text-surface-500">/</span>
+                <span className="text-surface-400">/</span>
                 <span className="font-mono text-xs uppercase tracking-widest text-surface-400">
                   {draft.site.role || "Role"}
                 </span>
@@ -291,7 +291,7 @@ export function SiteEditor({
 
         {/* Skills */}
         <div className="mt-6">
-          <h3 className="font-mono text-xs uppercase tracking-widest text-surface-500">
+          <h3 className="font-mono text-xs uppercase tracking-widest text-surface-400">
             Skills
           </h3>
           <div className="mt-3 space-y-2">
@@ -349,7 +349,7 @@ export function SiteEditor({
 
         {/* Tools */}
         <div className="mt-6">
-          <h3 className="font-mono text-xs uppercase tracking-widest text-surface-500">
+          <h3 className="font-mono text-xs uppercase tracking-widest text-surface-400">
             Tools
           </h3>
           <div className="mt-3 flex flex-wrap gap-2">
@@ -373,7 +373,7 @@ export function SiteEditor({
                     const next = draft.home.tools.filter((_, j) => j !== i);
                     setSite("home", { ...draft.home, tools: next });
                   }}
-                  className="text-surface-500 hover:text-red-400"
+                  className="text-surface-400 hover:text-red-400"
                   aria-label="Remove tool"
                 >
                   ×
@@ -498,7 +498,7 @@ export function SiteEditor({
               <div key={i} className="rounded-lg border border-surface-700 bg-surface-800 p-3">
                 <div className="grid gap-2 sm:grid-cols-2">
                   <div>
-                    <label className="font-mono text-[10px] uppercase tracking-widest text-surface-500">Year</label>
+                    <label className="font-mono text-[10px] uppercase tracking-widest text-surface-400">Year</label>
                     <input
                       value={exp.year}
                       onChange={(e) => {
@@ -511,7 +511,7 @@ export function SiteEditor({
                     />
                   </div>
                   <div>
-                    <label className="font-mono text-[10px] uppercase tracking-widest text-surface-500">Role</label>
+                    <label className="font-mono text-[10px] uppercase tracking-widest text-surface-400">Role</label>
                     <input
                       value={exp.role}
                       onChange={(e) => {
@@ -524,7 +524,7 @@ export function SiteEditor({
                     />
                   </div>
                   <div>
-                    <label className="font-mono text-[10px] uppercase tracking-widest text-surface-500">Company</label>
+                    <label className="font-mono text-[10px] uppercase tracking-widest text-surface-400">Company</label>
                     <input
                       value={exp.company}
                       onChange={(e) => {
@@ -638,7 +638,7 @@ export function SiteEditor({
           </Field>
         </Grid>
         <div className="mt-6">
-          <h3 className="font-mono text-xs uppercase tracking-widest text-surface-500">
+          <h3 className="font-mono text-xs uppercase tracking-widest text-surface-400">
             Steps
           </h3>
           <div className="mt-3 space-y-2">
@@ -670,7 +670,7 @@ export function SiteEditor({
                     const steps = draft.process.steps.filter((_, j) => j !== i);
                     setSite("process", { ...draft.process, steps });
                   }}
-                  className="mt-1.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-surface-700 text-surface-500 hover:text-red-400 hover:border-red-800 transition-colors"
+                  className="mt-1.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-surface-700 text-surface-400 hover:text-red-400 hover:border-red-800 transition-colors"
                   title="Remove step"
                 >
                   ×

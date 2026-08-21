@@ -3,11 +3,8 @@ import Link from "next/link";
 export default function NotFound() {
   return (
     <div className="container-wide grid place-items-center py-section text-center">
-      <p className="eyebrow">
-        <span className="eyebrow-dot" />
-        404
-      </p>
-      <h1 className="mt-6 text-display-2 font-semibold tracking-tight text-balance">
+      <p className="eyebrow">404</p>
+      <h1 className="mt-6 text-display-2 font-medium tracking-tight text-balance">
         That page doesn’t exist.
       </h1>
       <p className="mt-4 max-w-md text-pretty text-surface-300">

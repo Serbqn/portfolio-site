@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { createClient, createServiceClient } from "@/lib/supabase";
+import { createClient } from "@/lib/supabase";
 
 export const dynamic = "force-dynamic";
 
@@ -21,8 +21,8 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  // Use service client to sign in — this sets the Supabase auth cookie.
-  const supabase = await createServiceClient();
+  // Use the anon client to sign in — this sets the Supabase auth cookie.
+  const supabase = await createClient();
   const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password,
@@ -35,31 +35,11 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  // Also set our legacy cookie for middleware compatibility.
-  const response = NextResponse.json({ ok: true });
-  response.cookies.set("serb_admin", data.session.access_token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    path: "/",
-    maxAge: 60 * 60 * 24 * 7, // 7 days
-  });
-
-  return response;
+  return NextResponse.json({ ok: true });
 }
 
 export async function DELETE() {
-  const supabase = await createServiceClient();
+  const supabase = await createClient();
   await supabase.auth.signOut();
-
-  const response = NextResponse.json({ ok: true });
-  response.cookies.set("serb_admin", "", {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    path: "/",
-    maxAge: 0,
-  });
-
-  return response;
+  return NextResponse.json({ ok: true });
 }

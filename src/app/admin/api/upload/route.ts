@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { put } from "@vercel/blob";
+import { put, del } from "@vercel/blob";
 import { getSession } from "@/lib/auth";
 import { isValidSlug } from "@/lib/content";
 
@@ -64,6 +64,49 @@ export async function POST(req: NextRequest) {
     url: blob.url,
     type: file.type,
   });
+}
+
+/**
+ * Delete an uploaded image from Vercel Blob.
+ * Only accepts URLs that belong to the project's Blob store.
+ */
+export async function DELETE(req: NextRequest) {
+  const session = await getSession();
+  if (!session) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  let body: unknown;
+  try {
+    body = await req.json();
+  } catch {
+    return NextResponse.json({ error: "Invalid request body." }, { status: 400 });
+  }
+
+  const { url } = (body ?? {}) as { url?: unknown };
+  if (typeof url !== "string" || !url.trim()) {
+    return NextResponse.json({ error: "Missing url" }, { status: 400 });
+  }
+
+  // Safety: only allow deleting from the project's own Blob store.
+  if (!url.includes(".public.blob.vercel-storage.com")) {
+    return NextResponse.json(
+      { error: "Refusing to delete a non-Blob URL" },
+      { status: 400 },
+    );
+  }
+
+  try {
+    await del(url);
+  } catch (e) {
+    console.error("blob delete failed:", e instanceof Error ? e.message : e);
+    return NextResponse.json(
+      { error: "Could not delete image. Please try again." },
+      { status: 500 },
+    );
+  }
+
+  return NextResponse.json({ ok: true });
 }
 
 function extensionForMime(mime: string): string {

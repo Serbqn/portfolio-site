@@ -1,3 +1,4 @@
+import { unstable_cache, revalidateTag } from "next/cache";
 import { createServiceClient } from "@/lib/supabase";
 import type {
   ProjectFull,
@@ -15,81 +16,122 @@ export function isValidSlug(slug: string): boolean {
 
 // ---- Site content ----
 
-export async function getSite(): Promise<SiteContent> {
-  const supabase = await createServiceClient();
-  const { data, error } = await supabase
-    .from("site")
-    .select("content")
-    .eq("id", 1)
-    .single();
+export const getSite = unstable_cache(
+  async (): Promise<SiteContent> => {
+    const supabase = createServiceClient();
+    const { data, error } = await supabase
+      .from("site")
+      .select("content")
+      .eq("id", 1)
+      .single();
 
-  if (error) {
-    console.error("getSite error:", error.message);
-    throw new Error("Failed to fetch site content");
-  }
-  return data.content as SiteContent;
-}
+    if (error) {
+      console.error("getSite error:", error.message);
+      throw new Error("Failed to fetch site content");
+    }
+    return data.content as SiteContent;
+  },
+  ["site-content"],
+  { tags: ["site"] },
+);
 
 export async function updateSite(next: SiteContent): Promise<SiteContent> {
   if (!next || typeof next !== "object") {
     throw new Error("Invalid site content");
   }
-  const supabase = await createServiceClient();
+  const supabase = createServiceClient();
   const { error } = await supabase
     .from("site")
-    .upsert({ id: 1, content: next as any });
+    .upsert({ id: 1, content: next });
   if (error) {
     console.error("updateSite error:", error.message);
     throw new Error("Failed to update site content");
   }
+  revalidateTag("site");
   return next;
 }
 
 // ---- Projects ----
 
-export async function getProjects(): Promise<ProjectListItem[]> {
-  const supabase = await createServiceClient();
-  const { data, error } = await supabase
-    .from("projects")
-    .select("meta")
-    .order("created_at", { ascending: false });
+export const getProjects = unstable_cache(
+  async (): Promise<ProjectListItem[]> => {
+    const supabase = createServiceClient();
+    const { data, error } = await supabase
+      .from("projects")
+      .select("meta")
+      .order("created_at", { ascending: false });
 
-  if (error) {
-    console.error("getProjects error:", error.message);
-    throw new Error("Failed to fetch projects");
-  }
-  return (data?.map((p) => p.meta as ProjectListItem)) ?? [];
-}
+    if (error) {
+      console.error("getProjects error:", error.message);
+      throw new Error("Failed to fetch projects");
+    }
+    return (data?.map((p) => p.meta as ProjectListItem)) ?? [];
+  },
+  ["projects-list"],
+  { tags: ["projects"] },
+);
 
 export async function getProjectSlugs(): Promise<string[]> {
   const list = await getProjects();
   return list.map((p) => p.slug);
 }
 
-export async function getProjectBySlug(
-  slug: string,
-): Promise<ProjectFull | null> {
-  if (!isValidSlug(slug)) return null;
-  const supabase = await createServiceClient();
-  const { data, error } = await supabase
-    .from("projects")
-    .select("meta, content_md")
-    .eq("slug", slug)
-    .single();
+/** All projects with parsed case-study sections — powers the projects-page
+ * side drawer (instant open, no per-project fetch). */
+export const getProjectsFull = unstable_cache(
+  async (): Promise<ProjectFull[]> => {
+    const supabase = createServiceClient();
+    const { data, error } = await supabase
+      .from("projects")
+      .select("meta, content_md")
+      .order("created_at", { ascending: false });
 
-  if (error || !data) {
-    return null;
-  }
+    if (error) {
+      console.error("getProjectsFull error:", error.message);
+      throw new Error("Failed to fetch projects");
+    }
 
-  const meta = data.meta as ProjectMeta;
-  const sections = parseCaseStudySections(data.content_md);
+    return (data ?? []).map((row) => {
+      const meta = row.meta as ProjectMeta;
+      const sections = parseCaseStudySections(row.content_md as string);
+      return {
+        ...meta,
+        ...sections,
+        contentPath: `/admin?edit=${meta.slug}`,
+      };
+    });
+  },
+  ["projects-full"],
+  { tags: ["projects"] },
+);
 
-  return {
-    ...meta,
-    ...sections,
-    contentPath: `/admin?edit=${slug}`,
-  };
-}
+export const getProjectBySlug = (slug: string) =>
+  unstable_cache(
+    async (): Promise<ProjectFull | null> => {
+      if (!isValidSlug(slug)) return null;
+      const supabase = createServiceClient();
+      const { data, error } = await supabase
+        .from("projects")
+        .select("meta, content_md")
+        .eq("slug", slug)
+        .single();
+
+      if (error || !data) {
+        return null;
+      }
+
+      const meta = data.meta as ProjectMeta;
+      const sections = parseCaseStudySections(data.content_md);
+
+      return {
+        ...meta,
+        ...sections,
+        contentPath: `/admin?edit=${slug}`,
+      };
+    },
+    ["project", slug],
+    { tags: ["projects"] },
+  )();
 
 function parseCaseStudySections(md: string): {
   problem: string;
@@ -156,13 +198,14 @@ export async function createProject(
   const supabase = await createServiceClient();
   const { error } = await supabase.from("projects").insert({
     slug,
-    meta: meta as any,
+    meta,
     content_md: buildCaseStudyMD(draft, meta),
   });
   if (error) {
     console.error("createProject error:", error.message);
     throw new Error("Failed to create project");
   }
+  revalidateTag("projects");
   return meta;
 }
 
@@ -192,13 +235,14 @@ export async function updateProject(
     .from("projects")
     .upsert({
       slug,
-      meta: meta as any,
+      meta,
       content_md: buildCaseStudyMD(draft, meta),
     });
   if (error) {
     console.error("updateProject error:", error.message);
     throw new Error("Failed to update project");
   }
+  revalidateTag("projects");
   return meta;
 }
 
@@ -210,6 +254,7 @@ export async function deleteProject(slug: string): Promise<void> {
     console.error("deleteProject error:", error.message);
     throw new Error("Failed to delete project");
   }
+  revalidateTag("projects");
 }
 
 function buildCaseStudyMD(draft: ProjectDraft, meta: ProjectMeta): string {
@@ -228,9 +273,4 @@ function buildCaseStudyMD(draft: ProjectDraft, meta: ProjectMeta): string {
     md.push(`## ${h}`, "", body, "");
   }
   return md.join("\n");
-}
-
-export function isReadOnlyFS(): boolean {
-  // No longer read-only on Vercel — we use Supabase.
-  return false;
 }

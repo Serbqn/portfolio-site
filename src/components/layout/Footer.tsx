@@ -19,10 +19,39 @@ export async function Footer() {
 
   return (
     <footer className="border-t border-surface-700 bg-surface-900">
+      {/* Big CTA band */}
+      <div className="border-b border-surface-700">
+        <div className="container-wide flex flex-col gap-6 py-section-sm sm:flex-row sm:items-end sm:justify-between">
+          <p className="text-display-3 font-medium tracking-tight text-balance text-surface-0">
+            Have something worth building?
+          </p>
+          <Link
+            href="/contact"
+            className="group inline-flex shrink-0 items-center gap-2 rounded-lg bg-accent-500 px-5 py-2.5 text-sm font-medium text-surface-950 transition-colors duration-150 hover:bg-accent-400"
+          >
+            Start a project
+            <svg
+              viewBox="0 0 20 20"
+              className="h-4 w-4 transition-transform duration-150 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+              fill="none"
+              aria-hidden
+            >
+              <path
+                d="M6 14L14 6M8 6h6v6"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </Link>
+        </div>
+      </div>
+
       <div className="container-wide grid gap-12 py-section sm:grid-cols-2 sm:gap-8 lg:grid-cols-12">
         <div className="lg:col-span-5">
           <div className="flex items-center gap-2.5">
-            <span className="grid h-7 w-7 place-items-center rounded-md bg-surface-950 text-accent-500">
+            <span className="grid h-7 w-7 place-items-center rounded-md bg-surface-950 text-accent-400">
               <svg
                 viewBox="0 0 32 32"
                 className="h-4 w-4"
@@ -37,7 +66,7 @@ export async function Footer() {
                 />
               </svg>
             </span>
-            <span className="text-sm font-semibold tracking-tight text-surface-0">
+            <span className="text-sm font-medium tracking-tight text-surface-0">
               {site.name}
             </span>
           </div>
@@ -57,7 +86,7 @@ export async function Footer() {
             <li>
               <Link
                 href="/"
-                className="text-surface-200 transition-colors hover:text-surface-0"
+                className="link-reveal text-surface-200 hover:text-surface-0"
               >
                 Home
               </Link>
@@ -65,7 +94,7 @@ export async function Footer() {
             <li>
               <Link
                 href="/projects"
-                className="text-surface-200 transition-colors hover:text-surface-0"
+                className="link-reveal text-surface-200 hover:text-surface-0"
               >
                 Projects
               </Link>
@@ -73,7 +102,7 @@ export async function Footer() {
             <li>
               <Link
                 href="/about"
-                className="text-surface-200 transition-colors hover:text-surface-0"
+                className="link-reveal text-surface-200 hover:text-surface-0"
               >
                 About
               </Link>
@@ -81,7 +110,7 @@ export async function Footer() {
             <li>
               <Link
                 href="/contact"
-                className="text-surface-200 transition-colors hover:text-surface-0"
+                className="link-reveal text-surface-200 hover:text-surface-0"
               >
                 Contact
               </Link>
@@ -93,14 +122,14 @@ export async function Footer() {
           <h3 className="font-mono text-xs uppercase tracking-widest text-surface-400">
             Elsewhere
           </h3>
-          <ul className="mt-4 grid grid-cols-2 gap-y-2 text-sm sm:grid-cols-1">
+          <ul className="mt-4 flex flex-wrap gap-1.5">
             {socialLinks.map((l) => (
               <li key={l.label}>
                 <a
                   href={l.href}
                   target="_blank"
                   rel="noreferrer noopener"
-                  className="link-reveal text-surface-200"
+                  className="inline-flex items-center rounded-full border border-surface-600 px-3 py-1 font-mono text-xs uppercase tracking-widest text-surface-200 transition-colors duration-150 hover:border-accent-500 hover:text-accent-400"
                 >
                   {l.label}
                 </a>
@@ -109,22 +138,22 @@ export async function Footer() {
             <li>
               <a
                 href={`mailto:${site.email}`}
-                className="link-reveal text-surface-200"
+                className="inline-flex items-center rounded-full border border-surface-600 px-3 py-1 font-mono text-xs uppercase tracking-widest text-surface-200 transition-colors duration-150 hover:border-accent-500 hover:text-accent-400"
               >
-                {site.email}
+                Email
               </a>
             </li>
           </ul>
         </div>
       </div>
 
-      <div className="border-t border-surface-700">
-        <div className="container-wide flex flex-col items-start justify-between gap-2 py-6 sm:flex-row sm:items-center">
+      <div className="border-t border-surface-800">
+        <div className="container-wide flex flex-col gap-2 py-6 sm:flex-row sm:items-center sm:justify-between">
           <p className="font-mono text-xs uppercase tracking-widest text-surface-400">
             © {year} {site.name}
           </p>
           <p className="font-mono text-xs uppercase tracking-widest text-surface-400">
-            Built with Next.js · Designed in Open Design
+            Designed &amp; built in {site.location}
           </p>
         </div>
       </div>

@@ -115,8 +115,8 @@ function Frame({
         isDark
           ? "border-surface-700 bg-surface-950"
           : "border-surface-300 bg-surface-50",
-        "shadow-[0_0_0_1px_rgba(62,207,142,0.04)]",
-        "group-hover:border-accent-600 group-hover:shadow-[0_0_60px_-10px_rgba(62,207,142,0.25)]",
+        "shadow-[0_0_0_1px_rgba(255,107,53,0.04)]",
+        "group-hover:border-accent-600 group-hover:shadow-[0_0_60px_-10px_rgba(255,107,53,0.3)]",
         compact ? "aspect-[16/10]" : "aspect-[16/9]",
       )}
       style={{
@@ -195,7 +195,7 @@ function Frame({
         className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
         style={{
           background:
-            "linear-gradient(180deg, rgba(62,207,142,0.06) 0%, transparent 30%)",
+            "linear-gradient(180deg, rgba(255,107,53,0.07) 0%, transparent 30%)",
         }}
       />
     </div>

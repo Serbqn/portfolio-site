@@ -16,11 +16,7 @@ export default async function ContactPage() {
     <section className="container-wide section">
       <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
         <div className="lg:col-span-5">
-          <p className="eyebrow">
-            <span className="eyebrow-dot" />
-            {contact.eyebrow}
-          </p>
-          <h1 className="mt-3 text-display-1 font-semibold tracking-tight text-balance">
+          <h1 className="text-display-1 font-medium tracking-tight text-balance">
             {contact.title}
           </h1>
           <p className="mt-5 max-w-md text-lg leading-relaxed text-pretty text-surface-300">
@@ -41,7 +37,7 @@ export default async function ContactPage() {
           </div>
 
           <div className="mt-10">
-            <h2 className="font-mono text-xs uppercase tracking-widest text-surface-500">
+            <h2 className="font-mono text-xs uppercase tracking-widest text-surface-400">
               Elsewhere
             </h2>
             <SocialLinks

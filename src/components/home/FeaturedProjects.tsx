@@ -1,33 +1,16 @@
 "use client";
 
+import Link from "next/link";
+import { ArrowRight } from "@phosphor-icons/react";
 import { motion } from "motion/react";
-import { ProjectCard } from "@/components/projects/ProjectCard";
-import type { ProjectListItem } from "@/lib/types";
-
-const containerVariants = {
-  hidden: {},
-  show: {
-    transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.05,
-    },
-  },
-};
-
-const cardVariants = {
-  hidden: { opacity: 0, y: 12 },
-  show: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] },
-  },
-};
+import { ProjectCanvas } from "@/components/projects/ProjectCanvas";
+import type { ProjectFull } from "@/lib/types";
 
 export function FeaturedProjects({
   projects,
   title,
 }: {
-  projects: ProjectListItem[];
+  projects: ProjectFull[];
   title: string;
 }) {
   if (!projects.length) return null;
@@ -36,44 +19,37 @@ export function FeaturedProjects({
     <section className="container-wide section">
       <div className="flex items-end justify-between gap-4 pb-8 sm:pb-10">
         <div>
-          <p className="eyebrow">
-            <span className="eyebrow-dot" />
+          <p className="eyebrow">Featured</p>
+          <h2 className="mt-2 text-display-3 font-medium tracking-tight text-balance">
             {title}
-          </p>
-          <h2 className="mt-3 text-display-3 font-semibold tracking-tight text-balance">
-            Recent work, the kind that ships.
           </h2>
         </div>
-        <a
+        <Link
           href="/projects"
-          className="hidden shrink-0 items-center gap-1.5 self-end text-sm text-surface-200 transition-colors hover:text-surface-0 sm:inline-flex"
+          className="group hidden shrink-0 items-center gap-1.5 self-end text-sm text-surface-200 transition-colors hover:text-surface-0 sm:inline-flex"
         >
-          All projects
-          <span aria-hidden>→</span>
-        </a>
+          Explore the full canvas
+          <ArrowRight className="h-3.5 w-3.5 transition-transform duration-150 group-hover:translate-x-0.5" weight="bold" />
+        </Link>
       </div>
 
+      {/* Locked spatial teaser — the same constellation as /projects, frozen in place */}
       <motion.div
-        variants={containerVariants}
-        initial="hidden"
-        whileInView="show"
+        initial={{ opacity: 0, y: 16 }}
+        whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-60px" }}
-        className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8"
+        transition={{ duration: 0.38, ease: [0.22, 1, 0.36, 1] }}
       >
-        {projects.map((p) => (
-          <motion.div key={p.slug} variants={cardVariants}>
-            <ProjectCard project={p} />
-          </motion.div>
-        ))}
+        <ProjectCanvas projects={projects} interactive={false} viewKey="featured" />
       </motion.div>
 
       <div className="mt-10 sm:hidden">
-        <a
+        <Link
           href="/projects"
-          className="inline-flex h-10 items-center justify-center rounded-lg border border-surface-700 px-4 text-sm font-medium text-surface-0 transition-colors hover:bg-surface-800"
+          className="inline-flex h-10 items-center justify-center rounded-lg border border-surface-600 px-4 text-sm font-medium text-surface-0 transition-colors hover:border-surface-500 hover:bg-surface-800"
         >
           All projects →
-        </a>
+        </Link>
       </div>
     </section>
   );
