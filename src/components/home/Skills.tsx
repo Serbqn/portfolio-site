@@ -1,9 +1,56 @@
 "use client";
 
-import { motion } from "motion/react";
+import { useEffect, useRef, useState } from "react";
+import { motion, useInView, useReducedMotion } from "motion/react";
 import type { Skill } from "@/lib/types";
 
 const barTransition = { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const };
+
+/**
+ * SkillBar — fills to `level`% when scrolled into view.
+ *
+ * Robustness: some mobile browsers never report the intersection
+ * (rootMargin/IO quirks), which left bars permanently empty. So:
+ * scroll trigger when available, plus a timed fallback that fills
+ * regardless, and a static render under reduced motion.
+ */
+function SkillBar({ level, index }: { level: number; index: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, amount: 0.5 });
+  const reduceMotion = useReducedMotion();
+  const [fallback, setFallback] = useState(false);
+
+  useEffect(() => {
+    const t = window.setTimeout(() => setFallback(true), 2500);
+    return () => window.clearTimeout(t);
+  }, []);
+
+  const target = `${level}%`;
+  const trackClass =
+    "mt-2 h-1.5 w-full overflow-hidden rounded-full bg-surface-700";
+  const fillClass =
+    "h-full rounded-full bg-gradient-to-r from-accent-500 to-accent-400";
+
+  if (reduceMotion) {
+    return (
+      <div ref={ref} className={trackClass}>
+        <div className={fillClass} style={{ width: target }} />
+      </div>
+    );
+  }
+
+  const filled = inView || fallback;
+  return (
+    <div ref={ref} className={trackClass}>
+      <motion.div
+        className={fillClass}
+        initial={{ width: 0 }}
+        animate={filled ? { width: target } : { width: 0 }}
+        transition={{ ...barTransition, delay: inView ? index * 0.08 : 0 }}
+      />
+    </div>
+  );
+}
 
 export function Skills({ skills, tools }: { skills: Skill[]; tools: string[] }) {
   return (
@@ -31,15 +78,7 @@ export function Skills({ skills, tools }: { skills: Skill[]; tools: string[] }) 
                   <div className="text-sm font-medium text-surface-0">
                     {s.name}
                   </div>
-                  <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-surface-700">
-                    <motion.div
-                      className="h-full rounded-full bg-gradient-to-r from-accent-500 to-accent-400"
-                      initial={{ width: 0 }}
-                      whileInView={{ width: `${s.level}%` }}
-                      viewport={{ once: true, margin: "-80px" }}
-                      transition={{ ...barTransition, delay: i * 0.08 }}
-                    />
-                  </div>
+                  <SkillBar level={s.level} index={i} />
                 </div>
                 <span className="font-mono text-xs uppercase tracking-widest text-surface-400">
                   {s.level}

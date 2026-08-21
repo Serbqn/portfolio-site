@@ -18,9 +18,17 @@ export default async function AboutPage() {
           <h1 className="mt-2 text-display-1 font-medium tracking-tight text-balance">
             {about.title}
           </h1>
-          <p className="mt-5 max-w-2xl text-lg leading-relaxed text-pretty text-surface-300">
-            {about.lead}
-          </p>
+          {/* Lead supports multiple paragraphs — line breaks entered in the
+              admin split into separate <p> elements (blank lines ignored). */}
+          <div className="mt-5 max-w-2xl space-y-4 text-lg leading-relaxed text-pretty text-surface-300">
+            {about.lead
+              .split(/\r?\n/)
+              .map((para) => para.trim())
+              .filter(Boolean)
+              .map((para) => (
+                <p key={para.slice(0, 32)}>{para}</p>
+              ))}
+          </div>
         </header>
 
         <div className="mt-section grid gap-12 lg:grid-cols-12 lg:gap-16">
