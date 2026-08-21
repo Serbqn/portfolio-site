@@ -86,11 +86,9 @@ export function ImageLightbox({ images, className }: Props) {
                 className="object-cover object-top transition-transform duration-500 ease-out-soft group-hover:scale-[1.02]"
               />
             </motion.div>
-            {img.caption ? (
-              <div className="px-4 py-3 text-left">
-                <p className="text-xs text-surface-400">{img.caption}</p>
-              </div>
-            ) : null}
+            {/* Caption — kept in the DOM for SEO/screen readers, hidden
+                from the UI by design */}
+            {img.caption ? <p className="sr-only">{img.caption}</p> : null}
           </button>
         ))}
       </div>
@@ -191,13 +189,9 @@ export function ImageLightbox({ images, className }: Props) {
               />
             </motion.div>
 
-            {/* Caption */}
+            {/* Caption — same treatment as thumbnails: DOM-only, no UI */}
             {images[activeIndex].caption && (
-              <div className="absolute bottom-6 left-1/2 -translate-x-1/2 rounded-lg border border-surface-700 bg-surface-900/80 px-4 py-2 backdrop-blur-sm">
-                <p className="text-sm text-surface-200">
-                  {images[activeIndex].caption}
-                </p>
-              </div>
+              <p className="sr-only">{images[activeIndex].caption}</p>
             )}
           </motion.div>
         )}
