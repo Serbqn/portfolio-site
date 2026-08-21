@@ -107,7 +107,10 @@ export function Navbar({
             </span>
           </Link>
 
-          <nav className="hidden items-center gap-1 lg:flex">
+          {/* Right cluster — desktop nav plus the always-visible CTA and
+              hamburger */}
+          <div className="flex items-center gap-2">
+            <nav className="hidden items-center gap-1 lg:flex">
             {links.map((l) => {
               const active =
                 l.href === "/"
@@ -142,9 +145,13 @@ export function Navbar({
               <Command className="h-3 w-3" weight="bold" aria-hidden />
               K
             </button>
+            </nav>
+
+            {/* The CTA and hamburger sit OUTSIDE the desktop-only nav so
+                they stay visible on tablets and mobile */}
             <Link
               href="/contact"
-              className="ml-1 inline-flex items-center gap-1.5 rounded-lg bg-accent-500 px-3 py-1.5 text-sm font-medium text-surface-950 transition-colors duration-150 hover:bg-accent-400"
+              className="inline-flex items-center gap-1.5 rounded-lg bg-accent-500 px-3 py-1.5 text-sm font-medium text-surface-950 transition-colors duration-150 hover:bg-accent-400"
             >
               Hire me
               <svg
@@ -167,7 +174,7 @@ export function Navbar({
             <button
               type="button"
               onClick={() => setMenuOpen((o) => !o)}
-              className="ml-1 inline-flex h-9 w-9 items-center justify-center rounded-lg border border-surface-600 text-surface-200 transition-colors duration-150 hover:border-accent-500 hover:text-accent-400 lg:hidden"
+              className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-surface-600 text-surface-200 transition-colors duration-150 hover:border-accent-500 hover:text-accent-400 lg:hidden"
               aria-expanded={menuOpen}
               aria-controls="mobile-menu"
               aria-label={menuOpen ? "Close menu" : "Open menu"}
@@ -178,7 +185,7 @@ export function Navbar({
                 <List className="h-4 w-4" weight="bold" />
               )}
             </button>
-          </nav>
+          </div>
         </div>
 
         {/* Mobile / tablet menu panel */}
