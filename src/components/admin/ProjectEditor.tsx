@@ -83,6 +83,8 @@ export function ProjectEditor({
           }
           const { slug, ...rest } = data.project;
           setDraft(rest as ProjectDraftWithSections);
+          // Keep the tags text input in sync with the fetched project.
+          setTagsRaw((rest.tags ?? []).join(", "));
           setSlug(slug);
           setStatus("idle");
         })
