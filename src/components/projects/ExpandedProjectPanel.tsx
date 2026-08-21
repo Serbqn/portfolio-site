@@ -287,8 +287,8 @@ export function ExpandedProjectPanel({
             </button>
           ))
         ) : (
-          /* Case study — centered column with a readable measure */
-          <div className="mx-auto max-w-[62ch] space-y-6 text-center">
+          /* Case study — left-aligned text in a centered, readable column */
+          <div className="mx-auto max-w-[62ch] space-y-6 text-left">
             {sections.length ? (
               sections.map((s) => (
                 <section key={s.heading}>
