@@ -13,7 +13,15 @@ export function SiteEditor({
   status: AdminStatus;
   onSave: (next: SiteContent) => Promise<void>;
 }) {
-  const [draft, setDraft] = useState<SiteContent>(site);
+  // Normalize legacy site rows that predate newer fields (`process.show`, `site.focus`).
+  const [draft, setDraft] = useState<SiteContent>(() => ({
+    ...site,
+    site: {
+      ...site.site,
+      focus: site.site.focus ?? "Fintech · Dev tools · B2B",
+    },
+    process: { ...site.process, show: site.process.show !== false },
+  }));
 
   function setSite<K extends keyof SiteContent>(key: K, value: SiteContent[K]) {
     setDraft((d) => ({ ...d, [key]: value }));
@@ -120,6 +128,18 @@ export function SiteEditor({
                 setSite("site", { ...draft.site, availability: v })
               }
             />
+          </Field>
+          <Field id="site.focus" label="Focus (home hero)" className="sm:col-span-2">
+            <Input
+              id="site.focus"
+              value={draft.site.focus ?? ""}
+              onChange={(v) =>
+                setSite("site", { ...draft.site, focus: v })
+              }
+            />
+            <p className="mt-1.5 font-mono text-[10px] uppercase tracking-widest text-surface-400">
+              Shown next to "Designer" in the hero sidebar. Leave empty to hide.
+            </p>
           </Field>
         </Grid>
       </Section>
@@ -627,6 +647,23 @@ export function SiteEditor({
 
       <Section title="Process (project page footer)">
         <Grid>
+          <div className="sm:col-span-2">
+            <label className="flex items-center gap-2 text-sm text-surface-0">
+              <input
+                id="process.show"
+                type="checkbox"
+                checked={draft.process.show}
+                onChange={(e) =>
+                  setSite("process", {
+                    ...draft.process,
+                    show: e.target.checked,
+                  })
+                }
+                className="h-4 w-4 rounded border-surface-600 bg-surface-900 text-accent-500 focus:ring-accent-500"
+              />
+              Show this section on project pages
+            </label>
+          </div>
           <Field id="process.eyebrow" label="Eyebrow" className="sm:col-span-2">
             <Input
               id="process.eyebrow"

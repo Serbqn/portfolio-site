@@ -15,6 +15,8 @@ export type Site = {
   description: string;
   location: string;
   availability: string;
+  /** Home hero "Focus" line. Empty/undefined hides the row. */
+  focus?: string;
   email: string;
   social: SocialLinks;
   /** Optional custom SVG path data for the logo icon. If empty, a default icon is used. */
@@ -78,6 +80,7 @@ export type Process = {
   eyebrow: string;
   steps: ProcessStep[];
   footer: string;
+  show: boolean;
 };
 
 export type SiteContent = {

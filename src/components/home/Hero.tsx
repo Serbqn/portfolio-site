@@ -11,10 +11,12 @@ export function Hero({
   hero,
   name,
   availability,
+  focus,
 }: {
   hero: HeroType;
   name: string;
   availability: string;
+  focus?: string;
 }) {
   const reduceMotion = useReducedMotion();
   const words = hero.headline.split(" ");
@@ -118,14 +120,16 @@ export function Hero({
                   {name}
                 </dd>
               </div>
-              <div>
-                <dt className="font-mono text-xs uppercase tracking-widest text-surface-400">
-                  Focus
-                </dt>
-                <dd className="mt-1 text-base font-medium text-surface-0">
-                  Fintech · Dev tools · B2B
-                </dd>
-              </div>
+              {focus ? (
+                <div>
+                  <dt className="font-mono text-xs uppercase tracking-widest text-surface-400">
+                    Focus
+                  </dt>
+                  <dd className="mt-1 text-base font-medium text-surface-0">
+                    {focus}
+                  </dd>
+                </div>
+              ) : null}
               <div>
                 <dt className="font-mono text-xs uppercase tracking-widest text-surface-400">
                   Status

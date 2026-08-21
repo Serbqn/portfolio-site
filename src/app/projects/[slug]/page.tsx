@@ -266,31 +266,33 @@ export default async function ProjectPage({
       </div>
 
       {/* Inline artifact strip — process section from site content */}
-      <section className="container-wide pb-section">
-        <div className="rounded-2xl border border-accent-600 bg-surface-950 p-6 sm:p-8">
-          <p className="font-mono text-xs uppercase tracking-widest text-surface-400">
-            {site.process.eyebrow}
-          </p>
-          <div className="mt-4 grid gap-4 sm:grid-cols-3">
-            {site.process.steps.map((step) => (
-              <div
-                key={step.label}
-                className="rounded-xl border border-surface-700 bg-surface-900 p-4"
-              >
-                <div className="font-mono text-xs uppercase tracking-widest text-surface-200">
-                  {step.label}
+      {site.process.show !== false ? (
+        <section className="container-wide pb-section">
+          <div className="rounded-2xl border border-accent-600 bg-surface-950 p-6 sm:p-8">
+            <p className="font-mono text-xs uppercase tracking-widest text-surface-400">
+              {site.process.eyebrow}
+            </p>
+            <div className="mt-4 grid gap-4 sm:grid-cols-3">
+              {site.process.steps.map((step) => (
+                <div
+                  key={step.label}
+                  className="rounded-xl border border-surface-700 bg-surface-900 p-4"
+                >
+                  <div className="font-mono text-xs uppercase tracking-widest text-surface-200">
+                    {step.label}
+                  </div>
+                  <div className="mt-1 text-lg font-medium text-surface-0">
+                    {step.value}
+                  </div>
                 </div>
-                <div className="mt-1 text-lg font-medium text-surface-0">
-                  {step.value}
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
+            <p className="mt-5 max-w-prose text-sm text-surface-200">
+              {site.process.footer}
+            </p>
           </div>
-          <p className="mt-5 max-w-prose text-sm text-surface-200">
-            {site.process.footer}
-          </p>
-        </div>
-      </section>
+        </section>
+      ) : null}
 
       {/* Prev / Next */}
       <ProjectNav prev={prev} next={next} />

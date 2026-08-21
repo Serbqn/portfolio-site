@@ -31,6 +31,7 @@ export default async function HomePage() {
         hero={site.hero}
         name={site.site.name}
         availability={site.site.availability}
+        focus={site.site.focus ?? "Fintech · Dev tools · B2B"}
       />
       <FeaturedProjects
         title={site.home.featuredTitle}
