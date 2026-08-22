@@ -44,7 +44,13 @@ export async function generateMetadata(): Promise<Metadata> {
       description: hero.subheadline,
     },
     icons: {
-      icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
+      icon: [
+        { url: "/api/favicon", type: "image/svg+xml" },
+        { url: "/api/favicon/png?size=32", type: "image/png", sizes: "32x32" },
+        { url: "/api/favicon/png?size=16", type: "image/png", sizes: "16x16" },
+      ],
+      // Safari/iOS don't support SVG favicons — PNG rendered from the same logo.
+      apple: [{ url: "/api/favicon/png?size=180" }],
     },
   };
 }
