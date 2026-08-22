@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getProjectBySlug, getProjectSlugs, getProjects, getSite } from "@/lib/content";
-import { cn } from "@/lib/utils";
+import { cn, normalizeExternalUrl } from "@/lib/utils";
 import { BrowserFrame } from "@/components/projects/BrowserFrame";
 import { ImageLightbox } from "@/components/projects/ImageLightbox";
 import { Markdown } from "@/components/projects/Markdown";
@@ -121,6 +121,30 @@ export default async function ProjectPage({
               <p className="mt-4 max-w-2xl text-lg leading-relaxed text-pretty text-surface-300">
                 {project.subtitle}
               </p>
+
+              {/* Live/external project link — opens in a new tab */}
+              {project.link ? (
+                <a
+                  href={normalizeExternalUrl(project.link)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-6 inline-flex items-center gap-1.5 rounded-full border border-accent-600 bg-surface-900 px-4 py-2 text-sm font-medium text-accent-400 transition-colors hover:bg-surface-800 hover:text-accent-300"
+                >
+                  Visit project
+                  <svg
+                    viewBox="0 0 24 24"
+                    className="h-4 w-4"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    aria-hidden
+                  >
+                    <path d="M7 17L17 7M9 7h8v8" />
+                  </svg>
+                </a>
+              ) : null}
             </div>
 
             <dl className="grid gap-5 border-t border-surface-700 pt-6 text-sm sm:grid-cols-2 lg:col-span-5 lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0">

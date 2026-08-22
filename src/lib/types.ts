@@ -101,6 +101,8 @@ export type ProjectMeta = {
   role: string;
   year: string;
   client: string;
+  /** Optional external/live project URL — rendered as an "open in new tab" link. */
+  link?: string;
   tags: string[];
   featured: boolean;
   cover: string;

@@ -18,11 +18,11 @@ import type { ProjectFull, ProjectListItem } from "@/lib/types";
 const SPRING = { type: "spring" as const, stiffness: 200, damping: 26, mass: 0.8 };
 const SCALE_MIN = 0.8;
 const SCALE_MAX = 1.4;
-/** How far the field may be panned from its home position. The centered
- * grid fits the frame, so modest limits keep every card within reach —
- * no more getting lost off-canvas. */
-const PAN_X_LIMIT = 340;
-const PAN_Y_LIMIT = 300;
+/** Minimum pan range from the home position. Grows with the field via
+ * `panBounds` (below) so every card stays reachable no matter how many
+ * projects exist — without letting you get lost off-canvas. */
+const PAN_X_MIN = 340;
+const PAN_Y_MIN = 300;
 
 /** Deterministic pseudo-random jitter from the slug so layouts are stable across renders. */
 function hashStr(s: string): number {
@@ -108,6 +108,42 @@ export function ProjectCanvas({
   /** Browser fullscreen state for the canvas frame. */
   const [isFullscreen, setIsFullscreen] = useState(false);
 
+  // Loose-grid home positions with deterministic jitter, centered on the
+  // frame so the constellation never hangs off one side at rest.
+  const positions = useMemo(() => {
+    const raw = projects.map((p, i) => {
+      const h = hashStr(p.slug);
+      const col = i % 3;
+      const row = Math.floor(i / 3);
+      return {
+        slug: p.slug,
+        x: col * 380 + (h % 56) - 28,
+        y: row * 330 + ((h >> 3) % 48) - 24,
+        rotate: ((h >> 6) % 5) - 2,
+      };
+    });
+    const meanX = raw.reduce((s, c) => s + c.x, 0) / (raw.length || 1);
+    const meanY = raw.reduce((s, c) => s + c.y, 0) / (raw.length || 1);
+    return new Map(
+      raw.map((c) => [
+        c.slug,
+        { x: c.x - meanX, y: c.y - meanY, rotate: c.rotate },
+      ]),
+    );
+  }, [projects]);
+
+  // Pan range grows with the field: always far enough to bring the
+  // outermost card fully into view (+ half-card margin), never further.
+  const panBounds = useMemo(() => {
+    let x = PAN_X_MIN;
+    let y = PAN_Y_MIN;
+    for (const p of positions.values()) {
+      x = Math.max(x, Math.abs(p.x) + 150);
+      y = Math.max(y, Math.abs(p.y) + 170);
+    }
+    return { x, y };
+  }, [positions]);
+
   const readSaved = useCallback((): ViewState => {
     try {
       const raw = sessionStorage.getItem(storageKey);
@@ -122,8 +158,8 @@ export function ProjectCanvas({
   useEffect(() => {
     if (!canvasMode) return;
     const saved = readSaved();
-    panX.set(clamp(saved.x, -PAN_X_LIMIT, PAN_X_LIMIT));
-    panY.set(clamp(saved.y, -PAN_Y_LIMIT, PAN_Y_LIMIT));
+    panX.set(clamp(saved.x, -panBounds.x, panBounds.x));
+    panY.set(clamp(saved.y, -panBounds.y, panBounds.y));
     scale.set(clamp(saved.scale ?? 1, SCALE_MIN, SCALE_MAX));
     setOffsets(saved.offsets ?? {});
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -190,8 +226,8 @@ export function ProjectCanvas({
       const dx = e.clientX - session.startX;
       const dy = e.clientY - session.startY;
       if (Math.abs(dx) > 3 || Math.abs(dy) > 3) session.moved = true;
-      panX.set(clamp(session.baseX + dx, -PAN_X_LIMIT, PAN_X_LIMIT));
-      panY.set(clamp(session.baseY + dy, -PAN_Y_LIMIT, PAN_Y_LIMIT));
+      panX.set(clamp(session.baseX + dx, -panBounds.x, panBounds.x));
+      panY.set(clamp(session.baseY + dy, -panBounds.y, panBounds.y));
     };
 
     const onPointerUp = (e: PointerEvent) => {
@@ -217,7 +253,7 @@ export function ProjectCanvas({
       window.removeEventListener("pointermove", onPointerMove);
       window.removeEventListener("pointerup", onPointerUp);
     };
-  }, [canvasMode, panX, panY, schedulePersist, expandedSlug, onExpandCard]);
+  }, [canvasMode, panX, panY, schedulePersist, expandedSlug, onExpandCard, panBounds]);
 
   // Pinch / ctrl+wheel zoom — trackpad pinch reports ctrlKey
   useEffect(() => {
@@ -281,11 +317,11 @@ export function ProjectCanvas({
       const delta = pan[e.key];
       if (!delta) return;
       e.preventDefault();
-      panX.set(clamp(panX.get() + delta[0], -PAN_X_LIMIT, PAN_X_LIMIT));
-      panY.set(clamp(panY.get() + delta[1], -PAN_Y_LIMIT, PAN_Y_LIMIT));
+      panX.set(clamp(panX.get() + delta[0], -panBounds.x, panBounds.x));
+      panY.set(clamp(panY.get() + delta[1], -panBounds.y, panBounds.y));
       schedulePersist();
     },
-    [canvasMode, expandedSlug, panX, panY, schedulePersist],
+    [canvasMode, expandedSlug, panX, panY, schedulePersist, panBounds],
   );
 
   // Card drag end — record the offset from the card's home slot
@@ -312,30 +348,6 @@ export function ProjectCanvas({
       }
     : { "aria-label": `Featured projects — ${projects.length}` };
 
-  // Loose-grid home positions with deterministic jitter, centered on the
-  // frame so the constellation never hangs off one side at rest.
-  const positions = useMemo(() => {
-    const raw = projects.map((p, i) => {
-      const h = hashStr(p.slug);
-      const col = i % 3;
-      const row = Math.floor(i / 3);
-      return {
-        slug: p.slug,
-        x: col * 380 + (h % 56) - 28,
-        y: row * 330 + ((h >> 3) % 48) - 24,
-        rotate: ((h >> 6) % 5) - 2,
-      };
-    });
-    const meanX = raw.reduce((s, c) => s + c.x, 0) / (raw.length || 1);
-    const meanY = raw.reduce((s, c) => s + c.y, 0) / (raw.length || 1);
-    return new Map(
-      raw.map((c) => [
-        c.slug,
-        { x: c.x - meanX, y: c.y - meanY, rotate: c.rotate },
-      ]),
-    );
-  }, [projects]);
-
   // Auto-center the expanded panel: solve (cardPos + pan) * scale = 0 for
   // pan, and lift zoom to at least 1× for comfortable reading.
   useEffect(() => {
@@ -344,8 +356,8 @@ export function ProjectCanvas({
     if (!pos) return;
     const off = offsets[expandedSlug] ?? { dx: 0, dy: 0 };
     const animations = [
-      animate(panX, clamp(-(pos.x + off.dx), -PAN_X_LIMIT, PAN_X_LIMIT), SPRING),
-      animate(panY, clamp(-(pos.y + off.dy), -PAN_Y_LIMIT, PAN_Y_LIMIT), SPRING),
+      animate(panX, clamp(-(pos.x + off.dx), -panBounds.x, panBounds.x), SPRING),
+      animate(panY, clamp(-(pos.y + off.dy), -panBounds.y, panBounds.y), SPRING),
     ];
     if (scale.get() < 1) {
       animations.push(animate(scale, 1, SPRING));
@@ -383,57 +395,10 @@ export function ProjectCanvas({
 
   return (
     <div className={cn("relative", className)}>
-      {/* Zoom toolbar */}
-      {interactive ? (
-        <div
-          data-pan-ignore=""
-          className="absolute right-4 top-4 z-50 flex items-center gap-1 rounded-lg border border-surface-600 bg-surface-900/90 p-1 backdrop-blur-sm"
-        >
-          <button
-            type="button"
-            onClick={() => zoomBy(0.1)}
-            className="grid h-7 w-7 place-items-center rounded-md text-surface-300 transition-colors hover:bg-surface-800 hover:text-surface-0"
-            aria-label="Zoom in"
-          >
-            <MagnifyingGlassPlus className="h-4 w-4" />
-          </button>
-          <button
-            type="button"
-            onClick={() => zoomBy(-0.1)}
-            className="grid h-7 w-7 place-items-center rounded-md text-surface-300 transition-colors hover:bg-surface-800 hover:text-surface-0"
-            aria-label="Zoom out"
-          >
-            <MagnifyingGlassMinus className="h-4 w-4" />
-          </button>
-          <button
-            type="button"
-            onClick={resetView}
-            className="grid h-7 w-7 place-items-center rounded-md text-surface-300 transition-colors hover:bg-surface-800 hover:text-surface-0"
-            aria-label="Reset view and card layout"
-          >
-            <ArrowsCounterClockwise className="h-4 w-4" />
-          </button>
-          <span aria-hidden className="mx-0.5 h-5 w-px bg-surface-600" />
-          <button
-            type="button"
-            onClick={toggleFullscreen}
-            className={cn(
-              "grid h-7 w-7 place-items-center rounded-md transition-colors hover:bg-surface-800",
-              isFullscreen ? "text-accent-400" : "text-surface-300 hover:text-surface-0",
-            )}
-            aria-label={isFullscreen ? "Exit fullscreen" : "Open canvas fullscreen"}
-            aria-pressed={isFullscreen}
-          >
-            {isFullscreen ? (
-              <ArrowsIn className="h-4 w-4" weight="bold" />
-            ) : (
-              <ArrowsOut className="h-4 w-4" weight="bold" />
-            )}
-          </button>
-        </div>
-      ) : null}
-
-      {/* Canvas frame — static box that clips; never itself transformed */}
+      {/* Canvas frame — static box that clips; never itself transformed.
+          The zoom/fullscreen toolbar lives INSIDE the frame: while the frame
+          is browser-fullscreen only its subtree renders, so an outside
+          toolbar would be invisible and unclickable. */}
       <div
         ref={containerRef}
         {...frameProps}
@@ -447,6 +412,56 @@ export function ProjectCanvas({
           canvasMode && !expandedSlug && "cursor-grab",
         )}
       >
+        {/* Zoom toolbar — [data-pan-ignore] keeps card panning off it */}
+        {interactive ? (
+          <div
+            data-pan-ignore=""
+            className="absolute right-4 top-4 z-50 flex items-center gap-1 rounded-lg border border-surface-600 bg-surface-900/90 p-1 backdrop-blur-sm"
+          >
+            <button
+              type="button"
+              onClick={() => zoomBy(0.1)}
+              className="grid h-7 w-7 place-items-center rounded-md text-surface-300 transition-colors hover:bg-surface-800 hover:text-surface-0"
+              aria-label="Zoom in"
+            >
+              <MagnifyingGlassPlus className="h-4 w-4" />
+            </button>
+            <button
+              type="button"
+              onClick={() => zoomBy(-0.1)}
+              className="grid h-7 w-7 place-items-center rounded-md text-surface-300 transition-colors hover:bg-surface-800 hover:text-surface-0"
+              aria-label="Zoom out"
+            >
+              <MagnifyingGlassMinus className="h-4 w-4" />
+            </button>
+            <button
+              type="button"
+              onClick={resetView}
+              className="grid h-7 w-7 place-items-center rounded-md text-surface-300 transition-colors hover:bg-surface-800 hover:text-surface-0"
+              aria-label="Reset view and card layout"
+            >
+              <ArrowsCounterClockwise className="h-4 w-4" />
+            </button>
+            <span aria-hidden className="mx-0.5 h-5 w-px bg-surface-600" />
+            <button
+              type="button"
+              onClick={toggleFullscreen}
+              className={cn(
+                "grid h-7 w-7 place-items-center rounded-md transition-colors hover:bg-surface-800",
+                isFullscreen ? "text-accent-400" : "text-surface-300 hover:text-surface-0",
+              )}
+              aria-label={isFullscreen ? "Exit fullscreen" : "Open canvas fullscreen"}
+              aria-pressed={isFullscreen}
+            >
+              {isFullscreen ? (
+                <ArrowsIn className="h-4 w-4" weight="bold" />
+              ) : (
+                <ArrowsOut className="h-4 w-4" weight="bold" />
+              )}
+            </button>
+          </div>
+        ) : null}
+
         {/* Faint dot grid — fixed texture on the frame */}
         <div
           aria-hidden

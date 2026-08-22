@@ -1,5 +1,6 @@
 import { unstable_cache, revalidateTag } from "next/cache";
 import { createServiceClient } from "@/lib/supabase";
+import { normalizeExternalUrl } from "@/lib/utils";
 import type {
   ProjectFull,
   ProjectListItem,
@@ -32,7 +33,7 @@ export const getSite = unstable_cache(
     return data.content as SiteContent;
   },
   ["site-content"],
-  { tags: ["site"] },
+  { tags: ["site"], revalidate: 30 },
 );
 
 export async function updateSite(next: SiteContent): Promise<SiteContent> {
@@ -68,7 +69,7 @@ export const getProjects = unstable_cache(
     return (data?.map((p) => p.meta as ProjectListItem)) ?? [];
   },
   ["projects-list"],
-  { tags: ["projects"] },
+  { tags: ["projects"], revalidate: 30 },
 );
 
 export async function getProjectSlugs(): Promise<string[]> {
@@ -102,7 +103,7 @@ export const getProjectsFull = unstable_cache(
     });
   },
   ["projects-full"],
-  { tags: ["projects"] },
+  { tags: ["projects"], revalidate: 30 },
 );
 
 export const getProjectBySlug = (slug: string) =>
@@ -130,7 +131,7 @@ export const getProjectBySlug = (slug: string) =>
       };
     },
     ["project", slug],
-    { tags: ["projects"] },
+    { tags: ["projects"], revalidate: 30 },
   )();
 
 function parseCaseStudySections(md: string): {
@@ -187,6 +188,7 @@ export async function createProject(
     role: draft.role,
     year: draft.year,
     client: draft.client,
+    link: normalizeExternalUrl(draft.link),
     tags: draft.tags ?? [],
     featured: draft.featured ?? false,
     cover: draft.cover,
@@ -222,6 +224,7 @@ export async function updateProject(
     role: draft.role,
     year: draft.year,
     client: draft.client,
+    link: normalizeExternalUrl(draft.link),
     tags: draft.tags ?? [],
     featured: draft.featured ?? false,
     cover: draft.cover,

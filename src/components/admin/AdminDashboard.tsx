@@ -214,6 +214,7 @@ function emptyDraft(): ProjectDraftWithSections {
     role: "",
     year: String(now.getFullYear()),
     client: "",
+    link: "",
     tags: [],
     featured: false,
     cover: "",

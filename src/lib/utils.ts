@@ -46,3 +46,29 @@ export function resolveLogo(
   }
   return { d: trimmed, viewBox: DEFAULT_LOGO.viewBox };
 }
+
+/**
+ * Normalize an admin-entered external URL into a safe href.
+ * Empty stays empty; bare domains get an https:// prefix; internal paths
+ * (leading "/") pass through untouched. Only http/https/mailto schemes are
+ * allowed through verbatim — anything else gets coerced to https:// so a
+ * stray "javascript:" can never end up in an href.
+ */
+export function normalizeExternalUrl(raw: string | null | undefined): string {
+  const trimmed = raw?.trim() ?? "";
+  if (!trimmed) return "";
+  if (/^https?:\/\//i.test(trimmed) || /^mailto:/i.test(trimmed)) return trimmed;
+  if (trimmed.startsWith("/")) return trimmed;
+  if (trimmed.startsWith("//")) return `https:${trimmed}`;
+  return `https://${trimmed}`;
+}
+
+/** Pretty host for display ("https://a.b/c" → "a.b"); falls back to the raw
+ * input when it can't be parsed as a URL. */
+export function urlHost(raw: string): string {
+  try {
+    return new URL(normalizeExternalUrl(raw)).hostname || raw;
+  } catch {
+    return raw;
+  }
+}

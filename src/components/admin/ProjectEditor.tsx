@@ -10,6 +10,7 @@ export type ProjectDraftWithSections = {
   role: string;
   year: string;
   client: string;
+  link: string;
   tags: string[];
   featured: boolean;
   cover: string;
@@ -44,6 +45,7 @@ export function ProjectEditor({
       role: "",
       year: "",
       client: "",
+      link: "",
       tags: [],
       featured: false,
       cover: "",
@@ -313,6 +315,17 @@ export function ProjectEditor({
                     .filter(Boolean),
                 );
               }}
+              className="h-10 w-full rounded-lg border border-surface-600 bg-surface-900 px-3 text-sm text-surface-0 outline-none focus:border-accent-500 focus:shadow-ring-accent"
+            />
+          </Field>
+          <Field id="link" label="Project link">
+            <input
+              id="link"
+              type="text"
+              inputMode="url"
+              value={draft.link}
+              onChange={(e) => setField("link", e.target.value)}
+              placeholder="https://example.com"
               className="h-10 w-full rounded-lg border border-surface-600 bg-surface-900 px-3 text-sm text-surface-0 outline-none focus:border-accent-500 focus:shadow-ring-accent"
             />
           </Field>

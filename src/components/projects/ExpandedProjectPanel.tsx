@@ -7,7 +7,7 @@ import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { X, ArrowUpRight, ArrowLeft, ArrowRight } from "@phosphor-icons/react";
 import { Markdown } from "@/components/projects/Markdown";
-import { cn } from "@/lib/utils";
+import { cn, normalizeExternalUrl, urlHost } from "@/lib/utils";
 import type { ProjectFull } from "@/lib/types";
 
 type Tab = "overview" | "gallery" | "case";
@@ -85,9 +85,22 @@ export function ExpandedProjectPanel({
   }, [activeImg, closeLightbox, stepLightbox]);
 
   // Portal target — the lightbox must escape the panel's stacking context,
-  // otherwise the canvas toolbar (z-50) paints above it.
+  // otherwise the canvas toolbar (z-50) paints above it. While the canvas
+  // frame is browser-fullscreen only ITS subtree renders, so the lightbox
+  // must portal into the fullscreen element instead of <body> — otherwise
+  // it stays invisible and gallery images "can't be expanded".
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
+  const [portalTarget, setPortalTarget] = useState<HTMLElement | null>(null);
+  useEffect(() => {
+    const sync = () =>
+      setPortalTarget(
+        (document.fullscreenElement as HTMLElement | null) ?? document.body,
+      );
+    sync();
+    document.addEventListener("fullscreenchange", sync);
+    return () => document.removeEventListener("fullscreenchange", sync);
+  }, []);
 
   // Gallery paging — one image per wheel gesture. Native non-passive
   // listener so preventDefault sticks (React's onWheel is passive). Each
@@ -257,6 +270,21 @@ export function ExpandedProjectPanel({
             <p className="font-mono text-[10px] uppercase tracking-widest text-surface-400">
               Role · <span className="text-surface-200">{project.role}</span>
             </p>
+
+            {/* External/live link — opens in a new tab */}
+            {project.link ? (
+              <p className="font-mono text-[10px] uppercase tracking-widest text-surface-400">
+                Link ·{" "}
+                <a
+                  href={normalizeExternalUrl(project.link)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm normal-case tracking-normal text-accent-400 underline-offset-2 transition-colors hover:text-accent-300 hover:underline"
+                >
+                  {urlHost(project.link)} ↗
+                </a>
+              </p>
+            ) : null}
           </div>
         ) : tab === "gallery" ? (
           /* Gallery — one image per scroll gesture: every slide fills the
@@ -309,9 +337,10 @@ export function ExpandedProjectPanel({
           </div>
         )}
 
-        {/* Lightbox — full-size image viewer, portaled to <body> so it
-            stacks above the canvas toolbar and everything else */}
-        {mounted
+        {/* Lightbox — full-size image viewer, portaled above the panel so it
+            stacks above the canvas toolbar; while the frame is fullscreen it
+            portals into the fullscreen element (only its subtree renders) */}
+        {mounted && portalTarget
           ? createPortal(
               <AnimatePresence>
                 {activeImg !== null && galleryImages[activeImg] ? (
@@ -390,7 +419,7 @@ export function ExpandedProjectPanel({
                   </motion.div>
                 ) : null}
               </AnimatePresence>,
-              document.body,
+              portalTarget,
             )
           : null}
       </div>
