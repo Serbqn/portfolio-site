@@ -7,7 +7,7 @@ import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { X, ArrowUpRight, ArrowLeft, ArrowRight } from "@phosphor-icons/react";
 import { Markdown } from "@/components/projects/Markdown";
-import { cn, normalizeExternalUrl, urlHost } from "@/lib/utils";
+import { cn, normalizeExternalUrl } from "@/lib/utils";
 import type { ProjectFull } from "@/lib/types";
 
 type Tab = "overview" | "gallery" | "case";
@@ -281,7 +281,7 @@ export function ExpandedProjectPanel({
                   rel="noopener noreferrer"
                   className="text-sm normal-case tracking-normal text-accent-400 underline-offset-2 transition-colors hover:text-accent-300 hover:underline"
                 >
-                  {urlHost(project.link)} ↗
+                  Visit Project ↗
                 </a>
               </p>
             ) : null}
