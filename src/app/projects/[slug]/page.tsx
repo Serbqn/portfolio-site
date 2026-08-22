@@ -47,11 +47,13 @@ export async function generateMetadata({
   return {
     title: project.title,
     description: project.summary,
+    // og:image / twitter:image come from the sibling opengraph-image.tsx —
+    // generated PNG cards, since SVG covers aren't valid OG images.
     openGraph: {
       title: project.title,
       description: project.summary,
-      images: project.cover ? [{ url: project.cover }] : undefined,
     },
+    alternates: { canonical: `/projects/${slug}` },
   };
 }
 
@@ -98,9 +100,13 @@ export default async function ProjectPage({
             "@context": "https://schema.org",
             "@type": "CreativeWork",
             name: project.title,
+            headline: project.title,
             description: project.summary,
+            url: `${process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.serb.work"}/projects/${slug}`,
+            keywords: project.tags.join(", "),
             creator: { "@type": "Person", name: site.site.name },
             image: project.cover,
+            datePublished: project.year ? `${project.year}-01-01` : undefined,
             dateCreated: project.year,
           }),
         }}

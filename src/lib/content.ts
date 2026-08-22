@@ -77,6 +77,43 @@ export async function getProjectSlugs(): Promise<string[]> {
   return list.map((p) => p.slug);
 }
 
+/** Real row timestamps for the sitemap — cached under both tags so admin
+ * edits refresh it through the same revalidateTag calls as page content. */
+export const getSitemapEntries = unstable_cache(
+  async (): Promise<{
+    siteUpdatedAt: string | null;
+    projects: { slug: string; updatedAt: string }[];
+  }> => {
+    const supabase = createServiceClient();
+    const [siteRes, projectsRes] = await Promise.all([
+      supabase.from("site").select("updated_at").eq("id", 1).single(),
+      supabase.from("projects").select("slug, updated_at"),
+    ]);
+
+    if (siteRes.error) {
+      console.error("getSitemapEntries site error:", siteRes.error.message);
+      throw new Error("Failed to fetch sitemap entries");
+    }
+    if (projectsRes.error) {
+      console.error(
+        "getSitemapEntries projects error:",
+        projectsRes.error.message,
+      );
+      throw new Error("Failed to fetch sitemap entries");
+    }
+
+    return {
+      siteUpdatedAt: (siteRes.data?.updated_at as string | undefined) ?? null,
+      projects: (projectsRes.data ?? []).map((row) => ({
+        slug: row.slug as string,
+        updatedAt: row.updated_at as string,
+      })),
+    };
+  },
+  ["sitemap-entries"],
+  { tags: ["site", "projects"], revalidate: 300 },
+);
+
 /** All projects with parsed case-study sections — powers the projects-page
  * side drawer (instant open, no per-project fetch). */
 export const getProjectsFull = unstable_cache(

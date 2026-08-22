@@ -5,6 +5,7 @@ export const metadata: Metadata = {
   title: "About",
   description:
     "How I work, what I care about, and the four roles that taught me most of what I know about designing technical products.",
+  alternates: { canonical: "/about" },
 };
 
 export default async function AboutPage() {

@@ -25,7 +25,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const { site, hero } = await getSite();
   return {
     metadataBase: new URL(
-      process.env.NEXT_PUBLIC_SITE_URL ?? "https://serb.design",
+      process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.serb.work",
     ),
     title: {
       default: `${site.name} — ${site.role}`,

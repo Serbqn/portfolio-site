@@ -6,6 +6,7 @@ export const metadata: Metadata = {
   title: "Projects",
   description:
     "Selected case studies in fintech, dev tools, and B2B SaaS — interface design for products where the work is in the details.",
+  alternates: { canonical: "/projects" },
 };
 
 export default async function ProjectsPage() {

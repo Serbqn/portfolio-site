@@ -1,7 +1,14 @@
+import type { Metadata } from "next";
 import { Hero } from "@/components/home/Hero";
 import { FeaturedProjects } from "@/components/home/FeaturedProjects";
 import { Skills } from "@/components/home/Skills";
 import { getProjectsFull, getSite } from "@/lib/content";
+
+// Canonical is set per page — a root-level canonical would collapse every
+// route onto "/" because children inherit layout metadata.
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
 
 export default async function HomePage() {
   const [site, projects] = await Promise.all([getSite(), getProjectsFull()]);
@@ -22,7 +29,7 @@ export default async function HomePage() {
             jobTitle: site.site.role,
             description: site.site.description,
             email: site.site.email,
-            url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://serb.design",
+            url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.serb.work",
             sameAs: Object.values(site.site.social).filter(Boolean),
           }),
         }}

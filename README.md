@@ -33,7 +33,7 @@ Open [http://localhost:3000](http://localhost:3000).
 | `SUPABASE_SERVICE_ROLE_KEY` | Supabase project → Settings → API (service role — server-only, never expose) |
 | `BLOB_READ_WRITE_TOKEN` | Vercel dashboard → Storage → Blob → your store |
 
-Optional: `NEXT_PUBLIC_SITE_URL` (used for sitemap/robots/metadata; defaults to `https://serb.design`).
+Optional: `NEXT_PUBLIC_SITE_URL` (used for sitemap/robots/metadata; defaults to `https://www.serb.work`).
 
 ## Database setup
 
