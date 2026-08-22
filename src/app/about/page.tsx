@@ -18,6 +18,12 @@ export default async function AboutPage() {
           <h1 className="mt-2 text-display-1 font-medium tracking-tight text-balance">
             {about.title}
           </h1>
+          {/* Optional subtitle — hidden when left empty in the admin. */}
+          {about.subtitle ? (
+            <p className="mt-4 max-w-2xl text-xl leading-relaxed text-pretty text-surface-200">
+              {about.subtitle}
+            </p>
+          ) : null}
           {/* Lead supports multiple paragraphs — line breaks entered in the
               admin split into separate <p> elements (blank lines ignored). */}
           <div className="mt-5 max-w-2xl space-y-4 text-lg leading-relaxed text-pretty text-surface-300">

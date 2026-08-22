@@ -77,6 +77,7 @@
   "about": {
     "eyebrow": "About",
     "title": "Designer, not decorator. Developer, not just implementer.",
+    "subtitle": "Product design and production front-end code for fintech, dev tools, and B2B SaaS.",
     "lead": "I'm Serb — a UI/UX designer with a background in front-end engineering. The two disciplines shape how I work: I think in systems, ship in components, and write copy that respects the reader. I don't just hand off mockups — I build the thing.",
     "sections": [
       {

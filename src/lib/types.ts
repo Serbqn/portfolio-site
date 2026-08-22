@@ -59,6 +59,8 @@ export type Experience = {
 export type About = {
   eyebrow: string;
   title: string;
+  /** Optional subtitle shown under the page title. Empty/undefined hides it. */
+  subtitle?: string;
   lead: string;
   sections: { heading: string; body: string }[];
   experience: Experience[];

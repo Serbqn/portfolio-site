@@ -437,6 +437,18 @@ export function SiteEditor({
               }
             />
           </Field>
+          <Field id="about.subtitle" label="Subtitle" className="sm:col-span-2">
+            <Input
+              id="about.subtitle"
+              value={draft.about.subtitle ?? ""}
+              onChange={(v) =>
+                setSite("about", { ...draft.about, subtitle: v })
+              }
+            />
+            <p className="mt-1.5 font-mono text-[10px] uppercase tracking-widest text-surface-400">
+              Shown under the title on the About page. Leave empty to hide.
+            </p>
+          </Field>
           <Field id="about.lead" label="Lead paragraph" className="sm:col-span-2">
             <TextArea
               id="about.lead"
