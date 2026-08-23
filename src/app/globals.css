@@ -272,16 +272,6 @@
  * site's own voice while still reading as a special, focused zone.
  */
 
-@keyframes hint-pulse {
-  0%,
-  100% {
-    box-shadow: 0 0 18px -8px rgba(255, 184, 106, 0.12);
-  }
-  50% {
-    box-shadow: 0 0 30px -6px rgba(255, 184, 106, 0.28);
-  }
-}
-
 @keyframes glow-breathe {
   0%,
   100% {
@@ -290,10 +280,6 @@
   50% {
     opacity: 1;
   }
-}
-
-.animate-hint-pulse {
-  animation: hint-pulse 2.8s ease-in-out infinite;
 }
 
 .animate-glow-breathe {

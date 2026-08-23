@@ -9,7 +9,7 @@ import {
   useReducedMotion,
   type MotionValue,
 } from "motion/react";
-import { MagnifyingGlassPlus, MagnifyingGlassMinus, ArrowsCounterClockwise, ArrowsOut, ArrowsIn, DotsSixVertical } from "@phosphor-icons/react";
+import { MagnifyingGlassPlus, MagnifyingGlassMinus, ArrowsCounterClockwise, ArrowsOut, ArrowsIn, DotsSixVertical, Info } from "@phosphor-icons/react";
 import { ExpandedProjectPanel } from "@/components/projects/ExpandedProjectPanel";
 import { ProjectCard } from "@/components/projects/ProjectCard";
 import { cn } from "@/lib/utils";
@@ -525,7 +525,7 @@ export function ProjectCanvas({
         onWheelCapture={markInteracted}
         onPointerMove={canvasMode ? onSpotlightMove : undefined}
         className={cn(
-          "relative touch-none overflow-hidden border border-surface-700 bg-surface-950/50 outline-none scroll-mt-32",
+          "relative touch-none overflow-hidden border border-surface-700 bg-surface-950 outline-none scroll-mt-32",
           // Stage mode reads the wrapper's animated radius so the border
           // follows the curve instead of being clipped off at the corners.
           fullBleed ? "rounded-[var(--stage-radius,0px)]" : "rounded-2xl",
@@ -541,72 +541,93 @@ export function ProjectCanvas({
           canvasMode && !expandedSlug && "cursor-grab",
         )}
       >
-        {/* Top-right chrome — zoom/fullscreen controls ([data-pan-ignore]
-            keeps card panning off the controls). */}
+        {/* Top-right chrome — vertical control rail ([data-pan-ignore]
+            keeps card panning off the controls). Top to bottom: help,
+            fullscreen, reset, zoom. The info icon reveals the pan/zoom
+            hint on hover/focus — it replaces the old bottom-center pill. */}
         {interactive ? (
-          <div className="absolute right-4 top-4 z-50 flex items-center gap-2">
+          <div className="absolute right-4 top-4 z-50 flex items-start gap-2">
             <div
               data-pan-ignore=""
-              className="flex items-center gap-1 rounded-lg border border-surface-600 bg-surface-900/90 p-1 backdrop-blur-sm"
+              className="flex flex-col items-center gap-0 rounded-lg border border-surface-600 bg-surface-900/90 p-1.5 backdrop-blur-sm"
             >
-            <button
-              type="button"
-              onClick={() => {
-                markInteracted();
-                zoomBy(0.1);
-              }}
-              className="grid h-7 w-7 place-items-center rounded-md text-surface-300 transition-colors hover:bg-surface-800 hover:text-surface-0"
-              aria-label="Zoom in"
-            >
-              <MagnifyingGlassPlus className="h-4 w-4" />
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                markInteracted();
-                zoomBy(-0.1);
-              }}
-              className="grid h-7 w-7 place-items-center rounded-md text-surface-300 transition-colors hover:bg-surface-800 hover:text-surface-0"
-              aria-label="Zoom out"
-            >
-              <MagnifyingGlassMinus className="h-4 w-4" />
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                markInteracted();
-                resetView();
-              }}
-              className="grid h-7 w-7 place-items-center rounded-md text-surface-300 transition-colors hover:bg-surface-800 hover:text-surface-0"
-              aria-label="Reset view and card layout"
-            >
-              <ArrowsCounterClockwise className="h-4 w-4" />
-            </button>
-            <span aria-hidden className="mx-0.5 h-5 w-px bg-surface-600" />
-            <button
-              type="button"
-              onClick={() => {
-                markInteracted();
-                toggleFullscreen();
-              }}
-              className={cn(
-                "grid h-7 w-7 place-items-center rounded-md transition-colors hover:bg-surface-800",
-                isFullscreen ? "text-accent-400" : "text-surface-300 hover:text-surface-0",
-              )}
-              aria-label={isFullscreen ? "Exit fullscreen" : "Open canvas fullscreen"}
-              aria-pressed={isFullscreen}
-            >
-              {isFullscreen ? (
-                <ArrowsIn className="h-4 w-4" weight="bold" />
-              ) : (
-                <ArrowsOut className="h-4 w-4" weight="bold" />
-              )}
-            </button>
+              {/* Info — hover/focus tooltip carries the pan/zoom hint. */}
+              <div className="group relative">
+                <button
+                  type="button"
+                  aria-label="Pan and zoom help"
+                  aria-describedby="canvas-controls-hint"
+                  className="grid h-8 w-8 place-items-center rounded-md text-surface-300 transition-colors hover:bg-surface-800 hover:text-accent-400"
+                >
+                  <Info className="h-5 w-5" />
+                </button>
+                <span
+                  id="canvas-controls-hint"
+                  role="tooltip"
+                  className="pointer-events-none absolute right-full top-1/2 z-50 mr-2 -translate-y-1/2 whitespace-nowrap rounded-md border border-accent-400/40 bg-surface-900/95 px-2.5 py-1.5 font-mono text-[10px] uppercase tracking-widest text-accent-400 opacity-0 shadow-[inset_0_0_0_1px_rgba(255,184,106,0.15),0_0_28px_-6px_rgba(255,184,106,0.5)] backdrop-blur-sm transition-opacity duration-150 group-hover:opacity-100 group-focus-within:opacity-100"
+                >
+                  Drag anywhere to pan · ⠿ handle arranges a card · pinch or ⌘ scroll to zoom
+                </span>
+              </div>
+              <span aria-hidden className="my-1.5 h-px w-6 bg-surface-600" />
+              <button
+                type="button"
+                onClick={() => {
+                  markInteracted();
+                  toggleFullscreen();
+                }}
+                className={cn(
+                  "grid h-8 w-8 place-items-center rounded-md transition-colors hover:bg-surface-800",
+                  isFullscreen ? "text-accent-400" : "text-surface-300 hover:text-surface-0",
+                )}
+                aria-label={isFullscreen ? "Exit fullscreen" : "Open canvas fullscreen"}
+                aria-pressed={isFullscreen}
+              >
+                {isFullscreen ? (
+                  <ArrowsIn className="h-5 w-5" />
+                ) : (
+                  <ArrowsOut className="h-5 w-5" />
+                )}
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  markInteracted();
+                  resetView();
+                }}
+                className="grid h-8 w-8 place-items-center rounded-md text-surface-300 transition-colors hover:bg-surface-800 hover:text-surface-0"
+                aria-label="Reset view and card layout"
+              >
+                <ArrowsCounterClockwise className="h-5 w-5" />
+              </button>
+              <span aria-hidden className="my-1.5 h-px w-6 bg-surface-600" />
+              <button
+                type="button"
+                onClick={() => {
+                  markInteracted();
+                  zoomBy(0.1);
+                }}
+                className="grid h-8 w-8 place-items-center rounded-md text-surface-300 transition-colors hover:bg-surface-800 hover:text-surface-0"
+                aria-label="Zoom in"
+              >
+                <MagnifyingGlassPlus className="h-5 w-5" />
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  markInteracted();
+                  zoomBy(-0.1);
+                }}
+                className="grid h-8 w-8 place-items-center rounded-md text-surface-300 transition-colors hover:bg-surface-800 hover:text-surface-0"
+                aria-label="Zoom out"
+              >
+                <MagnifyingGlassMinus className="h-5 w-5" />
+              </button>
             </div>
           </div>
         ) : null}
 
-        {/* Cursor spotlight — an amber radial veil that follows the pointer
+        {/* Cursor spotlight — a faint neutral veil that follows the pointer
             across the dot grid (fed via --spot-x/--spot-y on the frame).
             Painted under the dots so it lights the texture, not the cards. */}
         {canvasMode ? (
@@ -615,19 +636,20 @@ export function ProjectCanvas({
             className="pointer-events-none absolute inset-0"
             style={{
               background:
-                "radial-gradient(560px circle at var(--spot-x, 50%) var(--spot-y, 38%), rgba(255, 184, 106, 0.08), transparent 65%)",
+                "radial-gradient(560px circle at var(--spot-x, 50%) var(--spot-y, 38%), rgba(255, 255, 255, 0.04), transparent 65%)",
             }}
           />
         ) : null}
 
-        {/* Faint dot grid — fixed texture on the frame */}
+        {/* Dot grid — fixed texture on the frame: near-black field with a
+            sparse neutral gray dot lattice (24px pitch, ~2px dots). */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 opacity-60"
+          className="pointer-events-none absolute inset-0"
           style={{
             backgroundImage:
-              "radial-gradient(rgba(255,107,53,0.10) 1px, transparent 1px)",
-            backgroundSize: "28px 28px",
+              "radial-gradient(rgba(255,255,255,0.08) 1.5px, transparent 1.5px)",
+            backgroundSize: "24px 24px",
           }}
         />
 
@@ -719,16 +741,6 @@ export function ProjectCanvas({
             </div>
           );
         })()}
-
-        {/* Bottom-center hint — back at its original home, out of the
-            toolbar's way. Amber border kept at 30% so it whispers the
-            accent rather than shouting it; pointer-events-none lets pans
-            start right through it. */}
-        {interactive ? (
-          <p className="animate-hint-pulse pointer-events-none absolute bottom-4 left-1/2 z-50 -translate-x-1/2 whitespace-nowrap rounded-full border border-accent-400/30 bg-surface-900/80 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-surface-200 backdrop-blur-sm">
-            Drag anywhere to pan · ⠿ handle arranges a card · pinch or ⌘ scroll to zoom
-          </p>
-        ) : null}
 
         {/* Glow ring — breathes until the first real interaction asks it
             to leave (or a panel takes over the viewport). */}
