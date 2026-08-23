@@ -95,6 +95,15 @@ export function ProjectCanvas({
   const showField = isDesktop && !reduceMotion;
   const canvasMode = interactive && showField;
 
+  // useReducedMotion resolves SYNCHRONOUSLY on the client's first render
+  // (unlike useMediaQuery, which waits for its effect), so any class that
+  // depends on it would differ from the server HTML during hydration —
+  // and React keeps the server's version. Gate such decisions behind this
+  // flag: server + hydration render the pre-mount choice, then a normal
+  // post-mount update applies the reduced-motion correction.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
   // v3: resets everyone onto the new top-anchored default view once.
   const storageKey = `project-canvas:v3:${viewKey}`;
   const [offsets, setOffsets] = useState<Record<string, { dx: number; dy: number }>>({});
@@ -474,13 +483,23 @@ export function ProjectCanvas({
   }, [expandedSlug, canvasMode]);
 
   if (!showField) {
-    // Stacked fallback — mobile or reduced motion
+    // Stacked fallback — mobile or reduced motion.
+    // `lg:hidden` only when the spatial field will actually render on
+    // desktop (motion-safe). Under reduced motion the field never renders,
+    // so this grid is the ONLY content at ≥1024px — hiding it there left
+    // reduced-motion desktop users staring at a blank stage.
     return (
       <div
         className={cn(
           "grid gap-6 sm:grid-cols-2",
-          // Interactive canvas only exists ≥1024px — hide this fallback there.
-          interactive ? "lg:hidden" : "lg:grid-cols-3",
+          // `lg:hidden` only while the spatial field will actually own
+          // desktop (motion-safe). Under reduced motion the field never
+          // renders, so this grid is the ONLY content at ≥1024px — hiding
+          // it there left reduced-motion desktop users with a blank stage.
+          // Pre-mount stays hidden to match the server (see `mounted`).
+          interactive && (!reduceMotion || !mounted)
+            ? "lg:hidden"
+            : "lg:grid-cols-3",
           className,
         )}
       >

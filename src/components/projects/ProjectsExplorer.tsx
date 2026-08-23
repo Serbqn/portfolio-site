@@ -141,8 +141,10 @@ export function ProjectsExplorer({ projects }: { projects: ProjectFull[] }) {
   useEffect(() => setMounted(true), []);
   /** Animated morph (desktop + motion-safe). */
   const morphActive = mounted && isDesktop && reduceMotion === false;
-  /** Reduced motion: jump straight to the end form, no scroll linkage. */
-  const stageStatic = mounted && isDesktop && reduceMotion === true;
+  /** Reduced motion: ProjectCanvas collapses to the stacked grid at every
+   * width, so the stage must be AUTO-height — a fixed 68vh box would clip
+   * the tall grid (overflow-hidden hides everything below the fold). */
+  const stageAuto = mounted && isDesktop && reduceMotion === true;
 
   // Progress 0 → stage top at viewport bottom; 1 → stage top resting just
   // below the navbar (64) AND the pinned filter bar — exactly the snap
@@ -313,9 +315,13 @@ export function ProjectsExplorer({ projects }: { projects: ProjectFull[] }) {
           ref={stageRef}
           // Teaser height lives in a class, not inline style, so it can be
           // breakpoint-scoped: ≥lg keeps the contained 68vh teaser (also
-          // covers pre-hydration desktop), below lg the stage is auto-height
-          // so the stacked card grid grows the page and scrolls normally.
-          className="relative mt-8 h-[68vh] max-lg:h-auto snap-start scroll-mt-16 overflow-hidden"
+          // covers pre-hydration desktop), below lg — or everywhere under
+          // reduced motion — the stage is auto-height so the stacked card
+          // grid grows the page and scrolls normally.
+          className={cn(
+            "relative mt-8 snap-start scroll-mt-16 overflow-hidden",
+            stageAuto ? "h-auto" : "h-[68vh] max-lg:h-auto",
+          )}
           style={
             {
               ...(morphActive
@@ -329,21 +335,14 @@ export function ProjectsExplorer({ projects }: { projects: ProjectFull[] }) {
                     // scroll-mt-16 class fallback once measured).
                     scrollMarginTop: 64 + dims.barH,
                   }
-                : stageStatic
-                  ? {
-                      height: `calc(100svh - ${64 + dims.barH}px)`,
-                      borderRadius: 0,
-                      scrollMarginTop: 64 + dims.barH,
-                    }
-                  : {
-                      // Mobile / pre-hydration: no inline geometry — the
-                      // h-[68vh] max-lg:h-auto classes own the height.
-                      borderRadius: 20,
-                    }),
+                : {
+                    // Mobile, pre-hydration, and reduced-motion desktop:
+                    // no inline geometry — the height classes own it.
+                    borderRadius: 20,
+                  }),
               // Frame + glow ring read this so their borders follow the
               // curve (a square border under a rounded clip loses corners).
-              "--stage-radius":
-                morphActive ? mRadius : stageStatic ? "0px" : "20px",
+              "--stage-radius": morphActive ? mRadius : "20px",
             } as StageStyle
           }
         >
