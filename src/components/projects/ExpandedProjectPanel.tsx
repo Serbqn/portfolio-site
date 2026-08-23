@@ -208,6 +208,48 @@ export function ExpandedProjectPanel({
              leftover height (min floor with scroll fallback), so it reads
              large on any panel size without pushing content out of view. */
           <div className="flex h-full min-h-0 flex-col gap-3">
+            {/* Meta group — subtitle + disciplines + role + link stacked
+               tightly; the outer gap-3 keeps air before the cover. */}
+            <div className="flex flex-col gap-1.5">
+              <p className="text-sm leading-relaxed text-pretty text-surface-200">
+                {project.subtitle}
+              </p>
+
+              {/* Disciplines / role / live link — reads before the cover so
+                 the meta leads and the visuals follow. */}
+              <ul className="flex flex-wrap items-center gap-x-1.5 font-mono text-[11px] uppercase tracking-wider text-surface-400">
+                {project.tags.map((tag, i) => (
+                  <li key={tag} className="flex items-center gap-1.5">
+                    {i > 0 ? (
+                      <span aria-hidden className="text-surface-600">
+                        /
+                      </span>
+                    ) : null}
+                    {tag}
+                  </li>
+                ))}
+              </ul>
+
+              <p className="font-mono text-[10px] uppercase tracking-widest text-surface-400">
+                Role · <span className="text-surface-200">{project.role}</span>
+              </p>
+
+              {/* External/live link — opens in a new tab */}
+              {project.link ? (
+                <p className="font-mono text-[10px] uppercase tracking-widest text-surface-400">
+                  Link ·{" "}
+                  <a
+                    href={normalizeExternalUrl(project.link)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm normal-case tracking-normal text-accent-400 underline-offset-2 transition-colors hover:text-accent-300 hover:underline"
+                  >
+                    Visit Project ↗
+                  </a>
+                </p>
+              ) : null}
+            </div>
+
             {project.cover ? (
               <button
                 type="button"
@@ -230,10 +272,6 @@ export function ExpandedProjectPanel({
               </button>
             ) : null}
 
-            <p className="text-sm leading-relaxed text-pretty text-surface-200">
-              {project.subtitle}
-            </p>
-
             {metrics.length ? (
               <div
                 className="grid gap-px overflow-hidden rounded-xl border border-surface-700"
@@ -254,37 +292,6 @@ export function ExpandedProjectPanel({
               </div>
             ) : null}
 
-            <ul className="flex flex-wrap items-center gap-x-1.5 font-mono text-[11px] uppercase tracking-wider text-surface-400">
-              {project.tags.map((tag, i) => (
-                <li key={tag} className="flex items-center gap-1.5">
-                  {i > 0 ? (
-                    <span aria-hidden className="text-surface-600">
-                      /
-                    </span>
-                  ) : null}
-                  {tag}
-                </li>
-              ))}
-            </ul>
-
-            <p className="font-mono text-[10px] uppercase tracking-widest text-surface-400">
-              Role · <span className="text-surface-200">{project.role}</span>
-            </p>
-
-            {/* External/live link — opens in a new tab */}
-            {project.link ? (
-              <p className="font-mono text-[10px] uppercase tracking-widest text-surface-400">
-                Link ·{" "}
-                <a
-                  href={normalizeExternalUrl(project.link)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm normal-case tracking-normal text-accent-400 underline-offset-2 transition-colors hover:text-accent-300 hover:underline"
-                >
-                  Visit Project ↗
-                </a>
-              </p>
-            ) : null}
           </div>
         ) : tab === "gallery" ? (
           /* Gallery — one image per scroll gesture: every slide fills the
