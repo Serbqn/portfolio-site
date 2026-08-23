@@ -93,20 +93,6 @@ export function ProjectCard({
           <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-surface-300">
             {project.subtitle}
           </p>
-
-          {/* Tags — editorial mono row with slash separators */}
-          <ul className="mt-4 flex flex-wrap items-center gap-x-1.5 border-t border-surface-700 pt-3 font-mono text-[11px] uppercase tracking-wider text-surface-400">
-            {project.tags.slice(0, 3).map((tag, i) => (
-              <li key={tag} className="flex items-center gap-1.5">
-                {i > 0 ? (
-                  <span aria-hidden className="text-surface-600">
-                    /
-                  </span>
-                ) : null}
-                {tag}
-              </li>
-            ))}
-          </ul>
         </div>
       </motion.article>
     </Link>

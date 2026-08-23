@@ -67,6 +67,7 @@ export function ProjectCanvas({
   interactive = true,
   viewKey = "canvas",
   className,
+  fullBleed = false,
   onOpenCard,
   expandedSlug = null,
   onExpandCard,
@@ -77,6 +78,9 @@ export function ProjectCanvas({
   /** sessionStorage key suffix so multiple canvases don't share state. */
   viewKey?: string;
   className?: string;
+  /** Stage mode (/projects): fill the viewport below the navbar and drop
+   * corner rounding. Teaser canvases stay fixed-height and rounded. */
+  fullBleed?: boolean;
   /** Present → plain card clicks fire this (side drawer) instead of
    * navigating. Modifier-clicks still navigate via the card's href. */
   onOpenCard?: (project: ProjectListItem) => void;
@@ -91,7 +95,8 @@ export function ProjectCanvas({
   const showField = isDesktop && !reduceMotion;
   const canvasMode = interactive && showField;
 
-  const storageKey = `project-canvas:v2:${viewKey}`;
+  // v3: resets everyone onto the new top-anchored default view once.
+  const storageKey = `project-canvas:v3:${viewKey}`;
   const [offsets, setOffsets] = useState<Record<string, { dx: number; dy: number }>>({});
 
   // Shared pan/zoom values — mutated by background drag, toolbar, and keyboard.
@@ -107,6 +112,54 @@ export function ProjectCanvas({
   const panDraggedRef = useRef(false);
   /** Browser fullscreen state for the canvas frame. */
   const [isFullscreen, setIsFullscreen] = useState(false);
+
+  /** True once the visitor actually touches the canvas (press, wheel, or
+   * arrow keys) — retires the attention effects so they never compete
+   * with real use. */
+  const [hasInteracted, setHasInteracted] = useState(false);
+  const markInteracted = useCallback(() => setHasInteracted(true), []);
+
+  /** True once the stage has scrolled into view — drives the settle-in
+   * entrance. A timer backstop guarantees cards can never stay hidden
+   * (e.g. IntersectionObserver unavailable or odd root margins). */
+  const [stageEntered, setStageEntered] = useState(false);
+  useEffect(() => {
+    if (!canvasMode || stageEntered) return;
+    const el = containerRef.current;
+    if (!el || typeof IntersectionObserver === "undefined") {
+      setStageEntered(true);
+      return;
+    }
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((en) => en.isIntersecting)) {
+          setStageEntered(true);
+          io.disconnect();
+        }
+      },
+      { rootMargin: "-12% 0px -12% 0px" },
+    );
+    io.observe(el);
+    const t = window.setTimeout(() => setStageEntered(true), 2500);
+    return () => {
+      io.disconnect();
+      window.clearTimeout(t);
+    };
+  }, [canvasMode, stageEntered]);
+  const enterStage = canvasMode && stageEntered;
+
+  /** Cursor spotlight — feeds --spot-x/--spot-y on the frame; an amber
+   * radial veil renders at that point (see the overlay below). */
+  const onSpotlightMove = useCallback(
+    (e: React.PointerEvent<HTMLDivElement>) => {
+      const el = containerRef.current;
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      el.style.setProperty("--spot-x", `${e.clientX - rect.left}px`);
+      el.style.setProperty("--spot-y", `${e.clientY - rect.top}px`);
+    },
+    [],
+  );
 
   // Loose-grid home positions with deterministic jitter, centered on the
   // frame so the constellation never hangs off one side at rest.
@@ -144,26 +197,65 @@ export function ProjectCanvas({
     return { x, y };
   }, [positions]);
 
-  const readSaved = useCallback((): ViewState => {
+  /** Vertical pan that pins the TOP of the card block just inside the
+   * frame's top edge — the natural "read from the top" opening view.
+   * Positions are mean-centred on the frame, so the block's top edge sits
+   * at min(pos.y) minus half a card; panning DOWN by the distance from
+   * frame centre brings it into view. */
+  const topAnchorPanY = useCallback(() => {
+    const el = containerRef.current;
+    const frameH = el?.clientHeight || 600;
+    const cardH =
+      el?.querySelector<HTMLElement>("[data-draggable-card]")?.offsetHeight || 240;
+    let minY = 0;
+    for (const p of positions.values()) minY = Math.min(minY, p.y);
+    const blockTop = minY - cardH / 2;
+    // Park the block's top edge 28px below the frame's top edge.
+    return clamp(28 - frameH / 2 - blockTop, -panBounds.y, panBounds.y);
+  }, [positions, panBounds]);
+
+  // Restore persisted view once, client-side only. A FRESH visit (nothing
+  // saved yet) opens anchored to the top of the card block instead of the
+  // mean-centred default that hides the first row above the frame edge.
+  useEffect(() => {
+    if (!canvasMode) return;
+    let saved: ViewState | null = null;
     try {
       const raw = sessionStorage.getItem(storageKey);
-      if (raw) return { ...EMPTY_VIEW, ...(JSON.parse(raw) as ViewState) };
+      if (raw) saved = { ...EMPTY_VIEW, ...(JSON.parse(raw) as ViewState) };
     } catch {
       /* ignore malformed state */
     }
-    return EMPTY_VIEW;
-  }, [storageKey]);
-
-  // Restore persisted view once, client-side only
-  useEffect(() => {
-    if (!canvasMode) return;
-    const saved = readSaved();
-    panX.set(clamp(saved.x, -panBounds.x, panBounds.x));
-    panY.set(clamp(saved.y, -panBounds.y, panBounds.y));
-    scale.set(clamp(saved.scale ?? 1, SCALE_MIN, SCALE_MAX));
-    setOffsets(saved.offsets ?? {});
+    if (saved) {
+      panX.set(clamp(saved.x, -panBounds.x, panBounds.x));
+      panY.set(clamp(saved.y, -panBounds.y, panBounds.y));
+      scale.set(clamp(saved.scale ?? 1, SCALE_MIN, SCALE_MAX));
+      setOffsets(saved.offsets ?? {});
+      autoAnchorRef.current = false; // saved view wins over auto-anchoring
+    } else {
+      panX.set(0);
+      panY.set(topAnchorPanY());
+      scale.set(1);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [canvasMode]);
+
+  /** True while the field should stay pinned to the top of the card block.
+   * The frame's height keeps changing as the stage morphs from teaser to
+   * full-bleed, so a one-shot anchor computed at mount lands wrong; a
+   * ResizeObserver re-applies it until the visitor actually takes control
+   * (pan, zoom, drag, arrow keys). Reset hands control back to the anchor. */
+  const autoAnchorRef = useRef(true);
+  useEffect(() => {
+    if (!canvasMode) return;
+    const el = containerRef.current;
+    if (!el || typeof ResizeObserver === "undefined") return;
+    const ro = new ResizeObserver(() => {
+      if (autoAnchorRef.current && !hasInteracted) panY.set(topAnchorPanY());
+    });
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [canvasMode, panY, topAnchorPanY, hasInteracted]);
 
   const persistNow = useCallback(
     (nextOffsets?: Record<string, { dx: number; dy: number }>) => {
@@ -233,6 +325,7 @@ export function ProjectCanvas({
     const onPointerUp = (e: PointerEvent) => {
       if (session?.moved) {
         panDraggedRef.current = true;
+        autoAnchorRef.current = false; // user took over the view
         schedulePersist();
       } else if (
         expandedSlug &&
@@ -271,6 +364,7 @@ export function ProjectCanvas({
 
   const zoomBy = useCallback(
     (delta: number) => {
+      autoAnchorRef.current = false;
       scale.set(clamp(scale.get() + delta, SCALE_MIN, SCALE_MAX));
       schedulePersist();
     },
@@ -279,11 +373,14 @@ export function ProjectCanvas({
 
   const resetView = useCallback(() => {
     panX.set(0);
-    panY.set(0);
+    // Reset re-anchors to the TOP of the card block, not the centred mean —
+    // "refresh" should read like going back to page one of the field.
+    autoAnchorRef.current = true;
+    panY.set(topAnchorPanY());
     scale.set(1);
     setOffsets({});
     persistNow({});
-  }, [panX, panY, scale, persistNow]);
+  }, [panX, panY, scale, persistNow, topAnchorPanY]);
 
   // Track browser fullscreen state (user may also exit via F11 / Esc)
   useEffect(() => {
@@ -317,16 +414,19 @@ export function ProjectCanvas({
       const delta = pan[e.key];
       if (!delta) return;
       e.preventDefault();
+      markInteracted();
+      autoAnchorRef.current = false; // user took over the view
       panX.set(clamp(panX.get() + delta[0], -panBounds.x, panBounds.x));
       panY.set(clamp(panY.get() + delta[1], -panBounds.y, panBounds.y));
       schedulePersist();
     },
-    [canvasMode, expandedSlug, panX, panY, schedulePersist, panBounds],
+    [canvasMode, expandedSlug, panX, panY, schedulePersist, panBounds, markInteracted],
   );
 
   // Card drag end — record the offset from the card's home slot
   const onCardDragEnd = useCallback(
     (slug: string, dx: number, dy: number) => {
+      autoAnchorRef.current = false; // user took over the layout
       setOffsets((prev) => {
         const next = { ...prev, [slug]: { dx, dy } };
         window.clearTimeout(persistOffsets.current);
@@ -402,25 +502,40 @@ export function ProjectCanvas({
       <div
         ref={containerRef}
         {...frameProps}
+        onPointerDownCapture={markInteracted}
+        onWheelCapture={markInteracted}
+        onPointerMove={canvasMode ? onSpotlightMove : undefined}
         className={cn(
-          "relative touch-none overflow-hidden rounded-2xl border border-surface-700 bg-surface-950/50 outline-none scroll-mt-32",
+          "relative touch-none overflow-hidden border border-surface-700 bg-surface-950/50 outline-none scroll-mt-32",
+          // Stage mode reads the wrapper's animated radius so the border
+          // follows the curve instead of being clipped off at the corners.
+          fullBleed ? "rounded-[var(--stage-radius,0px)]" : "rounded-2xl",
           interactive
-            ? "h-[68vh] min-h-[540px] focus-visible:border-accent-500"
+            ? fullBleed
+              ? // Wrapper owns the geometry (contained → full-bleed morph);
+                // the frame just fills it.
+                "h-full w-full focus-visible:border-accent-500"
+              : "h-[68vh] min-h-[540px] focus-visible:border-accent-500"
             : "h-[440px]",
           // Grab cursor only while panning is actually available — once a
           // panel is expanded there is nothing to drag, so show the default.
           canvasMode && !expandedSlug && "cursor-grab",
         )}
       >
-        {/* Zoom toolbar — [data-pan-ignore] keeps card panning off it */}
+        {/* Top-right chrome — zoom/fullscreen controls ([data-pan-ignore]
+            keeps card panning off the controls). */}
         {interactive ? (
-          <div
-            data-pan-ignore=""
-            className="absolute right-4 top-4 z-50 flex items-center gap-1 rounded-lg border border-surface-600 bg-surface-900/90 p-1 backdrop-blur-sm"
-          >
+          <div className="absolute right-4 top-4 z-50 flex items-center gap-2">
+            <div
+              data-pan-ignore=""
+              className="flex items-center gap-1 rounded-lg border border-surface-600 bg-surface-900/90 p-1 backdrop-blur-sm"
+            >
             <button
               type="button"
-              onClick={() => zoomBy(0.1)}
+              onClick={() => {
+                markInteracted();
+                zoomBy(0.1);
+              }}
               className="grid h-7 w-7 place-items-center rounded-md text-surface-300 transition-colors hover:bg-surface-800 hover:text-surface-0"
               aria-label="Zoom in"
             >
@@ -428,7 +543,10 @@ export function ProjectCanvas({
             </button>
             <button
               type="button"
-              onClick={() => zoomBy(-0.1)}
+              onClick={() => {
+                markInteracted();
+                zoomBy(-0.1);
+              }}
               className="grid h-7 w-7 place-items-center rounded-md text-surface-300 transition-colors hover:bg-surface-800 hover:text-surface-0"
               aria-label="Zoom out"
             >
@@ -436,7 +554,10 @@ export function ProjectCanvas({
             </button>
             <button
               type="button"
-              onClick={resetView}
+              onClick={() => {
+                markInteracted();
+                resetView();
+              }}
               className="grid h-7 w-7 place-items-center rounded-md text-surface-300 transition-colors hover:bg-surface-800 hover:text-surface-0"
               aria-label="Reset view and card layout"
             >
@@ -445,7 +566,10 @@ export function ProjectCanvas({
             <span aria-hidden className="mx-0.5 h-5 w-px bg-surface-600" />
             <button
               type="button"
-              onClick={toggleFullscreen}
+              onClick={() => {
+                markInteracted();
+                toggleFullscreen();
+              }}
               className={cn(
                 "grid h-7 w-7 place-items-center rounded-md transition-colors hover:bg-surface-800",
                 isFullscreen ? "text-accent-400" : "text-surface-300 hover:text-surface-0",
@@ -459,7 +583,22 @@ export function ProjectCanvas({
                 <ArrowsOut className="h-4 w-4" weight="bold" />
               )}
             </button>
+            </div>
           </div>
+        ) : null}
+
+        {/* Cursor spotlight — an amber radial veil that follows the pointer
+            across the dot grid (fed via --spot-x/--spot-y on the frame).
+            Painted under the dots so it lights the texture, not the cards. */}
+        {canvasMode ? (
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0"
+            style={{
+              background:
+                "radial-gradient(560px circle at var(--spot-x, 50%) var(--spot-y, 38%), rgba(255, 184, 106, 0.08), transparent 65%)",
+            }}
+          />
         ) : null}
 
         {/* Faint dot grid — fixed texture on the frame */}
@@ -495,8 +634,13 @@ export function ProjectCanvas({
           data-field-layer=""
           className="absolute inset-0 select-none"
         >
-          <div className="absolute left-1/2 top-1/2">
-            {projects.map((p) => {
+          <motion.div
+            className="absolute left-1/2 top-1/2"
+            initial={canvasMode ? { opacity: 0, scale: 0.92 } : false}
+            animate={enterStage ? { opacity: 1, scale: 1 } : undefined}
+            transition={SPRING}
+          >
+            {projects.map((p, i) => {
               if (expandedSlug === p.slug) return null; // rendered full-field below
               const pos = positions.get(p.slug);
               if (!pos) return null;
@@ -516,18 +660,28 @@ export function ProjectCanvas({
                     transform: `translate(calc(-50% + ${pos.x}px), calc(-50% + ${pos.y}px)) rotate(${pos.rotate}deg)`,
                   }}
                 >
-                  <DraggableCard
-                    slug={p.slug}
-                    dx={off.dx}
-                    dy={off.dy}
-                    onDragEnd={onCardDragEnd}
+                  <motion.div
+                    initial={canvasMode ? { opacity: 0, y: 16 } : false}
+                    animate={enterStage ? { opacity: 1, y: 0 } : undefined}
+                    transition={{
+                      duration: 0.55,
+                      ease: [0.22, 1, 0.36, 1],
+                      delay: 0.08 + Math.min(i * 0.06, 0.42),
+                    }}
                   >
-                    <ProjectCard project={p} onOpen={onOpenCard} />
-                  </DraggableCard>
+                    <DraggableCard
+                      slug={p.slug}
+                      dx={off.dx}
+                      dy={off.dy}
+                      onDragEnd={onCardDragEnd}
+                    >
+                      <ProjectCard project={p} onOpen={onOpenCard} />
+                    </DraggableCard>
+                  </motion.div>
                 </div>
               );
             })}
-          </div>
+          </motion.div>
         </motion.div>
 
         {/* Expanded panel — pinned to the untransformed frame glass so it
@@ -547,11 +701,30 @@ export function ProjectCanvas({
           );
         })()}
 
-        {/* Interaction hint */}
+        {/* Bottom-center hint — back at its original home, out of the
+            toolbar's way. Amber border kept at 30% so it whispers the
+            accent rather than shouting it; pointer-events-none lets pans
+            start right through it. */}
         {interactive ? (
-          <p className="pointer-events-none absolute bottom-4 left-1/2 z-10 -translate-x-1/2 whitespace-nowrap rounded-full border border-surface-700 bg-surface-900/80 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-surface-400 backdrop-blur-sm">
+          <p className="animate-hint-pulse pointer-events-none absolute bottom-4 left-1/2 z-50 -translate-x-1/2 whitespace-nowrap rounded-full border border-accent-400/30 bg-surface-900/80 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-surface-200 backdrop-blur-sm">
             Drag anywhere to pan · ⠿ handle arranges a card · pinch or ⌘ scroll to zoom
           </p>
+        ) : null}
+
+        {/* Glow ring — breathes until the first real interaction asks it
+            to leave (or a panel takes over the viewport). */}
+        {canvasMode && enterStage && !hasInteracted && !expandedSlug ? (
+          <div
+            aria-hidden
+            className={cn(
+              "animate-glow-breathe pointer-events-none absolute inset-0 z-20",
+              fullBleed ? "rounded-[var(--stage-radius,0px)]" : "rounded-2xl",
+            )}
+            style={{
+              boxShadow:
+                "inset 0 0 0 1px rgba(255, 184, 106, 0.35), 0 0 44px -6px rgba(255, 184, 106, 0.3)",
+            }}
+          />
         ) : null}
       </div>
     </div>

@@ -4,6 +4,7 @@ import { GoogleAnalytics } from "@next/third-parties/google";
 import "./globals.css";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
+import { FooterGate } from "@/components/layout/FooterGate";
 import { getSite, getProjects } from "@/lib/content";
 
 /** GA4 measurement ID ("G-XXXXXXXXXX"). Analytics loads only when set. */
@@ -71,7 +72,9 @@ export default async function RootLayout({
           projects={projects}
         />
         <main className="flex-1">{children}</main>
-        <Footer />
+        <FooterGate>
+          <Footer />
+        </FooterGate>
         {/* Google Analytics 4 — renders nothing when NEXT_PUBLIC_GA_ID is unset */}
         {GA_ID ? <GoogleAnalytics gaId={GA_ID} /> : null}
       </body>

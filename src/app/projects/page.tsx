@@ -13,7 +13,9 @@ export default async function ProjectsPage() {
   const projects = await getProjectsFull();
 
   return (
-    <section className="container-wide section">
+    // snap-start: beat one of the /projects scroll story (intro → canvas).
+    // pb-0: no tail after the stage — the canvas is the hard bottom.
+    <section className="container-wide section snap-start pb-0">
       <header className="max-w-3xl">
         <p className="eyebrow">Work</p>
         <h1 className="mt-2 text-display-1 font-medium tracking-tight text-balance">

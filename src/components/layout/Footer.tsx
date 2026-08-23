@@ -21,7 +21,9 @@ export async function Footer() {
   const logoMark = resolveLogo(site.logo);
 
   return (
-    <footer className="border-t border-surface-700 bg-surface-900">
+    // snap-start: terminal beat for /projects' mandatory scroll-snap
+    // (inert elsewhere — only that page enables snap on <html>)
+    <footer className="snap-start border-t border-surface-700 bg-surface-900">
       {/* Big CTA band */}
       <div className="border-b border-surface-700">
         <div className="container-wide flex flex-col gap-6 py-section-sm sm:flex-row sm:items-end sm:justify-between">
