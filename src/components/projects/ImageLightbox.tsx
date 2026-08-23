@@ -5,6 +5,7 @@ import Image from "next/image";
 import { motion, AnimatePresence } from "motion/react";
 import { X } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
+import { useScrollLock } from "@/lib/use-scroll-lock";
 
 type GalleryImage = {
   src: string;
@@ -51,17 +52,8 @@ export function ImageLightbox({ images, className }: Props) {
     return () => window.removeEventListener("keydown", onKey);
   }, [activeIndex, close, goNext, goPrev]);
 
-  // Lock body scroll when modal is open
-  useEffect(() => {
-    if (activeIndex !== null) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [activeIndex]);
+  // Lock page scroll while the lightbox is open (on <html> — see hook)
+  useScrollLock(activeIndex !== null);
 
   return (
     <>

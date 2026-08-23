@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useScroll, useTransform } from "motion/react";
 import { Command, List, X } from "@phosphor-icons/react";
 import { cn, resolveLogo } from "@/lib/utils";
+import { useScrollLock } from "@/lib/use-scroll-lock";
 import { CommandPalette } from "@/components/layout/CommandPalette";
 import type { ProjectListItem } from "@/lib/types";
 
@@ -43,19 +44,19 @@ export function Navbar({
     setMenuOpen(false);
   }, [pathname]);
 
-  // While open: Esc closes, page scroll locks
+  // While open: Esc closes
   useEffect(() => {
     if (!menuOpen) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") setMenuOpen(false);
     };
     window.addEventListener("keydown", onKey);
-    document.body.style.overflow = "hidden";
-    return () => {
-      window.removeEventListener("keydown", onKey);
-      document.body.style.overflow = "";
-    };
+    return () => window.removeEventListener("keydown", onKey);
   }, [menuOpen]);
+
+  // Page scroll locks while open — on <html> (see useScrollLock): locking
+  // body un-stuck the sticky navbar, dropping the open menu above the fold.
+  useScrollLock(menuOpen);
 
   return (
     <>

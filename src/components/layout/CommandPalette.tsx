@@ -6,6 +6,7 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "motion/react";
 import { MagnifyingGlass, ArrowRight, FileText } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
+import { useScrollLock } from "@/lib/use-scroll-lock";
 import type { ProjectListItem } from "@/lib/types";
 
 type Item = {
@@ -120,17 +121,8 @@ export function CommandPalette({
     el?.scrollIntoView({ block: "nearest" });
   }, [activeIndex]);
 
-  // Lock body scroll while open
-  useEffect(() => {
-    if (open) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [open]);
+  // Lock page scroll while open (on <html> — see hook)
+  useScrollLock(open);
 
   let lastGroup: Item["group"] | null = null;
 

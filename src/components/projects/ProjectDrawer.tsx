@@ -13,6 +13,7 @@ import {
 } from "@phosphor-icons/react";
 import { Markdown } from "@/components/projects/Markdown";
 import type { ProjectFull } from "@/lib/types";
+import { useScrollLock } from "@/lib/use-scroll-lock";
 
 type Props = {
   project: ProjectFull;
@@ -51,13 +52,8 @@ export function ProjectDrawer({
     return () => window.removeEventListener("keydown", onKey);
   }, [onClose, onNavigate, next, prev]);
 
-  // Lock body scroll while open
-  useEffect(() => {
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, []);
+  // Lock page scroll while open (on <html> — see hook)
+  useScrollLock(true);
 
   // Focus the close button on open, restore focus on unmount
   useEffect(() => {
