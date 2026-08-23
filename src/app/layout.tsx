@@ -5,6 +5,7 @@ import "./globals.css";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { FooterGate } from "@/components/layout/FooterGate";
+import { ScrollReset } from "@/components/layout/ScrollReset";
 import { getSite, getProjects } from "@/lib/content";
 
 /** GA4 measurement ID ("G-XXXXXXXXXX"). Analytics loads only when set. */
@@ -71,6 +72,8 @@ export default async function RootLayout({
           logo={site.logo}
           projects={projects}
         />
+        {/* Instant scroll-to-top on push navigations (see component doc) */}
+        <ScrollReset />
         <main className="flex-1">{children}</main>
         <FooterGate>
           <Footer />

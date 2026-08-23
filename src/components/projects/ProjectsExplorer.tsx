@@ -1,6 +1,14 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+  type CSSProperties,
+} from "react";
 import {
   motion,
   useReducedMotion,
@@ -78,7 +86,12 @@ export function ProjectsExplorer({ projects }: { projects: ProjectFull[] }) {
   // Mandatory scroll-snap is scoped to this page: tag <html> while mounted
   // (the CSS media query limits it to ≥1024px + motion-safe), restore on
   // unmount so no other page ever snaps.
-  useEffect(() => {
+  // useLayoutEffect matters: the cleanup must run in the commit's mutation
+  // phase — BEFORE Next's scroll handler (componentDidMount) touches the
+  // viewport. As a passive effect the cleanup ran after paint, so leaving
+  // mid-scroll navigated with mandatory snap still live and the next page
+  // landed clamped to its bottom.
+  useLayoutEffect(() => {
     document.documentElement.classList.add("snap-page");
     return () => document.documentElement.classList.remove("snap-page");
   }, []);
@@ -88,7 +101,9 @@ export function ProjectsExplorer({ projects }: { projects: ProjectFull[] }) {
   // where mandatory snap instantly yanks the viewport onto the canvas.
   // "instant" bypasses the page's smooth-scroll so there's no visible
   // glide up from the restored position.
-  useEffect(() => {
+  // Layout effect (see above): restoring scrollRestoration must happen
+  // before Next's scroll handler reads it during the transition.
+  useLayoutEffect(() => {
     const prev = history.scrollRestoration;
     history.scrollRestoration = "manual";
     window.scrollTo({ top: 0, behavior: "instant" });
