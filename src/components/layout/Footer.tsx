@@ -26,7 +26,7 @@ export async function Footer() {
       <div className="border-b border-surface-700">
         <div className="container-wide flex flex-col gap-6 py-section-sm sm:flex-row sm:items-end sm:justify-between">
           <p className="text-display-3 font-medium tracking-tight text-balance text-surface-0">
-            Have something worth building?
+            Let's Build Together.
           </p>
           <Link
             href="/contact"
