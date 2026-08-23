@@ -296,7 +296,11 @@ export function ProjectsExplorer({ projects }: { projects: ProjectFull[] }) {
       {filtered.length > 0 ? (
         <motion.div
           ref={stageRef}
-          className="relative mt-8 snap-start scroll-mt-16 overflow-hidden"
+          // Teaser height lives in a class, not inline style, so it can be
+          // breakpoint-scoped: ≥lg keeps the contained 68vh teaser (also
+          // covers pre-hydration desktop), below lg the stage is auto-height
+          // so the stacked card grid grows the page and scrolls normally.
+          className="relative mt-8 h-[68vh] max-lg:h-auto snap-start scroll-mt-16 overflow-hidden"
           style={
             {
               ...(morphActive
@@ -310,13 +314,17 @@ export function ProjectsExplorer({ projects }: { projects: ProjectFull[] }) {
                     // scroll-mt-16 class fallback once measured).
                     scrollMarginTop: 64 + dims.barH,
                   }
-                : {
-                    height: stageStatic
-                      ? `calc(100svh - ${64 + dims.barH}px)`
-                      : "68vh",
-                    borderRadius: stageStatic ? 0 : 20,
-                    scrollMarginTop: stageStatic ? 64 + dims.barH : undefined,
-                  }),
+                : stageStatic
+                  ? {
+                      height: `calc(100svh - ${64 + dims.barH}px)`,
+                      borderRadius: 0,
+                      scrollMarginTop: 64 + dims.barH,
+                    }
+                  : {
+                      // Mobile / pre-hydration: no inline geometry — the
+                      // h-[68vh] max-lg:h-auto classes own the height.
+                      borderRadius: 20,
+                    }),
               // Frame + glow ring read this so their borders follow the
               // curve (a square border under a rounded clip loses corners).
               "--stage-radius":
