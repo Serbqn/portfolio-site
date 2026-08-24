@@ -53,7 +53,12 @@ export function ProjectsExplorer({ projects }: { projects: ProjectFull[] }) {
     const tagParam = params.get("tag");
     const s = params.get("sort") as SortKey | null;
     const projectParam = params.get("project");
-    if (tagParam) setActive(new Set(tagParam.split(",").filter((t) => tags.includes(t))));
+    // Single-select: keep at most one tag even if an old multi-tag URL is
+    // still floating around.
+    if (tagParam) {
+      const first = tagParam.split(",").find((t) => tags.includes(t));
+      if (first) setActive(new Set([first]));
+    }
     if (s && SORTS.some((o) => o.key === s)) setSort(s);
     if (projectParam && projects.some((p) => p.slug === projectParam)) {
       setActiveSlug(projectParam);
@@ -212,12 +217,9 @@ export function ProjectsExplorer({ projects }: { projects: ProjectFull[] }) {
   }, [active, projects, sort]);
 
   function toggleTag(tag: string) {
-    setActive((prev) => {
-      const next = new Set(prev);
-      if (next.has(tag)) next.delete(tag);
-      else next.add(tag);
-      return next;
-    });
+    // Single-select: picking a tag replaces the previous selection;
+    // clicking the active tag again clears it.
+    setActive((prev) => (prev.has(tag) ? new Set() : new Set([tag])));
   }
 
   function reset() {
