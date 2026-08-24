@@ -77,8 +77,8 @@ export function ContactForm({
           Thanks — your message is on its way.
         </h2>
         <p className="mt-3 max-w-prose text-pretty text-surface-300">
-          I read everything myself and reply within two working days. In the
-          meantime you can reach me directly at{" "}
+          I read everything myself and reply within one working day. In the
+          meantime you can also reach me directly at{" "}
           <a
             href={`mailto:${contactEmail}`}
             className="link-reveal font-medium text-surface-0"

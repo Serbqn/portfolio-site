@@ -45,3 +45,4 @@ next-env.d.ts.bak
 *.db
 *.db-journal
 data/
+.env*
