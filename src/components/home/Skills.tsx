@@ -72,7 +72,7 @@ export function Skills({ skills, tools }: { skills: Skill[]; tools: string[] }) 
             {skills.map((s, i) => (
               <li
                 key={s.name}
-                className="grid grid-cols-[1fr_auto] items-center gap-4 border-b border-surface-700 py-3 last:border-b-0"
+                className="border-b border-surface-700 py-3 last:border-b-0"
               >
                 <div>
                   <div className="text-sm font-medium text-surface-0">
@@ -80,9 +80,6 @@ export function Skills({ skills, tools }: { skills: Skill[]; tools: string[] }) 
                   </div>
                   <SkillBar level={s.level} index={i} />
                 </div>
-                <span className="font-mono text-xs uppercase tracking-widest text-surface-400">
-                  {s.level}
-                </span>
               </li>
             ))}
           </ul>
