@@ -1,4 +1,5 @@
-import { NextResponse } from "next/server";
+import { NextResponse, after } from "next/server";
+import { sendNewMessageTelegram } from "@/lib/notify";
 import { createClient } from "@/lib/supabase";
 
 /**
@@ -62,14 +63,16 @@ export async function POST(request: Request) {
     );
   }
 
+  const cleanCompany =
+    typeof company === "string" && company.trim()
+      ? company.trim().slice(0, 200)
+      : null;
+
   const supabase = await createClient();
   const { error } = await supabase.from("messages").insert({
     name: cleanName,
     email: cleanEmail,
-    company:
-      typeof company === "string" && company.trim()
-        ? company.trim().slice(0, 200)
-        : null,
+    company: cleanCompany,
     message: cleanMessage,
   });
 
@@ -80,6 +83,21 @@ export async function POST(request: Request) {
       { status: 500 },
     );
   }
+
+  // Ping Telegram AFTER the response is sent so the visitor never waits on it
+  // and a failing notification can't break the form.
+  after(async () => {
+    try {
+      await sendNewMessageTelegram({
+        name: cleanName,
+        email: cleanEmail,
+        company: cleanCompany,
+        message: cleanMessage,
+      });
+    } catch (err) {
+      console.error("new-message notification failed:", err);
+    }
+  });
 
   return NextResponse.json({ ok: true });
 }
