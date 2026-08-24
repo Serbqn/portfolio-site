@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { ProjectsExplorer } from "@/components/projects/ProjectsExplorer";
-import { getProjectsFull } from "@/lib/content";
+import { getProjectsFull, getSite } from "@/lib/content";
+import { PROJECTS_PAGE_DEFAULT } from "@/lib/types";
 
 export const metadata: Metadata = {
   title: "Projects",
@@ -10,20 +11,25 @@ export const metadata: Metadata = {
 };
 
 export default async function ProjectsPage() {
-  const projects = await getProjectsFull();
+  // Site copy is editable from the admin panel; a missing field (legacy
+  // rows) or a DB hiccup falls back to the original hardcoded text.
+  const [site, projects] = await Promise.all([
+    getSite().catch(() => null),
+    getProjectsFull(),
+  ]);
+  const copy = site?.projectsPage ?? PROJECTS_PAGE_DEFAULT;
 
   return (
     // snap-start: beat one of the /projects scroll story (intro → canvas).
     // pb-0: no tail after the stage — the canvas is the hard bottom.
     <section className="container-wide section snap-start pb-0">
       <header className="max-w-3xl">
-        <p className="eyebrow">Work</p>
+        <p className="eyebrow">{copy.eyebrow}</p>
         <h1 className="mt-2 text-display-1 font-medium tracking-tight text-balance">
-          A small portfolio, picked carefully.
+          {copy.title}
         </h1>
         <p className="mt-5 max-w-2xl text-lg leading-relaxed text-pretty text-surface-300">
-          Most of my work is under NDA. The public ones live on the canvas
-          below — drag it around, zoom in, or filter by discipline.
+          {copy.lead}
         </p>
       </header>
 

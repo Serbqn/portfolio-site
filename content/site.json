@@ -130,5 +130,10 @@
       { "label": "Build & ship", "value": "4–8 weeks" }
     ],
     "footer": "I run the full loop — research, design, and the production front-end code — so the artifact you see above is the artifact you ship."
+  },
+  "projectsPage": {
+    "eyebrow": "Work",
+    "title": "A small portfolio, picked carefully.",
+    "lead": "Most of my work is under NDA. The public ones live on the canvas below — drag it around, zoom in, or filter by discipline."
   }
 }

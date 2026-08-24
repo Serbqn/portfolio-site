@@ -85,6 +85,21 @@ export type Process = {
   show: boolean;
 };
 
+export type ProjectsPage = {
+  eyebrow: string;
+  title: string;
+  lead: string;
+};
+
+/** Fallback for legacy site rows that predate the editable projects-page
+ * copy — keeps the page rendering (and the admin editor populated) with
+ * the original hardcoded text. */
+export const PROJECTS_PAGE_DEFAULT: ProjectsPage = {
+  eyebrow: "Work",
+  title: "A small portfolio, picked carefully.",
+  lead: "Most of my work is under NDA. The public ones live on the canvas below — drag it around, zoom in, or filter by discipline.",
+};
+
 export type SiteContent = {
   site: Site;
   hero: Hero;
@@ -92,6 +107,7 @@ export type SiteContent = {
   about: About;
   contact: Contact;
   process: Process;
+  projectsPage?: ProjectsPage;
 };
 
 export type Metric = { label: string; value: string };

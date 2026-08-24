@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import type { SiteContent } from "@/lib/types";
+import { PROJECTS_PAGE_DEFAULT } from "@/lib/types";
 import type { AdminStatus } from "@/lib/admin-types";
 
 export function SiteEditor({
@@ -13,7 +14,7 @@ export function SiteEditor({
   status: AdminStatus;
   onSave: (next: SiteContent) => Promise<void>;
 }) {
-  // Normalize legacy site rows that predate newer fields (`process.show`, `site.focus`).
+  // Normalize legacy site rows that predate newer fields (`process.show`, `site.focus`, `projectsPage`).
   const [draft, setDraft] = useState<SiteContent>(() => ({
     ...site,
     site: {
@@ -21,6 +22,7 @@ export function SiteEditor({
       focus: site.site.focus ?? "Fintech · Dev tools · B2B",
     },
     process: { ...site.process, show: site.process.show !== false },
+    projectsPage: site.projectsPage ?? PROJECTS_PAGE_DEFAULT,
   }));
 
   function setSite<K extends keyof SiteContent>(key: K, value: SiteContent[K]) {
@@ -612,6 +614,49 @@ export function SiteEditor({
             </button>
           </div>
         </div>
+      </Section>
+
+      {/* ── Projects page ── */}
+      <Section title="Projects page">
+        <Grid>
+          <Field id="projectsPage.eyebrow" label="Eyebrow">
+            <Input
+              id="projectsPage.eyebrow"
+              value={draft.projectsPage?.eyebrow ?? PROJECTS_PAGE_DEFAULT.eyebrow}
+              onChange={(v) =>
+                setSite("projectsPage", {
+                  ...(draft.projectsPage ?? PROJECTS_PAGE_DEFAULT),
+                  eyebrow: v,
+                })
+              }
+            />
+          </Field>
+          <Field id="projectsPage.title" label="Title">
+            <Input
+              id="projectsPage.title"
+              value={draft.projectsPage?.title ?? PROJECTS_PAGE_DEFAULT.title}
+              onChange={(v) =>
+                setSite("projectsPage", {
+                  ...(draft.projectsPage ?? PROJECTS_PAGE_DEFAULT),
+                  title: v,
+                })
+              }
+            />
+          </Field>
+          <Field id="projectsPage.lead" label="Lead paragraph" className="sm:col-span-2">
+            <TextArea
+              id="projectsPage.lead"
+              rows={3}
+              value={draft.projectsPage?.lead ?? PROJECTS_PAGE_DEFAULT.lead}
+              onChange={(v) =>
+                setSite("projectsPage", {
+                  ...(draft.projectsPage ?? PROJECTS_PAGE_DEFAULT),
+                  lead: v,
+                })
+              }
+            />
+          </Field>
+        </Grid>
       </Section>
 
       {/* ── Contact ── */}

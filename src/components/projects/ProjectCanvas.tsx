@@ -157,6 +157,27 @@ export function ProjectCanvas({
   }, [canvasMode, stageEntered]);
   const enterStage = canvasMode && stageEntered;
 
+  /** Auto-revealed control hint: once the stage settles into view, the
+   * info-button tooltip shows itself so visitors learn the gestures
+   * without hunting for it. The first real canvas manipulation (pan,
+   * card drag, keyboard pan, pinch-zoom) retires it permanently for the
+   * visit — hover/focus on the info button keeps revealing it after. */
+  const [hintAutoVisible, setHintAutoVisible] = useState(false);
+  const hintRetiredRef = useRef(false);
+  const dismissHint = useCallback(() => {
+    hintRetiredRef.current = true;
+    setHintAutoVisible(false);
+  }, []);
+
+  useEffect(() => {
+    if (!enterStage || hintRetiredRef.current) return;
+    // Wait out the card settle-in animation before drawing attention.
+    const t = window.setTimeout(() => {
+      if (!hintRetiredRef.current) setHintAutoVisible(true);
+    }, 1100);
+    return () => window.clearTimeout(t);
+  }, [enterStage]);
+
   /** Cursor spotlight — feeds --spot-x/--spot-y on the frame; an amber
    * radial veil renders at that point (see the overlay below). */
   const onSpotlightMove = useCallback(
@@ -326,7 +347,11 @@ export function ProjectCanvas({
       if (!session) return;
       const dx = e.clientX - session.startX;
       const dy = e.clientY - session.startY;
-      if (Math.abs(dx) > 3 || Math.abs(dy) > 3) session.moved = true;
+      if (Math.abs(dx) > 3 || Math.abs(dy) > 3) {
+        // First real pan movement retires the auto hint.
+        if (!session.moved) dismissHint();
+        session.moved = true;
+      }
       panX.set(clamp(session.baseX + dx, -panBounds.x, panBounds.x));
       panY.set(clamp(session.baseY + dy, -panBounds.y, panBounds.y));
     };
@@ -355,7 +380,7 @@ export function ProjectCanvas({
       window.removeEventListener("pointermove", onPointerMove);
       window.removeEventListener("pointerup", onPointerUp);
     };
-  }, [canvasMode, panX, panY, schedulePersist, expandedSlug, onExpandCard, panBounds]);
+  }, [canvasMode, panX, panY, schedulePersist, expandedSlug, onExpandCard, panBounds, dismissHint]);
 
   // Pinch / ctrl+wheel zoom — trackpad pinch reports ctrlKey
   useEffect(() => {
@@ -364,12 +389,13 @@ export function ProjectCanvas({
     const onWheel = (e: WheelEvent) => {
       if (!e.ctrlKey && !e.metaKey) return;
       e.preventDefault();
+      dismissHint(); // zooming means the visitor has the canvas figured out
       scale.set(clamp(scale.get() - e.deltaY * 0.002, SCALE_MIN, SCALE_MAX));
       schedulePersist();
     };
     el.addEventListener("wheel", onWheel, { passive: false });
     return () => el.removeEventListener("wheel", onWheel);
-  }, [canvasMode, scale, schedulePersist]);
+  }, [canvasMode, scale, schedulePersist, dismissHint]);
 
   const zoomBy = useCallback(
     (delta: number) => {
@@ -424,12 +450,13 @@ export function ProjectCanvas({
       if (!delta) return;
       e.preventDefault();
       markInteracted();
+      dismissHint(); // keyboard panning retires the auto hint too
       autoAnchorRef.current = false; // user took over the view
       panX.set(clamp(panX.get() + delta[0], -panBounds.x, panBounds.x));
       panY.set(clamp(panY.get() + delta[1], -panBounds.y, panBounds.y));
       schedulePersist();
     },
-    [canvasMode, expandedSlug, panX, panY, schedulePersist, panBounds, markInteracted],
+    [canvasMode, expandedSlug, panX, panY, schedulePersist, panBounds, markInteracted, dismissHint],
   );
 
   // Card drag end — record the offset from the card's home slot
@@ -564,7 +591,14 @@ export function ProjectCanvas({
                 <span
                   id="canvas-controls-hint"
                   role="tooltip"
-                  className="pointer-events-none absolute right-full top-1/2 z-50 mr-2 -translate-y-1/2 whitespace-nowrap rounded-md border border-accent-400/40 bg-surface-900/95 px-2.5 py-1.5 font-mono text-[10px] uppercase tracking-widest text-accent-400 opacity-0 shadow-[inset_0_0_0_1px_rgba(255,184,106,0.15),0_0_28px_-6px_rgba(255,184,106,0.5)] backdrop-blur-sm transition-opacity duration-150 group-hover:opacity-100 group-focus-within:opacity-100"
+                  className={cn(
+                    "pointer-events-none absolute right-full top-1/2 z-50 mr-3.5 -translate-y-1/2 whitespace-nowrap rounded-md border border-accent-400/40 bg-surface-900/95 px-2.5 py-1.5 font-mono text-[10px] uppercase tracking-widest text-accent-400 shadow-[inset_0_0_0_1px_rgba(255,184,106,0.15),0_0_28px_-6px_rgba(255,184,106,0.5)] backdrop-blur-sm transition-opacity duration-150",
+                    // Auto-shown once the stage scrolls into view (until the
+                    // first real interaction); afterwards hover/focus reveals it.
+                    hintAutoVisible && !expandedSlug
+                      ? "opacity-100"
+                      : "opacity-0 group-hover:opacity-100 group-focus-within:opacity-100",
+                  )}
                 >
                   Drag anywhere to pan · ⠿ handle arranges a card · pinch or ⌘ scroll to zoom
                 </span>
@@ -715,6 +749,7 @@ export function ProjectCanvas({
                       dx={off.dx}
                       dy={off.dy}
                       onDragEnd={onCardDragEnd}
+                      onDragStart={dismissHint}
                     >
                       <ProjectCard project={p} onOpen={onOpenCard} />
                     </DraggableCard>
@@ -771,12 +806,15 @@ function DraggableCard({
   dx,
   dy,
   onDragEnd,
+  onDragStart,
   children,
 }: {
   slug: string;
   dx: number;
   dy: number;
   onDragEnd: (slug: string, dx: number, dy: number) => void;
+  /** Fires when a real handle-drag begins (used to retire the auto hint). */
+  onDragStart?: () => void;
   children: React.ReactNode;
 }) {
   const x = useMotionValue(dx);
@@ -817,6 +855,7 @@ function DraggableCard({
       whileDrag={{ scale: 1.03, zIndex: 30 }}
       onDragStart={() => {
         draggedRef.current = true;
+        onDragStart?.();
       }}
       onDragEnd={() => {
         onDragEnd(slug, x.get(), y.get());
