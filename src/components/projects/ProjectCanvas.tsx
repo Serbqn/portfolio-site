@@ -539,6 +539,12 @@ export function ProjectCanvas({
     );
   }
 
+  // The auto hint doubles as a held "hover" on the info button: while the
+  // tooltip is self-revealed the button wears its hover styling so the
+  // attention reads as intentional. The first real canvas manipulation
+  // (pan/card drag/zoom/arrow keys) retires both at once.
+  const hintActive = hintAutoVisible && !expandedSlug;
+
   return (
     <div className={cn("relative", className)}>
       {/* Canvas frame — static box that clips; never itself transformed.
@@ -584,7 +590,13 @@ export function ProjectCanvas({
                   type="button"
                   aria-label="Pan and zoom help"
                   aria-describedby="canvas-controls-hint"
-                  className="grid h-8 w-8 place-items-center rounded-md text-surface-300 transition-colors hover:bg-surface-800 hover:text-accent-400"
+                  aria-expanded={hintActive}
+                  className={cn(
+                    "grid h-8 w-8 place-items-center rounded-md transition-colors hover:bg-surface-800 hover:text-accent-400",
+                    // While the tooltip is auto-shown the button holds its
+                    // hover look; it relaxes once a drag retires the hint.
+                    hintActive ? "bg-surface-800 text-accent-400" : "text-surface-300",
+                  )}
                 >
                   <Info className="h-5 w-5" />
                 </button>
@@ -595,7 +607,7 @@ export function ProjectCanvas({
                     "pointer-events-none absolute right-full top-1/2 z-50 mr-3.5 -translate-y-1/2 whitespace-nowrap rounded-md border border-accent-400/40 bg-surface-900/95 px-2.5 py-1.5 font-mono text-[10px] uppercase tracking-widest text-accent-400 shadow-[inset_0_0_0_1px_rgba(255,184,106,0.15),0_0_28px_-6px_rgba(255,184,106,0.5)] backdrop-blur-sm transition-opacity duration-150",
                     // Auto-shown once the stage scrolls into view (until the
                     // first real interaction); afterwards hover/focus reveals it.
-                    hintAutoVisible && !expandedSlug
+                    hintActive
                       ? "opacity-100"
                       : "opacity-0 group-hover:opacity-100 group-focus-within:opacity-100",
                   )}
