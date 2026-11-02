@@ -8,6 +8,21 @@ import ts from "typescript";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
+test("deployment CSP permits the Turnstile script and verification iframe", () => {
+  const config = JSON.parse(fs.readFileSync(path.join(__dirname, "../vercel.json"), "utf8"));
+  const csp = config.headers.find((rule) => rule.source === "/(.*)").headers
+    .find((header) => header.key === "Content-Security-Policy").value;
+  const directives = new Map(csp.split(";").map((part) => {
+    const [directive, ...sources] = part.trim().split(/\s+/);
+    return [directive, sources];
+  }));
+  for (const directive of ["script-src", "frame-src"]) {
+    assert.ok(directives.get(directive).includes("https://challenges.cloudflare.com"));
+    assert.equal(directives.get(directive).includes("*"), false);
+  }
+  assert.deepEqual(directives.get("frame-ancestors"), ["'none'"]);
+});
+
 // Exercise the real handlers without sending messages or using live credentials.
 function loadModule(relativePath, context) {
   const filename = path.join(__dirname, "..", relativePath);
