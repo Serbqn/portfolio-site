@@ -1,11 +1,12 @@
 import { NextResponse, after } from "next/server";
 import { sendNewMessageTelegram } from "@/lib/notify";
-import { createClient } from "@/lib/supabase";
+import { createServiceClient } from "@/lib/supabase";
+import { verifyContactToken } from "@/lib/turnstile";
 
 /**
  * Public contact form endpoint.
- * Inserts a message into the `messages` table via the anon client —
- * RLS allows inserts, only service_role can read/delete.
+ * Only verified submissions can reach the service-role database client.
+ * Migration 004 disables direct public access to the messages table.
  */
 export async function POST(request: Request) {
   let body: unknown;
@@ -18,11 +19,12 @@ export async function POST(request: Request) {
     );
   }
 
-  const { name, email, company, message } = (body ?? {}) as {
+  const { name, email, company, message, turnstileToken } = (body ?? {}) as {
     name?: unknown;
     email?: unknown;
     company?: unknown;
     message?: unknown;
+    turnstileToken?: unknown;
   };
 
   if (
@@ -68,7 +70,15 @@ export async function POST(request: Request) {
       ? company.trim().slice(0, 200)
       : null;
 
-  const supabase = await createClient();
+  const verification = await verifyContactToken(turnstileToken);
+  if (!verification.ok) {
+    return NextResponse.json(
+      { error: verification.error },
+      { status: verification.status },
+    );
+  }
+
+  const supabase = createServiceClient();
   const { error } = await supabase.from("messages").insert({
     name: cleanName,
     email: cleanEmail,

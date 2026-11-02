@@ -2,6 +2,9 @@
 
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { ContactVerification } from "./ContactVerification";
+
+const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
 
 type Status = "idle" | "submitting" | "success" | "error";
 
@@ -14,9 +17,12 @@ export function ContactForm({
 }) {
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState<string | null>(null);
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+  const [verificationAttempt, setVerificationAttempt] = useState(0);
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (status === "submitting") return;
     setError(null);
     setStatus("submitting");
     const fd = new FormData(e.currentTarget);
@@ -35,11 +41,17 @@ export function ContactForm({
       return;
     }
 
+    if (!turnstileToken) {
+      setError("Please complete the security verification before sending.");
+      setStatus("error");
+      return;
+    }
+
     try {
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, company, message }),
+        body: JSON.stringify({ name, email, company, message, turnstileToken }),
       });
       if (!res.ok) {
         const data = (await res.json().catch(() => null)) as {
@@ -53,6 +65,10 @@ export function ContactForm({
     } catch {
       setError("Network error. Please try again.");
       setStatus("error");
+    } finally {
+      // Turnstile tokens are single-use, including after a failed request.
+      setTurnstileToken(null);
+      setVerificationAttempt((value) => value + 1);
     }
   }
 
@@ -104,6 +120,7 @@ export function ContactForm({
             name="name"
             type="text"
             autoComplete="name"
+            maxLength={200}
             required
             className="h-10 w-full rounded-lg border border-surface-600 bg-surface-900 px-3 text-sm text-surface-0 outline-none transition placeholder:text-surface-400 focus:border-accent-500"
           />
@@ -114,6 +131,7 @@ export function ContactForm({
             name="email"
             type="email"
             autoComplete="email"
+            maxLength={200}
             required
             className="h-10 w-full rounded-lg border border-surface-600 bg-surface-900 px-3 text-sm text-surface-0 outline-none transition placeholder:text-surface-400 focus:border-accent-500"
           />
@@ -124,6 +142,7 @@ export function ContactForm({
             name="company"
             type="text"
             autoComplete="organization"
+            maxLength={200}
             className="h-10 w-full rounded-lg border border-surface-600 bg-surface-900 px-3 text-sm text-surface-0 outline-none transition placeholder:text-surface-400 focus:border-accent-500"
           />
         </Field>
@@ -137,12 +156,32 @@ export function ContactForm({
             id="message"
             name="message"
             rows={6}
+            maxLength={10000}
             required
             placeholder="What are you building, who is it for, and what’s the rough timeline?"
             className="w-full rounded-lg border border-surface-600 bg-surface-900 px-3 py-2.5 text-sm text-surface-0 outline-none transition placeholder:text-surface-400 focus:border-accent-500"
           />
         </Field>
       </div>
+
+      {TURNSTILE_SITE_KEY ? (
+        <ContactVerification
+          key={verificationAttempt}
+          siteKey={TURNSTILE_SITE_KEY}
+          onTokenChange={setTurnstileToken}
+        />
+      ) : (
+        <p role="status" className="mt-6 text-sm text-surface-200">
+          The contact form is temporarily unavailable.
+        </p>
+      )}
+      <p className="mt-3 text-sm text-surface-200">
+        You can also email me directly at{" "}
+        <a href={`mailto:${contactEmail}`} className="link-reveal text-surface-0">
+          {contactEmail}
+        </a>
+        .
+      </p>
 
       {error ? (
         <p
@@ -153,13 +192,13 @@ export function ContactForm({
         </p>
       ) : null}
 
-      <div className="mt-6 flex items-center justify-between gap-3">
+      <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
         <p className="text-xs text-surface-400">
           No tracking. No newsletter. Straight to my inbox.
         </p>
         <button
           type="submit"
-          disabled={status === "submitting"}
+          disabled={status === "submitting" || !turnstileToken}
           className={cn(
             "inline-flex h-10 items-center justify-center rounded-lg bg-accent-500 px-4 text-sm font-medium text-surface-950 transition-colors duration-150 hover:bg-accent-400 active:scale-[0.98]",
             "disabled:opacity-50",
