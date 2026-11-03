@@ -6,18 +6,12 @@ import { usePathname } from "next/navigation";
 /**
  * Forces the viewport to the top after every client-side navigation.
  *
- * Two things defeat Next.js's built-in scroll reset on this site:
- * 1. /projects pins `history.scrollRestoration = "manual"` while mounted
- *    (mandatory-snap story), and Next skips its own scroll handling while
- *    the flag is up — so the old scroll offset carries into the next page,
- *    clamped to its bottom.
- * 2. The global `html { scroll-behavior: smooth }` turns whatever reset
- *    survives into a slow glide from the old position.
+ * The global smooth-scroll setting would otherwise animate a reset from
+ * the previous route's position.
  *
  * This runs after each pathname change with behavior:"instant" — no glide,
  * no reliance on Next internals. Back/Forward (popstate) is skipped so
- * native scroll restoration keeps working; /projects re-anchors to the top
- * itself by design.
+ * native scroll restoration keeps working.
  */
 export function ScrollReset() {
   const pathname = usePathname();

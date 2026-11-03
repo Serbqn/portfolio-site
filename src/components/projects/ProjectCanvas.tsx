@@ -7,7 +7,6 @@ import {
   useDragControls,
   useMotionValue,
   useReducedMotion,
-  type MotionValue,
 } from "motion/react";
 import { MagnifyingGlassPlus, MagnifyingGlassMinus, ArrowsCounterClockwise, ArrowsOut, ArrowsIn, DotsSixVertical, Info } from "@phosphor-icons/react";
 import { ExpandedProjectPanel } from "@/components/projects/ExpandedProjectPanel";
@@ -813,12 +812,13 @@ export function ProjectCanvas({
  * DraggableCard — wraps a card so it can be picked up and moved.
  * The offset persists across sessions; the card itself stays a working link.
  */
-function DraggableCard({
+export function DraggableCard({
   slug,
   dx,
   dy,
   onDragEnd,
   onDragStart,
+  bounds,
   children,
 }: {
   slug: string;
@@ -827,6 +827,7 @@ function DraggableCard({
   onDragEnd: (slug: string, dx: number, dy: number) => void;
   /** Fires when a real handle-drag begins (used to retire the auto hint). */
   onDragStart?: () => void;
+  bounds?: { left?: number; top?: number; right?: number; bottom?: number };
   children: React.ReactNode;
 }) {
   const x = useMotionValue(dx);
@@ -861,6 +862,7 @@ function DraggableCard({
       drag
       dragListener={false}
       dragControls={controls}
+      dragConstraints={bounds}
       dragMomentum={false}
       dragElastic={0.12}
       style={{ x, y }}

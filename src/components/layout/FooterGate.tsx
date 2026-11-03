@@ -2,9 +2,7 @@
 
 import { usePathname } from "next/navigation";
 
-/** Hides the global footer on immersive full-viewport pages. /projects ends
- * at the canvas stage — mandatory snap makes that the hard bottom of the
- * page, so nothing may scroll beneath it. */
+/** /projects owns a full-height browsing viewport with its own native scroll. */
 export function FooterGate({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   if (pathname === "/projects") return null;

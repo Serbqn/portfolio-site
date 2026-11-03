@@ -285,13 +285,3 @@
 .animate-glow-breathe {
   animation: glow-breathe 2.4s ease-in-out infinite;
 }
-
-/* Mandatory scroll-snap onto the canvas stage — desktop widths only (the
- * mobile stacked grid is tall; mandatory snapping there feels trapping)
- * and motion-safe only (the global reduce block also kills smooth scroll).
- * The class is toggled on <html> by ProjectsExplorer while mounted. */
-@media (prefers-reduced-motion: no-preference) and (min-width: 1024px) {
-  html.snap-page {
-    scroll-snap-type: y mandatory;
-  }
-}

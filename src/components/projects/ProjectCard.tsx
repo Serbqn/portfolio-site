@@ -14,6 +14,7 @@ export function ProjectCard({
   className,
   size = "default",
   onOpen,
+  priority = false,
 }: {
   project: ProjectListItem;
   className?: string;
@@ -21,6 +22,7 @@ export function ProjectCard({
   /** Present → plain clicks open the in-page drawer. Modifier-clicks and
    * middle-clicks still navigate to the standalone page normally. */
   onOpen?: (project: ProjectListItem) => void;
+  priority?: boolean;
 }) {
   return (
     <Link
@@ -53,6 +55,7 @@ export function ProjectCard({
               alt={`${project.title} cover`}
               fill
               draggable={false}
+              priority={priority}
               sizes="(min-width: 1024px) 360px, (min-width: 640px) 50vw, 100vw"
               className="object-cover saturate-[0.82] transition-[transform,filter] duration-500 ease-out-soft group-hover:scale-[1.06] group-hover:saturate-100"
             />

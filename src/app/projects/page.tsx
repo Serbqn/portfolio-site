@@ -20,19 +20,8 @@ export default async function ProjectsPage() {
   const copy = site?.projectsPage ?? PROJECTS_PAGE_DEFAULT;
 
   return (
-    // snap-start: beat one of the /projects scroll story (intro → canvas).
-    // pb-0: no tail after the stage — the canvas is the hard bottom.
-    <section className="container-wide section snap-start pb-0">
-      <header className="max-w-3xl">
-        <p className="eyebrow">{copy.eyebrow}</p>
-        <h1 className="mt-2 text-display-1 font-medium tracking-tight text-balance">
-          {copy.title}
-        </h1>
-        <p className="mt-5 max-w-2xl text-lg leading-relaxed text-pretty text-surface-300">
-          {copy.lead}
-        </p>
-      </header>
-
+    <section aria-label="Projects">
+      <h1 className="sr-only">{copy.title}</h1>
       <ProjectsExplorer projects={projects} />
     </section>
   );

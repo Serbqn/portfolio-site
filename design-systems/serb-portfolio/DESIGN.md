@@ -85,8 +85,12 @@ and data. Never a third family.
 - **Breakpoints**: Tailwind defaults — 640 (sm) · 768 (md) · 1024 (lg) · 1280 (xl) · 1536 (2xl). Mobile-first.
 - **Container**: `container-wide` (`max-w-wide mx-auto px-6`).
 - **Prose width**: `max-w-prose` (65ch) for long-form case-study copy.
-- **Spatial canvas** (projects index): desktop ≥1024px gets a draggable/zoomable field;
-  below that it collapses to a stacked list. Canvas transform-only (no layout thrash).
+- **Projects index**: opens directly on the filters and the project field. Desktop
+  ≥1024px uses native vertical scrolling; background drag controls the same scroll
+  offsets. Individual card handles, zoom, and fullscreen remain available. Cards
+  keep their slight angles; every row stays reachable without dragging. Below
+  1024px, and with reduced motion, projects use a normal stacked/grid list.
+- **Home preview**: retains the contained, locked spatial teaser.
 
 ---
 
